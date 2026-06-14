@@ -80,13 +80,16 @@ rdm/
 - Cloud provider settings UI
 - IPC channels: `CLOUD_GET_PROVIDERS`, `CLOUD_CONNECT`, `CLOUD_DISCONNECT`, `CLOUD_UPLOAD`
 
-### 📋 Phase 5: Plugin System
+### ✅ Phase 5: Plugin System
+**Status: Committed** (`ed34f2c`)
 
-- Plugin management UI page (install, enable/disable, permissions)
-- Plugin API expansion: real network calls, file I/O, UI extensions
-- YouTube extractor plugin (`plugins/youtube-extractor/`)
-- Plugin discovery and install flow
+- Plugin management UI page with enable/disable toggle, uninstall, permissions display
+- Bundled plugin quick-install section (YouTube Extractor)
+- DB-backed plugin state: install/uninstall/enable/disable persisted in SQLite
+- Plugin API: real downloads engine integration via dynamic imports, persistent storage per-plugin, full event bus, network.fetch
+- YouTube extractor plugin: manifest + oEmbed-based video info extraction, format listing, sanitized filenames
 - IPC channels: `PLUGIN_GET_ALL`, `PLUGIN_INSTALL`, `PLUGIN_UNINSTALL`, `PLUGIN_ENABLE`, `PLUGIN_DISABLE`
+- Plugins sidebar nav enabled + route
 
 ### 📋 Phase 6: Grabber — Web Media Detection
 
