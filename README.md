@@ -102,6 +102,8 @@ rdm/
 | 7 | Browser extensions: Chrome + Firefox, native messaging | ✅ |
 | 8 | Clipboard monitor + native notifications | ✅ |
 | 9 | Polish: icons, README, tests | ✅ |
+| 10 | Core engine stability fixes: async chunk I/O streaming | ✅ |
+| 11 | IDM Style UI Refinements, Dialog boxes & IPC integration | ✅ |
 | 4 | Cloud integration (skipped) | — |
 
 ## License
