@@ -115,6 +115,8 @@ const api = {
   },
 
   clipboard: {
+    readText: (): Promise<string> =>
+      ipcRenderer.invoke(IPC_CHANNELS.CLIPBOARD_READ_TEXT),
     onUrlDetected: (callback: (url: string) => void) => {
       const handler = (_event: Electron.IpcRendererEvent, url: string) =>
         callback(url);

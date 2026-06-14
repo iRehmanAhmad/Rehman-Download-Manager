@@ -113,6 +113,10 @@ export function registerAllIpc(engine: DownloadEngine): void {
     BrowserWindow.fromWebContents(event.sender)?.close();
   });
 
+  ipcMain.handle(IPC_CHANNELS.CLIPBOARD_READ_TEXT, () => {
+    return require('electron').clipboard.readText();
+  });
+
   app.on('before-quit', () => {
     try {
       getDownloadEngine().pauseAll();

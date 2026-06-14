@@ -13,9 +13,20 @@ export function GlobalAddUrlDialog() {
   const [adding, setAdding] = useState(false);
 
   useEffect(() => {
-    const handleOpenAddUrl = (e: Event) => {
-      if (e instanceof CustomEvent && typeof e.detail === 'string') {
-        setUrl(e.detail);
+    const handleOpenAddUrl = async (e: Event) => {
+      let initialUrl = '';
+      if (e instanceof CustomEvent && typeof e.detail === 'string' && e.detail.trim()) {
+        initialUrl = e.detail;
+      } else {
+        try {
+          const clipText = await window.api.clipboard.readText();
+          if (clipText && (clipText.startsWith('http://') || clipText.startsWith('https://') || clipText.startsWith('ftp://'))) {
+            initialUrl = clipText.trim();
+          }
+        } catch (err) {}
+      }
+      if (initialUrl) {
+        setUrl(initialUrl);
       }
       setShowDialog(true);
     };

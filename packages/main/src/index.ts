@@ -1,5 +1,6 @@
 import { app, BrowserWindow, Tray, Menu, nativeImage, screen } from 'electron';
 import { join } from 'path';
+import * as fs from 'fs';
 import { registerAllIpc, getDownloadEngine } from './ipc';
 import { initDatabase, getDatabase } from './storage/database';
 import { DownloadEngine } from './download/engine';
@@ -7,6 +8,18 @@ import { startBrowserBridge, stopBrowserBridge } from './browser-bridge';
 import { startClipboardMonitor, stopClipboardMonitor } from './clipboard';
 import { initNotifications } from './notifications';
 import { APP_NAME, SETTINGS_KEY, MAX_CONCURRENT_DOWNLOADS } from '@rdm/shared';
+
+const desktopPath = join(app.getPath('desktop'), 'rdm-crash-report.txt');
+
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  try { fs.appendFileSync(desktopPath, `\n[${new Date().toISOString()}] Uncaught Exception:\n${error.stack || error.message}\n`); } catch(e) {}
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  try { fs.appendFileSync(desktopPath, `\n[${new Date().toISOString()}] Unhandled Rejection:\n${reason instanceof Error ? reason.stack : reason}\n`); } catch(e) {}
+});
 
 // Disable hardware acceleration BEFORE app.on('ready') to fix black/invisible screen issues
 app.disableHardwareAcceleration();

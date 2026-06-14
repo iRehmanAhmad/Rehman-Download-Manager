@@ -50,6 +50,7 @@ export const IPC_CHANNELS = {
   GRABBER_DETECT_VIDEOS: 'grabber:detect-videos',
   GRABBER_CRAWL_SITE: 'grabber:crawl-site',
   CLIPBOARD_URL: 'clipboard:url',
+  CLIPBOARD_READ_TEXT: 'clipboard:read-text',
   APP_GET_VERSION: 'app:get-version',
   APP_MINIMIZE: 'app:minimize',
   APP_MAXIMIZE: 'app:maximize',
