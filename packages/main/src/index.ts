@@ -4,6 +4,8 @@ import { registerAllIpc, getDownloadEngine } from './ipc';
 import { initDatabase, getDatabase } from './storage/database';
 import { DownloadEngine } from './download/engine';
 import { startBrowserBridge, stopBrowserBridge } from './browser-bridge';
+import { startClipboardMonitor, stopClipboardMonitor } from './clipboard';
+import { initNotifications } from './notifications';
 import { APP_NAME, SETTINGS_KEY, MAX_CONCURRENT_DOWNLOADS } from '@rdm/shared';
 
 let mainWindow: BrowserWindow | null = null;
@@ -94,6 +96,18 @@ function loadEngineSettings(): void {
   }
 }
 
+function getClipboardEnabled(): boolean {
+  try {
+    const db = getDatabase();
+    const row = db
+      .prepare('SELECT value FROM settings WHERE key = ?')
+      .get(SETTINGS_KEY.CLIPBOARD_MONITOR) as { value: string } | undefined;
+    return row ? row.value === 'true' : false;
+  } catch {
+    return false;
+  }
+}
+
 app.whenReady().then(async () => {
   await initDatabase();
 
@@ -101,6 +115,8 @@ app.whenReady().then(async () => {
 
   registerAllIpc(engine);
   loadEngineSettings();
+  initNotifications();
+  if (getClipboardEnabled()) startClipboardMonitor();
   startBrowserBridge(engine);
   createWindow();
   createTray();
@@ -121,6 +137,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('before-quit', () => {
+  stopClipboardMonitor();
   stopBrowserBridge();
   tray?.destroy();
   tray = null;

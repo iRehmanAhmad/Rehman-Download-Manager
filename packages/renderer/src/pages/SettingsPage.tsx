@@ -181,7 +181,10 @@ function NotificationSettings() {
     <div className="max-w-lg space-y-6">
       <h2 className="text-base font-medium text-slate-200">Notifications</h2>
       <label className="flex items-center justify-between">
-        <span className="text-sm text-slate-400">Show download notifications</span>
+        <div>
+          <span className="text-sm text-slate-400">Show download notifications</span>
+          <p className="text-xs text-slate-600 mt-0.5">Desktop alerts on download complete or failure</p>
+        </div>
         <input
           type="checkbox"
           className="rounded bg-slate-800 border-slate-700"
@@ -190,7 +193,10 @@ function NotificationSettings() {
         />
       </label>
       <label className="flex items-center justify-between">
-        <span className="text-sm text-slate-400">Monitor clipboard for URLs</span>
+        <div>
+          <span className="text-sm text-slate-400">Monitor clipboard for URLs</span>
+          <p className="text-xs text-slate-600 mt-0.5">Auto-detect copied URLs and show download prompt</p>
+        </div>
         <input
           type="checkbox"
           className="rounded bg-slate-800 border-slate-700"

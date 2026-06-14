@@ -110,6 +110,15 @@ const api = {
     close: () => ipcRenderer.send(IPC_CHANNELS.APP_CLOSE),
   },
 
+  clipboard: {
+    onUrlDetected: (callback: (url: string) => void) => {
+      const handler = (_event: Electron.IpcRendererEvent, url: string) =>
+        callback(url);
+      ipcRenderer.on(IPC_CHANNELS.CLIPBOARD_URL, handler);
+      return () => ipcRenderer.removeListener(IPC_CHANNELS.CLIPBOARD_URL, handler);
+    },
+  },
+
   plugins: {
     getAll: (): Promise<PluginInstance[]> =>
       ipcRenderer.invoke(IPC_CHANNELS.PLUGIN_GET_ALL),
