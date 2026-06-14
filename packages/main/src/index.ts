@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Tray, Menu, nativeImage } from 'electron';
+import { app, BrowserWindow, Tray, Menu, nativeImage, screen } from 'electron';
 import { join } from 'path';
 import { registerAllIpc, getDownloadEngine } from './ipc';
 import { initDatabase, getDatabase } from './storage/database';
@@ -7,6 +7,9 @@ import { startBrowserBridge, stopBrowserBridge } from './browser-bridge';
 import { startClipboardMonitor, stopClipboardMonitor } from './clipboard';
 import { initNotifications } from './notifications';
 import { APP_NAME, SETTINGS_KEY, MAX_CONCURRENT_DOWNLOADS } from '@rdm/shared';
+
+// Disable hardware acceleration BEFORE app.on('ready') to fix black/invisible screen issues
+app.disableHardwareAcceleration();
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
@@ -22,6 +25,7 @@ function createWindow(): void {
     frame: false,
     titleBarStyle: 'hidden',
     backgroundColor: '#0f172a',
+    transparent: true,
     show: false,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -33,6 +37,19 @@ function createWindow(): void {
 
   mainWindow.on('ready-to-show', () => {
     mainWindow?.show();
+    mainWindow?.focus();
+  });
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    console.log('[main] renderer loaded');
+    mainWindow?.webContents.executeJavaScript(`
+      console.log('[renderer] window.api exists:', !!window.api);
+      console.log('[renderer] document.getElementById("root"):', !!document.getElementById('root'));
+    `).catch(err => console.error('[main] executeJavaScript failed:', err));
+  });
+
+  mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
+    console.log(`[renderer console] ${message}`);
   });
 
   mainWindow.on('closed', () => {

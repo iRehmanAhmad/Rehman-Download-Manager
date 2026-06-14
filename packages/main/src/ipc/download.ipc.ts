@@ -4,6 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { DownloadEngine } from '../download/engine';
 import { extractFilename, isValidUrl } from '@rdm/shared';
 import { notifyDownloadComplete, notifyDownloadError } from '../notifications';
+import { evaluateRules } from '../automation';
 
 let engine: DownloadEngine | null = null;
 
@@ -50,10 +51,12 @@ export function registerDownloadIpc(): void {
     emitQueueStatus();
   });
 
-  ipcMain.handle(IPC_CHANNELS.DOWNLOAD_ADD, (_event, options: DownloadOptions): Download => {
+  ipcMain.handle(IPC_CHANNELS.DOWNLOAD_ADD, (_event, rawOptions: DownloadOptions): Download => {
     const eng = getDownloadEngine();
     const id = uuid();
     const now = Date.now();
+
+    const options = evaluateRules(rawOptions);
 
     const download: Download = {
       id,

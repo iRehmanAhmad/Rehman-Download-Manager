@@ -6,6 +6,7 @@ const TABS = [
   { id: 'general', label: 'General', icon: Settings },
   { id: 'appearance', label: 'Appearance', icon: Monitor },
   { id: 'downloads', label: 'Downloads', icon: Download },
+  { id: 'network', label: 'Network', icon: Settings }, // Reusing Settings icon
   { id: 'notifications', label: 'Notifications', icon: Bell },
   { id: 'folders', label: 'Folders', icon: Folder },
   { id: 'security', label: 'Security', icon: Shield },
@@ -43,6 +44,7 @@ export function SettingsPage() {
           {tab === 'general' && <GeneralSettings />}
           {tab === 'appearance' && <AppearanceSettings />}
           {tab === 'downloads' && <DownloadSettings />}
+          {tab === 'network' && <NetworkSettings />}
           {tab === 'notifications' && <NotificationSettings />}
           {tab === 'folders' && <FolderSettings />}
           {tab === 'security' && <SecuritySettings />}
@@ -52,14 +54,41 @@ export function SettingsPage() {
   );
 }
 
+import { useTranslation } from 'react-i18next';
+
 function GeneralSettings() {
   const settings = useSettingsStore((s) => s.settings);
   const setValue = useSettingsStore((s) => s.setValue);
+  const loading = useSettingsStore((s) => s.loading);
+  const { i18n } = useTranslation();
+
+  if (loading) {
+    return <div className="text-sm text-slate-500">Loading settings...</div>;
+  }
+
+  const handleLanguageChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const lang = e.target.value;
+    await setValue('language', lang);
+    i18n.changeLanguage(lang);
+  };
 
   return (
     <div className="max-w-lg space-y-6">
       <h2 className="text-base font-medium text-slate-200">General</h2>
-      <label className="flex items-center justify-between">
+      
+      <div className="space-y-2">
+        <label className="text-sm text-slate-400 block">Language</label>
+        <select
+          value={settings.language || i18n.language || 'en'}
+          onChange={handleLanguageChange}
+          className="w-full bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-200"
+        >
+          <option value="en">English</option>
+          <option value="es">Español</option>
+        </select>
+      </div>
+
+      <label className="flex items-center justify-between pt-4 border-t border-slate-800">
         <span className="text-sm text-slate-400">Start with system</span>
         <input
           type="checkbox"
@@ -99,6 +128,28 @@ function AppearanceSettings() {
           <option value="light">Light</option>
           <option value="system">System</option>
         </select>
+      </div>
+    </div>
+  );
+}
+
+function NetworkSettings() {
+  const settings = useSettingsStore((s) => s.settings);
+  const setValue = useSettingsStore((s) => s.setValue);
+
+  return (
+    <div className="max-w-lg space-y-6">
+      <h2 className="text-base font-medium text-slate-200">Network & Proxy</h2>
+      <div className="space-y-2">
+        <label className="text-sm text-slate-400 block">Proxy Server (HTTP/HTTPS)</label>
+        <input
+          type="text"
+          placeholder="http://127.0.0.1:8080"
+          value={settings.proxyUrl || ''}
+          onChange={(e) => setValue('proxyUrl', e.target.value)}
+          className="w-full bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-200"
+        />
+        <p className="text-xs text-slate-500">Leave blank to use direct connection. Basic auth can be embedded in URL (e.g., http://user:pass@127.0.0.1).</p>
       </div>
     </div>
   );
@@ -218,11 +269,46 @@ function FolderSettings() {
 }
 
 function SecuritySettings() {
+  const settings = useSettingsStore((s) => s.settings);
+  const setValue = useSettingsStore((s) => s.setValue);
+
   return (
     <div className="max-w-lg space-y-6">
       <h2 className="text-base font-medium text-slate-200">Security</h2>
-      <p className="text-sm text-slate-500">MD5 checksum verification runs automatically on download completion if a checksum is provided when adding a URL.</p>
-      <p className="text-sm text-slate-600 mt-1">More verification algorithms (SHA-256, SHA-512) coming soon.</p>
+      
+      <label className="flex items-center justify-between">
+        <div>
+          <span className="text-sm text-slate-400">Enable Antivirus Scanning</span>
+          <p className="text-xs text-slate-600 mt-0.5">Automatically scan files after they finish downloading</p>
+        </div>
+        <input
+          type="checkbox"
+          className="rounded bg-slate-800 border-slate-700"
+          checked={settings.antivirusEnabled === 'true'}
+          onChange={(e) => setValue('antivirusEnabled', String(e.target.checked))}
+        />
+      </label>
+
+      {settings.antivirusEnabled === 'true' && (
+        <div className="space-y-2 mt-4 p-4 bg-slate-800/50 rounded-lg border border-slate-800">
+          <label className="text-sm text-slate-400 block">Antivirus Executable Command</label>
+          <input
+            type="text"
+            placeholder="C:\ProgramData\Microsoft\Windows Defender\Platform\...\MpCmdRun.exe"
+            value={settings.antivirusCmd || ''}
+            onChange={(e) => setValue('antivirusCmd', e.target.value)}
+            className="w-full bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-200"
+          />
+          <p className="text-xs text-slate-500 mt-2">
+            Enter the absolute path to your antivirus scanner's CLI tool. RDM will append the downloaded file path as the final argument.
+          </p>
+        </div>
+      )}
+
+      <div className="mt-8 border-t border-slate-800 pt-6">
+        <h3 className="text-sm font-medium text-slate-300 mb-2">Checksums</h3>
+        <p className="text-sm text-slate-500">MD5 checksum verification runs automatically on download completion if a checksum is provided when adding a URL.</p>
+      </div>
     </div>
   );
 }

@@ -12,7 +12,12 @@ import {
   PROGRESS_UPDATE_INTERVAL,
   DEFAULT_CONNECTIONS,
   MAX_CONNECTIONS,
+  SETTINGS_KEY,
 } from '@rdm/shared';
+import { DownloadRepository } from '../storage/download.repository';
+import { getDatabase } from '../storage/database';
+import { HttpsProxyAgent } from 'https-proxy-agent';
+import { spawn } from 'node:child_process';
 
 const MIN_CHUNK_SIZE = 1024 * 256;
 const SPEED_AVERAGE_WINDOW = 3000;
@@ -42,6 +47,7 @@ export class DownloadEngine extends EventEmitter {
   private maxConcurrent: number;
   private globalSpeedLimit: number;
   private tempDir: string;
+  private saveTimer: ReturnType<typeof setInterval> | null = null;
 
   constructor(maxConcurrent = 5, globalSpeedLimit = 0) {
     super();
@@ -49,11 +55,35 @@ export class DownloadEngine extends EventEmitter {
     this.globalSpeedLimit = globalSpeedLimit;
     this.tempDir = path.join(app.getPath('temp'), 'rdm');
     fs.mkdirSync(this.tempDir, { recursive: true });
+    
+    this.loadFromDB();
+    this.startSaveLoop();
+  }
+
+  private loadFromDB(): void {
+    const dls = DownloadRepository.loadAllDownloads();
+    for (const dl of dls) {
+      this.tasks.set(dl.id, new DownloadTask(dl, this.tempDir, () => this.getGlobalBytesPerSecond()));
+      if (dl.status === 'queued') {
+        this.queue.push(dl.id);
+      }
+    }
+  }
+
+  private startSaveLoop(): void {
+    this.saveTimer = setInterval(() => {
+      for (const [, task] of this.tasks) {
+        if (task.status === 'downloading' || task.status === 'paused') {
+          DownloadRepository.saveDownload(task.snapshot());
+        }
+      }
+    }, 5000);
   }
 
   add(download: Download): void {
     this.tasks.set(download.id, new DownloadTask(download, this.tempDir, () => this.getGlobalBytesPerSecond()));
     this.queue.push(download.id);
+    DownloadRepository.saveDownload(download);
     this.processQueue();
   }
 
@@ -61,6 +91,7 @@ export class DownloadEngine extends EventEmitter {
     const task = this.tasks.get(id);
     if (!task) return false;
     task.pause();
+    DownloadRepository.saveDownload(task.snapshot());
     this.queue = this.queue.filter((qid) => qid !== id);
     this.processQueue();
     return true;
@@ -70,6 +101,7 @@ export class DownloadEngine extends EventEmitter {
     const task = this.tasks.get(id);
     if (!task) return false;
     task.resume();
+    DownloadRepository.saveDownload(task.snapshot());
     if (!this.queue.includes(id)) {
       this.queue.push(id);
     }
@@ -81,6 +113,7 @@ export class DownloadEngine extends EventEmitter {
     const task = this.tasks.get(id);
     if (!task) return false;
     task.cancel();
+    DownloadRepository.saveDownload(task.snapshot());
     this.queue = this.queue.filter((qid) => qid !== id);
     this.processQueue();
     return true;
@@ -93,6 +126,7 @@ export class DownloadEngine extends EventEmitter {
     }
     this.queue = this.queue.filter((qid) => qid !== id);
     this.tasks.delete(id);
+    DownloadRepository.removeDownload(id);
     return true;
   }
 
@@ -242,6 +276,16 @@ class DownloadTask extends EventEmitter {
     this.getGlobalLimit = getGlobalLimit;
   }
 
+  private getSetting(key: string): string {
+    try {
+      const db = getDatabase();
+      const row = db.prepare('SELECT value FROM settings WHERE key = ?').get(key) as { value: string } | undefined;
+      return row ? row.value : '';
+    } catch {
+      return '';
+    }
+  }
+
   snapshot(): Download {
     return { ...this.dl };
   }
@@ -338,17 +382,35 @@ class DownloadTask extends EventEmitter {
   }
 
   private getRequestOptions(parsedUrl: URL, range?: string): http.RequestOptions {
+    const proxyUrl = this.getSetting(SETTINGS_KEY.PROXY_URL);
+    let agent;
+    if (proxyUrl) {
+      agent = new HttpsProxyAgent(proxyUrl);
+    }
+
+    const headers: Record<string, string> = { ...this.dl.headers };
+    
+    // Auto-detect embedded Basic Auth in URL
+    if (parsedUrl.username || parsedUrl.password) {
+      const auth = Buffer.from(`${parsedUrl.username}:${parsedUrl.password}`).toString('base64');
+      headers['Authorization'] = `Basic ${auth}`;
+    }
+
+    if (range) {
+      headers['Range'] = range;
+    }
+    if (this.dl.referer) {
+      headers['Referer'] = this.dl.referer;
+    }
+    headers['User-Agent'] = this.dl.userAgent || 'Mozilla/5.0';
+
     return {
       hostname: parsedUrl.hostname,
       port: parsedUrl.port,
       path: parsedUrl.pathname + parsedUrl.search,
       method: 'GET',
-      headers: {
-        ...(this.dl.headers || {}),
-        ...(range ? { Range: range } : {}),
-        ...(this.dl.referer ? { Referer: this.dl.referer } : {}),
-        'User-Agent': this.dl.userAgent || 'Mozilla/5.0',
-      },
+      agent,
+      headers,
     };
   }
 
@@ -364,8 +426,9 @@ class DownloadTask extends EventEmitter {
         },
         (res) => {
           const headers = res.headers;
+          const acceptRanges = String(headers['accept-ranges'] || '');
           const supportsRange =
-            headers['accept-ranges'] === 'bytes' &&
+            acceptRanges.includes('bytes') &&
             headers['content-length'] != null;
           const fileSize = parseInt(headers['content-length'] || '-1', 10);
           res.destroy();
@@ -506,7 +569,7 @@ class DownloadTask extends EventEmitter {
           this.clearThrottleTimer();
           this.activeChunks.clear();
           if (this.cancelled) return;
-          this.handleCompletion(outputPath);
+          this.runAntivirusScanAndComplete(outputPath);
           resolve();
         });
 
@@ -514,14 +577,14 @@ class DownloadTask extends EventEmitter {
           if (speedTimer) { clearInterval(speedTimer); speedTimer = null; }
           this.clearThrottleTimer();
           this.activeChunks.clear();
-          if (!this.cancelled) reject(err);
+          if (this.paused || this.cancelled) resolve(); else reject(err);
         });
       });
 
       req.on('error', (err) => {
         this.clearThrottleTimer();
         this.activeChunks.clear();
-        if (!this.cancelled) reject(err);
+        if (this.paused || this.cancelled) resolve(); else reject(err);
       });
       req.end();
     });
@@ -533,124 +596,225 @@ class DownloadTask extends EventEmitter {
     resumeInfo: { supportsRange: boolean; fileSize: number },
   ): Promise<void> {
     this.applySpeedThrottle();
-    const chunkSize = Math.max(
-      MIN_CHUNK_SIZE,
-      Math.ceil(resumeInfo.fileSize / this.numConnections),
-    );
 
-    const chunks: ChunkInfo[] = [];
-    for (let i = 0; i < this.numConnections; i++) {
-      const start = i * chunkSize;
-      const end = i === this.numConnections - 1 ? resumeInfo.fileSize - 1 : start + chunkSize - 1;
-      chunks.push({
+    if (!this.dl.chunks || this.dl.chunks.length === 0) {
+      this.dl.chunks = [
+        {
+          id: uuid(),
+          downloadId: this.dl.id,
+          index: 0,
+          startByte: 0,
+          endByte: resumeInfo.fileSize - 1,
+          downloaded: 0,
+          status: 'pending',
+          speed: 0,
+        }
+      ];
+    } else {
+      // Reset any previously downloading chunks to pending so they restart properly
+      for (const chunk of this.dl.chunks) {
+        if (chunk.status === 'downloading') {
+          chunk.status = 'pending';
+        }
+      }
+    }
+
+    return new Promise((resolve, reject) => {
+      this.dispatchConnections(mod, parsedUrl, resolve, reject);
+    });
+  }
+
+  private dispatchConnections(
+    mod: typeof http | typeof https,
+    parsedUrl: URL,
+    resolve: () => void,
+    reject: (err: any) => void
+  ) {
+    if (this.paused || this.cancelled) return;
+
+    // Check if everything is completely downloaded
+    const allCompleted = this.dl.chunks.every(c => c.status === 'completed');
+    if (allCompleted) {
+      this.clearThrottleTimer();
+      this.activeChunks.clear();
+      const outputPath = this.getTempPath();
+      this.mergeChunks(outputPath);
+      resolve();
+      return;
+    }
+
+    while (this.activeChunks.size < this.numConnections) {
+      let pendingChunk = this.dl.chunks.find(c => c.status === 'pending');
+      if (pendingChunk) {
+        this.downloadChunk(mod, parsedUrl, pendingChunk, resolve, reject);
+        continue;
+      }
+
+      // No pending chunks. Find the largest active chunk to split dynamically.
+      const splittable = this.dl.chunks
+        .filter(c => c.status === 'downloading')
+        .map(c => {
+          const remaining = (c.endByte - c.startByte + 1) - c.downloaded;
+          return { chunk: c, remaining };
+        })
+        .filter(c => c.remaining > MIN_CHUNK_SIZE * 2)
+        .sort((a, b) => b.remaining - a.remaining);
+
+      if (splittable.length === 0) break; // Nothing to split
+
+      const target = splittable[0].chunk;
+      const remaining = splittable[0].remaining;
+      const currentPos = target.startByte + target.downloaded;
+
+      const newEndByte = target.endByte;
+      const splitPos = currentPos + Math.floor(remaining / 2);
+
+      // Dynamically shrink the active chunk
+      target.endByte = splitPos;
+
+      // Create new chunk for the second half
+      const newChunk: ChunkInfo = {
         id: uuid(),
         downloadId: this.dl.id,
-        index: i,
-        startByte: start,
-        endByte: end,
+        index: this.dl.chunks.length,
+        startByte: splitPos + 1,
+        endByte: newEndByte,
         downloaded: 0,
         status: 'pending',
-        speed: 0,
-      });
+        speed: 0
+      };
+
+      this.dl.chunks.push(newChunk);
+      this.downloadChunk(mod, parsedUrl, newChunk, resolve, reject);
     }
-    this.dl.chunks = chunks;
-
-    const promises = chunks.map((chunk) =>
-      this.downloadChunk(mod, parsedUrl, chunk),
-    );
-    await Promise.all(promises);
-    this.clearThrottleTimer();
-    this.activeChunks.clear();
-
-    if (this.cancelled) return;
-    if (this.paused) return;
-
-    const outputPath = this.getTempPath();
-    this.mergeChunks(outputPath);
   }
 
   private downloadChunk(
     mod: typeof http | typeof https,
     parsedUrl: URL,
     chunk: ChunkInfo,
-  ): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const partPath = `${this.getTempPath()}.part${chunk.index}`;
-      const fileStream = fs.createWriteStream(partPath);
+    resolve: () => void,
+    reject: (err: any) => void
+  ): void {
+    const partPath = `${this.getTempPath()}.part${chunk.index}`;
+    // If it's resuming, we open in 'a' (append) mode, otherwise 'w' (write) mode
+    const fileStream = fs.createWriteStream(partPath, { flags: chunk.downloaded > 0 ? 'a' : 'w' });
 
-      const range = `bytes=${chunk.startByte}-${chunk.endByte}`;
-      const req = mod.request(
-        this.getRequestOptions(parsedUrl, range),
-        (res) => {
-          const streamHandle: ChunkStream = {
-            pause: () => res.pause(),
-            resume: () => res.resume(),
-            destroy: () => req.destroy(),
-          };
-          this.activeChunks.add(streamHandle);
+    const currentStart = chunk.startByte + chunk.downloaded;
+    if (currentStart > chunk.endByte) {
+      // Chunk already finished
+      chunk.status = 'completed';
+      this.dispatchConnections(mod, parsedUrl, resolve, reject);
+      return;
+    }
 
-          chunk.status = 'downloading';
+    const range = `bytes=${currentStart}-${chunk.endByte}`;
+    const req = mod.request(
+      this.getRequestOptions(parsedUrl, range),
+      (res) => {
+        if (res.statusCode && res.statusCode >= 400) {
+           req.destroy();
+           reject(new Error(`Server responded with ${res.statusCode}`));
+           return;
+        }
 
-          let lastBytes = 0;
-          const speedTimer = setInterval(() => {
-            const now = Date.now();
-            const delta = chunk.downloaded - lastBytes;
-            lastBytes = chunk.downloaded;
+        const streamHandle: ChunkStream = {
+          pause: () => res.pause(),
+          resume: () => res.resume(),
+          destroy: () => req.destroy(),
+        };
+        this.activeChunks.add(streamHandle);
+        chunk.status = 'downloading';
 
-            this.speedSamples.push({ time: now, bytes: delta });
-            this.pruneSpeedSamples(now);
+        let lastBytes = chunk.downloaded;
+        const speedTimer = setInterval(() => {
+          const now = Date.now();
+          const delta = chunk.downloaded - lastBytes;
+          lastBytes = chunk.downloaded;
 
-            const avgSpeed = this.calculateSpeed();
-            this.dl.speed = avgSpeed;
-            chunk.speed = avgSpeed;
+          this.speedSamples.push({ time: now, bytes: delta });
+          this.pruneSpeedSamples(now);
 
-            this.dl.downloaded = this.dl.chunks.reduce(
-              (sum, c) => sum + c.downloaded,
-              0,
+          const avgSpeed = this.calculateSpeed();
+          this.dl.speed = avgSpeed;
+          chunk.speed = avgSpeed;
+
+          this.dl.downloaded = this.dl.chunks.reduce(
+            (sum, c) => sum + c.downloaded,
+            0,
+          );
+          if (this.dl.fileSize > 0) {
+            this.dl.progress = Math.min(
+              100,
+              (this.dl.downloaded / this.dl.fileSize) * 100,
             );
-            if (this.dl.fileSize > 0) {
-              this.dl.progress = Math.min(
-                100,
-                (this.dl.downloaded / this.dl.fileSize) * 100,
-              );
-              if (avgSpeed > 0) {
-                this.dl.eta = (this.dl.fileSize - this.dl.downloaded) / avgSpeed;
-              }
+            if (avgSpeed > 0) {
+              this.dl.eta = (this.dl.fileSize - this.dl.downloaded) / avgSpeed;
             }
+          }
 
-            this.emitProgress();
-          }, PROGRESS_UPDATE_INTERVAL);
+          this.emitProgress();
+        }, PROGRESS_UPDATE_INTERVAL);
 
-          res.on('data', (data: Buffer) => {
-            if (this.paused || this.cancelled) {
-              req.destroy();
-              return;
-            }
-            chunk.downloaded += data.length;
-          });
+        res.on('data', (data: Buffer) => {
+          if (this.paused || this.cancelled) {
+            req.destroy();
+            return;
+          }
 
-          res.pipe(fileStream);
+          // In case target.endByte was dynamically shrunk, only take what we need
+          const remaining = (chunk.endByte - chunk.startByte + 1) - chunk.downloaded;
+          
+          if (data.length >= remaining) {
+            chunk.downloaded += remaining;
+            fileStream.write(data.slice(0, remaining));
+            req.destroy(); // this triggers res.on('close') or res.on('end') eventually
+            return;
+          }
 
-          fileStream.on('finish', () => {
-            clearInterval(speedTimer);
-            this.activeChunks.delete(streamHandle);
+          chunk.downloaded += data.length;
+          fileStream.write(data);
+        });
+
+        res.on('end', () => {
+          clearInterval(speedTimer);
+          this.activeChunks.delete(streamHandle);
+          fileStream.close();
+          if (chunk.startByte + chunk.downloaded >= chunk.endByte) {
             chunk.status = 'completed';
-            resolve();
-          });
+          } else {
+            chunk.status = 'pending'; // Incomplete, retry
+          }
+          this.dispatchConnections(mod, parsedUrl, resolve, reject);
+        });
 
-          res.on('error', (err) => {
-            clearInterval(speedTimer);
-            this.activeChunks.delete(streamHandle);
-            reject(err);
-          });
-        },
-      );
+        res.on('close', () => {
+          clearInterval(speedTimer);
+          this.activeChunks.delete(streamHandle);
+          fileStream.close();
+          if (chunk.status === 'downloading') {
+            if (chunk.startByte + chunk.downloaded >= chunk.endByte) {
+              chunk.status = 'completed';
+            } else {
+              chunk.status = 'pending';
+            }
+          }
+          this.dispatchConnections(mod, parsedUrl, resolve, reject);
+        });
 
-      req.on('error', (err) => {
-        reject(err);
-      });
-      req.end();
+        res.on('error', (err) => {
+          clearInterval(speedTimer);
+          this.activeChunks.delete(streamHandle);
+          fileStream.close();
+          if (this.paused || this.cancelled) resolve(); else reject(err);
+        });
+      },
+    );
+
+    req.on('error', (err) => {
+      if (this.paused || this.cancelled) resolve(); else reject(err);
     });
+    req.end();
   }
 
   private mergeChunks(outputPath: string): void {
@@ -669,7 +833,37 @@ class DownloadTask extends EventEmitter {
     }
 
     writeStream.end(() => {
+      this.runAntivirusScanAndComplete(outputPath);
+    });
+  }
+
+  private runAntivirusScanAndComplete(outputPath: string): void {
+    const avEnabled = this.getSetting(SETTINGS_KEY.ANTIVIRUS_ENABLED) === 'true';
+    if (!avEnabled) {
       this.handleCompletion(outputPath);
+      return;
+    }
+
+    const avCmd = this.getSetting(SETTINGS_KEY.ANTIVIRUS_CMD);
+    if (!avCmd) {
+      this.handleCompletion(outputPath);
+      return;
+    }
+
+    this.dl.status = 'scanning';
+    this.emitProgress();
+
+    const child = spawn(`"${avCmd}" "${outputPath}"`, { shell: true });
+    
+    child.on('close', (code) => {
+      if (code !== 0) {
+        this.dl.status = 'error';
+        this.dl.errorMessage = 'Virus detected by Antivirus scanner!';
+        try { fs.unlinkSync(outputPath); } catch {}
+        this.emit('error', this.snapshot());
+      } else {
+        this.handleCompletion(outputPath);
+      }
     });
   }
 

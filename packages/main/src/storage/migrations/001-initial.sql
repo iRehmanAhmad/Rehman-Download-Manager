@@ -112,4 +112,7 @@ INSERT OR IGNORE INTO settings (key, value) VALUES
     ('autoStart', 'false'),
     ('minimizeToTray', 'true'),
     ('showNotifications', 'true'),
-    ('clipboardMonitor', 'true');
+    ('clipboardMonitor', 'true'),
+    ('proxyUrl', ''),
+    ('antivirusEnabled', 'false'),
+    ('antivirusCmd', '');

@@ -136,7 +136,7 @@
         }
       }
 
-      sendResponse({
+      chrome.runtime.sendMessage({
         type: 'GRAB_MEDIA_RESPONSE',
         urls: Array.from(urls),
         pageUrl: window.location.href,

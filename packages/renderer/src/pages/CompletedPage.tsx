@@ -4,7 +4,8 @@ import { formatFileSize } from '@rdm/shared';
 import type { Download } from '@rdm/shared';
 
 export function CompletedPage() {
-  const downloads = useDownloadStore((s) => s.getAll());
+  const downloadsMap = useDownloadStore((s) => s.downloads);
+  const downloads = Array.from(downloadsMap.values());
   const completed = downloads.filter((d) => d.status === 'completed');
 
   if (completed.length === 0) {

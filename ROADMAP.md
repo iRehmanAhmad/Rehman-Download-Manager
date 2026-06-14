@@ -30,9 +30,34 @@ rdm/
 - Zustand (state), Tailwind CSS (styles)
 - Vitest (testing)
 
+## IDM Killer Master Plan (Current Focus)
+
+To successfully implement all of IDM's legendary features, we are executing a phased approach to upgrade the core engine and add missing features.
+
+### 🏃‍♂️ Phase 1: The Core Download Engine (Current Phase)
+*   **Dynamic Segmentation Engine:** Upgrade `DownloadManager` from static chunking to true dynamic segmentation (dividing the largest chunk in half when connections become available).
+*   **Advanced Resume Capability:** Persist download state and chunk progress to SQLite to seamlessly resume after app crashes.
+*   **Drag & Drop Links:** Allow dragging URLs directly onto the UI.
+
+### 📋 Phase 2: Browser Integration & Interception
+*   **Browser Extension:** Build companion extensions for Chrome/Edge/Firefox to catch downloads seamlessly.
+*   **Native Messaging Bridge:** Securely pass URLs from the extension to the Electron app.
+*   **"Download All" Feature:** Extension support to parse all media/file links on a page.
+
+### 📋 Phase 3: Advanced Network & Security
+*   **Proxy & Authentication Support:** Basic, NTLM, and proxy server support.
+*   **Speed Limits / Quotas:** Advanced scheduling/quotas.
+*   **Antivirus Integration:** Post-download hook to run Windows Defender or custom CLI scanners.
+
+### 📋 Phase 4: Automation & Organization
+*   **The Grabber:** Implement the web-spidering logic for full site downloads.
+*   **The Scheduler:** Background cron-job system to start/stop queues.
+*   **Smart Categories:** Auto-categorize based on extensions.
+*   **Multilingual Support:** i18n localization.
+
 ---
 
-## Phase Plan
+## Original Phase Plan (Completed)
 
 ### ✅ Phase 1: Foundation
 **Status: Committed** (`6fef0c9`)

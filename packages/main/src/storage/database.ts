@@ -127,15 +127,14 @@ INSERT OR IGNORE INTO settings (key, value) VALUES
     ('autoStart', 'false'),
     ('minimizeToTray', 'true'),
     ('showNotifications', 'true'),
-    ('clipboardMonitor', 'true');
+    ('clipboardMonitor', 'true'),
+    ('proxyUrl', ''),
+    ('antivirusEnabled', 'false'),
+    ('antivirusCmd', '');
 `;
 
 export async function initDatabase(): Promise<void> {
   const dbPath = join(app.getPath('userData'), DB_FILENAME);
-
   db = new DatabaseSync(dbPath);
-
-  db.exec('PRAGMA journal_mode = WAL;');
-  db.exec('PRAGMA foreign_keys = ON;');
   db.exec(SCHEMA);
 }

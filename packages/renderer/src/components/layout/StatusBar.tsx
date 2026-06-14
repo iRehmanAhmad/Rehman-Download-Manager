@@ -4,7 +4,8 @@ import { formatFileSize } from '@rdm/shared';
 import type { QueueStatus } from '@rdm/shared';
 
 export function StatusBar() {
-  const downloads = useDownloadStore((s) => s.getAll());
+  const downloadsMap = useDownloadStore((s) => s.downloads);
+  const downloads = Array.from(downloadsMap.values());
   const [qStatus, setQStatus] = useState<QueueStatus | null>(null);
 
   useEffect(() => {

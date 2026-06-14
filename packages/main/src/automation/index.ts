@@ -23,14 +23,19 @@ function rowToRule(row: Record<string, unknown>): AutomationRule {
   };
 }
 
+export function getRules(): AutomationRule[] {
+  const db = getDatabase();
+  const rows = db
+    .prepare('SELECT * FROM automation_rules ORDER BY priority ASC')
+    .all() as Record<string, unknown>[];
+  return rows.map(rowToRule);
+}
+
 export function registerAutomationIpc(): void {
   const db = getDatabase();
 
   ipcMain.handle(IPC_CHANNELS.AUTOMATION_GET_RULES, (): AutomationRule[] => {
-    const rows = db
-      .prepare('SELECT * FROM automation_rules ORDER BY priority ASC')
-      .all() as Record<string, unknown>[];
-    return rows.map(rowToRule);
+    return getRules();
   });
 
   ipcMain.handle(
@@ -75,3 +80,5 @@ export function registerAutomationIpc(): void {
     return result.changes > 0;
   });
 }
+
+export { evaluateRules } from './evaluator';

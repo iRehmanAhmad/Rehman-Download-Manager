@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
+import type { Download } from '@rdm/shared';
 import { TitleBar } from './components/layout/TitleBar';
+import { MenuBar } from './components/layout/MenuBar';
+import { TopToolbar } from './components/layout/TopToolbar';
 import { Sidebar } from './components/layout/Sidebar';
 import { StatusBar } from './components/layout/StatusBar';
 import { DownloadsPage } from './pages/DownloadsPage';
@@ -10,22 +13,67 @@ import { SchedulerPage } from './pages/SchedulerPage';
 import { AutomationPage } from './pages/AutomationPage';
 import { PluginsPage } from './pages/PluginsPage';
 import { GrabberPage } from './pages/GrabberPage';
+import { GlobalAddUrlDialog } from './components/downloads/GlobalAddUrlDialog';
 import { useSettingsStore } from './stores/settings-store';
+import { useDownloadStore } from './stores/download-store';
 
 export function App() {
   const loadAll = useSettingsStore((s) => s.loadAll);
+  const updateDownload = useDownloadStore((s) => s.updateDownload);
 
   useEffect(() => {
     loadAll();
-  }, [loadAll]);
+    
+    // Global listeners for download progress (so they update even if we navigate away from DownloadsPage)
+    const unsubProgress = window.api.download.onProgress((dl: Download) => {
+      updateDownload(dl.id, dl);
+    });
+    const unsubCompleted = window.api.download.onCompleted((dl: Download) => {
+      updateDownload(dl.id, dl);
+    });
+    const unsubError = window.api.download.onError((dl: Download) => {
+      updateDownload(dl.id, dl);
+    });
+
+    return () => {
+      unsubProgress();
+      unsubCompleted();
+      unsubError();
+    };
+  }, [loadAll, updateDownload]);
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'copy';
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    let url = e.dataTransfer.getData('text/uri-list');
+    if (!url) {
+      url = e.dataTransfer.getData('text/plain');
+    }
+    
+    // Quick validation
+    if (url && (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('ftp://'))) {
+      const event = new CustomEvent('open-add-url-dialog', { detail: url });
+      window.dispatchEvent(event);
+    }
+  };
 
   return (
-    <BrowserRouter>
-      <div className="flex flex-col h-full">
+    <HashRouter>
+      <div 
+        className="flex flex-col h-full bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950/20 text-slate-100"
+        onDragOver={handleDragOver}
+        onDrop={handleDrop}
+      >
         <TitleBar />
+        <MenuBar />
+        <TopToolbar />
         <div className="flex flex-1 overflow-hidden">
           <Sidebar />
-          <main className="flex-1 overflow-auto bg-slate-950">
+          <main className="flex-1 overflow-auto bg-transparent">
             <Routes>
               <Route path="/" element={<DownloadsPage />} />
               <Route path="/completed" element={<CompletedPage />} />
@@ -38,7 +86,8 @@ export function App() {
           </main>
         </div>
         <StatusBar />
+        <GlobalAddUrlDialog />
       </div>
-    </BrowserRouter>
+    </HashRouter>
   );
 }

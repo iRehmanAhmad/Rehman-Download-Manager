@@ -22,4 +22,7 @@ export const SETTINGS_KEY = {
   MINIMIZE_TO_TRAY: 'minimizeToTray',
   SHOW_NOTIFICATIONS: 'showNotifications',
   CLIPBOARD_MONITOR: 'clipboardMonitor',
+  PROXY_URL: 'proxyUrl',
+  ANTIVIRUS_ENABLED: 'antivirusEnabled',
+  ANTIVIRUS_CMD: 'antivirusCmd',
 } as const;
