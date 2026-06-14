@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "ignoreDeprecations": "6.0",
+    "baseUrl": ".",
+    "paths": {
+      "@rdm/shared": ["packages/shared/src"],
+      "@rdm/shared/*": ["packages/shared/src/*"],
+      "@rdm/main": ["packages/main/src"],
+      "@rdm/main/*": ["packages/main/src/*"],
+      "@rdm/renderer": ["packages/renderer/src"],
+      "@rdm/renderer/*": ["packages/renderer/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist", "out", ".electron-vite"]
+}
