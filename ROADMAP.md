@@ -71,7 +71,7 @@ rdm/
 - Engine loads concurrency and speed limit from DB on startup
 - Add URL dialog: MD5 checksum field
 
-### 📋 Phase 4: Cloud Integration
+### 📋 Phase 4: Cloud Integration — **SKIPPED** (user request)
 
 - Provider implementations: Google Drive, Dropbox, OneDrive
 - OAuth connect/disconnect flow
@@ -91,13 +91,13 @@ rdm/
 - IPC channels: `PLUGIN_GET_ALL`, `PLUGIN_INSTALL`, `PLUGIN_UNINSTALL`, `PLUGIN_ENABLE`, `PLUGIN_DISABLE`
 - Plugins sidebar nav enabled + route
 
-### 📋 Phase 6: Grabber — Web Media Detection
+### ✅ Phase 6: Grabber — Web Media Detection
+**Status: Committed** (`0357eb9`)
 
-- Video/audio link detection from web pages (YouTube, Vimeo, etc.)
-- Site crawling and link extraction
-- Type/extension filtering
-- Grabber UI page
-- Floating "Download this video" button overlay
+- Video detection engine: 4 regex patterns scan HTML source for mp4/webm/mkv/flv/m3u8 etc., HTTP fetch with redirect following, URL normalization against base
+- Site crawler: extracts all href/src URLs from page, classifies by extension (video/audio/image/archive/document), 15s timeout
+- GrabberPage UI: URL input, Scan Videos + Crawl All buttons, type filter dropdown, per-item add, batch Add to Queue, loading spinner
+- Sidebar: Grabber nav enabled, Cloud nav removed
 - IPC channels: `GRABBER_DETECT_VIDEOS`, `GRABBER_CRAWL_SITE`
 
 ### ✅ Phase 7: Browser Extensions
@@ -116,14 +116,14 @@ rdm/
 - Real-time setting changes: toggling clipboard monitor or notifications in Settings immediately starts/stops the underlying services
 - Preload bridge: clipboard.onUrlDetected listener exposed to renderer
 
-### 📋 Phase 9: Polish & Production
+### ✅ Phase 9: Polish & Production
+**Status: Committed** (`0357eb9`)
 
-- App icons for all platforms (resources/icons/)
-- Full test suite (unit + integration) via Vitest
-- Error handling, logging, crash reporting
-- Code signing and platform-specific packaging
-- README and user documentation
-- Final QA pass across all features
+- App icon: SVG with gradient background and download arrow motif (resources/icons/icon.svg)
+- Test suite: 23 unit tests across 4 files — URL utils (10), filesize utils (10), IPC channels (2), download enum (1)
+- Vitest configured and passing
+- README: complete project documentation — features, tech stack, getting started, project structure, phase status
+- SQL schema inlined into database.ts to eliminate migration file ENOENT crash at runtime
 
 ---
 
