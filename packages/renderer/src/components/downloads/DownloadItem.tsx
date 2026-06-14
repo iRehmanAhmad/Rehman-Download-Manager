@@ -16,7 +16,14 @@ interface DownloadItemProps {
 export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: DownloadItemProps) {
   const updateDownload = useDownloadStore((s) => s.updateDownload);
   const removeDownload = useDownloadStore((s) => s.removeDownload);
+  const selectedIds = useDownloadStore((s) => s.selectedIds);
+  const toggleSelection = useDownloadStore((s) => s.toggleSelection);
   const [showDialog, setShowDialog] = useState(false);
+  const isSelected = selectedIds?.has(download.id);
+
+  const handleClick = (e: React.MouseEvent) => {
+    toggleSelection(download.id, e.ctrlKey || e.metaKey);
+  };
 
   const handlePause = (e?: React.MouseEvent) => {
     e?.stopPropagation();
@@ -76,8 +83,11 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
   return (
     <>
       <div 
+        onClick={handleClick}
         onDoubleClick={() => setShowDialog(true)}
-        className="grid grid-cols-[30px_auto_100px_100px_120px_100px_80px] gap-3 px-4 py-2.5 items-center hover:bg-white/5 transition-colors group relative cursor-pointer"
+        className={`grid grid-cols-[30px_auto_100px_100px_120px_100px_80px] gap-3 px-4 py-2.5 items-center hover:bg-white/5 transition-colors group relative cursor-pointer ${
+          isSelected ? 'bg-brand-500/20 hover:bg-brand-500/30 border-l-2 border-brand-500' : 'border-l-2 border-transparent'
+        }`}
       >
         {/* Background Progress Bar (IDM Style) */}
         {download.status === 'downloading' && (
