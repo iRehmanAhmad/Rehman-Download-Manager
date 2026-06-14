@@ -1,11 +1,50 @@
 import { ipcMain, BrowserWindow, app } from 'electron';
-import { IPC_CHANNELS, type ScheduleEntry } from '@rdm/shared';
+import { IPC_CHANNELS, type ScheduleEntry, type PluginInstance } from '@rdm/shared';
 import { registerDownloadIpc, setDownloadEngine, getDownloadEngine } from './download.ipc';
 import { registerSettingsIpc } from './settings.ipc';
 import { registerCategoryIpc } from './category.ipc';
 import { DownloadEngine } from '../download/engine';
 import { registerScheduleIpc, loadSchedules } from '../scheduler';
 import { registerAutomationIpc } from '../automation';
+import {
+  scanPlugins,
+  loadPlugin,
+  unloadPlugin,
+  enablePlugin,
+  disablePlugin,
+  installPlugin,
+  uninstallPlugin,
+  getLoadedPlugins,
+  isPluginLoaded,
+} from '../plugins/loader';
+
+function registerPluginIpc(): void {
+  ipcMain.handle(IPC_CHANNELS.PLUGIN_GET_ALL, (): PluginInstance[] => {
+    return scanPlugins();
+  });
+
+  ipcMain.handle(IPC_CHANNELS.PLUGIN_INSTALL, (_event, sourcePath: string): PluginInstance | null => {
+    const instance = installPlugin(sourcePath);
+    if (instance) {
+      BrowserWindow.getAllWindows().forEach((win) => {
+        win.webContents.send('plugin:installed', instance);
+      });
+    }
+    return instance;
+  });
+
+  ipcMain.handle(IPC_CHANNELS.PLUGIN_UNINSTALL, (_event, id: string): boolean => {
+    return uninstallPlugin(id);
+  });
+
+  ipcMain.handle(IPC_CHANNELS.PLUGIN_ENABLE, (_event, id: string): boolean => {
+    return enablePlugin(id);
+  });
+
+  ipcMain.handle(IPC_CHANNELS.PLUGIN_DISABLE, (_event, id: string): boolean => {
+    return disablePlugin(id);
+  });
+}
 
 export function registerAllIpc(engine: DownloadEngine): void {
   setDownloadEngine(engine);
@@ -13,6 +52,7 @@ export function registerAllIpc(engine: DownloadEngine): void {
   registerDownloadIpc();
   registerSettingsIpc();
   registerCategoryIpc();
+  registerPluginIpc();
 
   registerAutomationIpc();
 

@@ -1,4 +1,4 @@
-import type { Download, DownloadOptions, Category, QueueStatus } from '@rdm/shared';
+import type { Download, DownloadOptions, Category, QueueStatus, PluginInstance } from '@rdm/shared';
 
 export interface RdmApi {
   download: {
@@ -51,6 +51,13 @@ export interface RdmApi {
     minimize(): void;
     maximize(): void;
     close(): void;
+  };
+  plugins: {
+    getAll(): Promise<PluginInstance[]>;
+    install(sourcePath: string): Promise<PluginInstance | null>;
+    uninstall(id: string): Promise<boolean>;
+    enable(id: string): Promise<boolean>;
+    disable(id: string): Promise<boolean>;
   };
 }
 

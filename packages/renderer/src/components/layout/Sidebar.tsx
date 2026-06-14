@@ -16,7 +16,7 @@ const NAV_ITEMS = [
   { path: '/scheduler', label: 'Scheduler', icon: Clock },
   { path: '/grabber', label: 'Grabber', icon: Globe, disabled: true },
   { path: '/automation', label: 'Automation', icon: Zap },
-  { path: '/plugins', label: 'Plugins', icon: Puzzle, disabled: true },
+  { path: '/plugins', label: 'Plugins', icon: Puzzle },
   { path: '/cloud', label: 'Cloud', icon: Cloud, disabled: true },
   { path: '/settings', label: 'Settings', icon: Settings },
 ];

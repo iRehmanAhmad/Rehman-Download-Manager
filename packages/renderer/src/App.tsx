@@ -8,6 +8,7 @@ import { CompletedPage } from './pages/CompletedPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { SchedulerPage } from './pages/SchedulerPage';
 import { AutomationPage } from './pages/AutomationPage';
+import { PluginsPage } from './pages/PluginsPage';
 import { useSettingsStore } from './stores/settings-store';
 
 export function App() {
@@ -29,6 +30,7 @@ export function App() {
               <Route path="/completed" element={<CompletedPage />} />
               <Route path="/automation" element={<AutomationPage />} />
               <Route path="/scheduler" element={<SchedulerPage />} />
+              <Route path="/plugins" element={<PluginsPage />} />
               <Route path="/settings" element={<SettingsPage />} />
             </Routes>
           </main>
