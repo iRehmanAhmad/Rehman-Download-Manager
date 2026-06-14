@@ -41,12 +41,23 @@ const api = {
     },
   },
 
+  queue: {
+    startAll: (): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.QUEUE_START_ALL),
+    pauseAll: (): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.QUEUE_PAUSE_ALL),
+    setConcurrency: (n: number): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.QUEUE_SET_CONCURRENCY, n),
+    setGlobalSpeedLimit: (limit: number): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.QUEUE_SET_GLOBAL_SPEED_LIMIT, limit),
+  },
+
   settings: {
-    get: (key: string): Promise<unknown> =>
+    get: (key: string): Promise<string | null> =>
       ipcRenderer.invoke(IPC_CHANNELS.SETTINGS_GET, key),
-    set: (key: string, value: unknown): Promise<boolean> =>
+    set: (key: string, value: string): Promise<boolean> =>
       ipcRenderer.invoke(IPC_CHANNELS.SETTINGS_SET, key, value),
-    getAll: (): Promise<Record<string, unknown>> =>
+    getAll: (): Promise<Record<string, string>> =>
       ipcRenderer.invoke(IPC_CHANNELS.SETTINGS_GET_ALL),
   },
 
@@ -55,6 +66,32 @@ const api = {
       ipcRenderer.invoke(IPC_CHANNELS.CATEGORY_GET_ALL),
     create: (category: Omit<Category, 'id'>): Promise<Category> =>
       ipcRenderer.invoke(IPC_CHANNELS.CATEGORY_CREATE, category),
+    update: (category: Category): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.CATEGORY_UPDATE, category),
+    delete: (id: string): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.CATEGORY_DELETE, id),
+  },
+
+  schedule: {
+    getAll: (): Promise<import('@rdm/shared').ScheduleEntry[]> =>
+      ipcRenderer.invoke(IPC_CHANNELS.SCHEDULE_GET_ALL),
+    create: (entry: Omit<import('@rdm/shared').ScheduleEntry, 'id'>): Promise<import('@rdm/shared').ScheduleEntry> =>
+      ipcRenderer.invoke(IPC_CHANNELS.SCHEDULE_CREATE, entry),
+    update: (entry: import('@rdm/shared').ScheduleEntry): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.SCHEDULE_UPDATE, entry),
+    delete: (id: string): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.SCHEDULE_DELETE, id),
+  },
+
+  automation: {
+    getRules: (): Promise<import('@rdm/shared').AutomationRule[]> =>
+      ipcRenderer.invoke(IPC_CHANNELS.AUTOMATION_GET_RULES),
+    createRule: (rule: Omit<import('@rdm/shared').AutomationRule, 'id'>): Promise<import('@rdm/shared').AutomationRule> =>
+      ipcRenderer.invoke(IPC_CHANNELS.AUTOMATION_CREATE_RULE, rule),
+    updateRule: (rule: import('@rdm/shared').AutomationRule): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.AUTOMATION_UPDATE_RULE, rule),
+    deleteRule: (id: string): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.AUTOMATION_DELETE_RULE, id),
   },
 
   app: {

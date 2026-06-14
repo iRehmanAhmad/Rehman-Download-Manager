@@ -33,6 +33,7 @@ export interface Download {
   priority: DownloadPriority;
   categoryId?: string;
   addedAt: number;
+  startedAt?: number;
   completedAt?: number;
   errorMessage?: string;
   retryCount: number;

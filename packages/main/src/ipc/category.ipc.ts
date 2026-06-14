@@ -1,24 +1,52 @@
 import { ipcMain } from 'electron';
 import type { Category } from '@rdm/shared';
-
-const categories: Category[] = [
-  { id: 'music', name: 'Music', defaultDir: 'Music', color: '#ec4899', sortOrder: 1 },
-  { id: 'videos', name: 'Videos', defaultDir: 'Videos', color: '#8b5cf6', sortOrder: 2 },
-  { id: 'documents', name: 'Documents', defaultDir: 'Documents', color: '#3b82f6', sortOrder: 3 },
-  { id: 'archives', name: 'Archives', defaultDir: 'Archives', color: '#f59e0b', sortOrder: 4 },
-  { id: 'programs', name: 'Programs', defaultDir: 'Programs', color: '#10b981', sortOrder: 5 },
-  { id: 'other', name: 'Other', defaultDir: 'Other', color: '#6b7280', sortOrder: 99 },
-];
+import { getDatabase } from '../storage/database';
+import { v4 as uuid } from 'uuid';
 
 export function registerCategoryIpc(): void {
   ipcMain.handle('category:get-all', (): Category[] => {
-    return categories;
+    const db = getDatabase();
+    const rows = db
+      .prepare('SELECT id, name, default_dir, color, sort_order FROM categories ORDER BY sort_order')
+      .all() as {
+      id: string;
+      name: string;
+      default_dir: string;
+      color: string | null;
+      sort_order: number;
+    }[];
+    return rows.map((r) => ({
+      id: r.id,
+      name: r.name,
+      defaultDir: r.default_dir,
+      color: r.color || undefined,
+      icon: undefined,
+      sortOrder: r.sort_order,
+    }));
   });
 
   ipcMain.handle('category:create', (_event, category: Omit<Category, 'id'>): Category => {
-    const id = `cat-${Date.now()}`;
-    const newCategory: Category = { id, ...category };
-    categories.push(newCategory);
-    return newCategory;
+    const db = getDatabase();
+    const id = `cat-${uuid().slice(0, 8)}`;
+    db.prepare(
+      'INSERT INTO categories (id, name, default_dir, color, sort_order) VALUES (?, ?, ?, ?, ?)',
+    ).run(id, category.name, category.defaultDir, category.color || null, category.sortOrder || 0);
+    return { id, ...category };
+  });
+
+  ipcMain.handle('category:update', (_event, category: Category): boolean => {
+    const db = getDatabase();
+    const result = db
+      .prepare(
+        'UPDATE categories SET name = ?, default_dir = ?, color = ?, sort_order = ? WHERE id = ?',
+      )
+      .run(category.name, category.defaultDir, category.color || null, category.sortOrder || 0, category.id);
+    return result.changes > 0;
+  });
+
+  ipcMain.handle('category:delete', (_event, id: string): boolean => {
+    const db = getDatabase();
+    const result = db.prepare('DELETE FROM categories WHERE id = ?').run(id);
+    return result.changes > 0;
   });
 }
