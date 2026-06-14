@@ -21,6 +21,10 @@ const api = {
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_SET_SPEED_LIMIT, id, limit),
     setConnections: (id: string, count: number): Promise<boolean> =>
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_SET_CONNECTIONS, id, count),
+    openFile: (id: string): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_OPEN_FILE, id),
+    openFolder: (id: string): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_OPEN_FOLDER, id),
     onProgress: (callback: (download: Download) => void) => {
       const handler = (_event: Electron.IpcRendererEvent, download: Download) =>
         callback(download);

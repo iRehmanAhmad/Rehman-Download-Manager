@@ -10,6 +10,8 @@ export const IPC_CHANNELS = {
   DOWNLOAD_SET_SPEED_LIMIT: 'download:set-speed-limit',
   DOWNLOAD_SET_CONNECTIONS: 'download:set-connections',
   DOWNLOAD_MOVE: 'download:move',
+  DOWNLOAD_OPEN_FILE: 'download:open-file',
+  DOWNLOAD_OPEN_FOLDER: 'download:open-folder',
   DOWNLOAD_PROGRESS: 'download:progress',
   DOWNLOAD_COMPLETED: 'download:completed',
   DOWNLOAD_ERROR: 'download:error',

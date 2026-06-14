@@ -232,8 +232,9 @@ export class DownloadEngine extends EventEmitter {
         this.emit('error', dl);
         this.processQueue();
       });
-
-      task.start();
+      task.start().catch((err) => {
+        console.error('Unhandled task start error:', err);
+      });
     }
   }
 }
@@ -325,7 +326,15 @@ class DownloadTask extends EventEmitter {
     const parsedUrl = new URL(this.dl.url);
     const mod = parsedUrl.protocol === 'https:' ? https : http;
 
-    const resumeInfo = await this.getResumeInfo(mod, parsedUrl);
+    // If we already have chunks and a file size, we know it's resumable
+    const alreadyChunked = this.dl.chunks && this.dl.chunks.length > 0 && this.dl.fileSize > 0;
+
+    let resumeInfo = { supportsRange: false, fileSize: -1 };
+    if (!alreadyChunked) {
+      resumeInfo = await this.getResumeInfo(mod, parsedUrl);
+    } else {
+      resumeInfo = { supportsRange: true, fileSize: this.dl.fileSize };
+    }
 
     if (resumeInfo.supportsRange && resumeInfo.fileSize > 0) {
       this.dl.fileSize = resumeInfo.fileSize;
@@ -638,8 +647,7 @@ class DownloadTask extends EventEmitter {
       this.clearThrottleTimer();
       this.activeChunks.clear();
       const outputPath = this.getTempPath();
-      this.mergeChunks(outputPath);
-      resolve();
+      this.mergeChunks(outputPath).then(resolve).catch(reject);
       return;
     }
 
@@ -779,27 +787,29 @@ class DownloadTask extends EventEmitter {
         res.on('end', () => {
           clearInterval(speedTimer);
           this.activeChunks.delete(streamHandle);
-          fileStream.close();
-          if (chunk.startByte + chunk.downloaded >= chunk.endByte) {
-            chunk.status = 'completed';
-          } else {
-            chunk.status = 'pending'; // Incomplete, retry
-          }
-          this.dispatchConnections(mod, parsedUrl, resolve, reject);
+          fileStream.close(() => {
+            if (chunk.startByte + chunk.downloaded >= chunk.endByte) {
+              chunk.status = 'completed';
+            } else {
+              chunk.status = 'pending'; // Incomplete, retry
+            }
+            try { this.dispatchConnections(mod, parsedUrl, resolve, reject); } catch(e) { reject(e); }
+          });
         });
 
         res.on('close', () => {
           clearInterval(speedTimer);
           this.activeChunks.delete(streamHandle);
-          fileStream.close();
-          if (chunk.status === 'downloading') {
-            if (chunk.startByte + chunk.downloaded >= chunk.endByte) {
-              chunk.status = 'completed';
-            } else {
-              chunk.status = 'pending';
+          fileStream.close(() => {
+            if (chunk.status === 'downloading') {
+              if (chunk.startByte + chunk.downloaded >= chunk.endByte) {
+                chunk.status = 'completed';
+              } else {
+                chunk.status = 'pending';
+              }
             }
-          }
-          this.dispatchConnections(mod, parsedUrl, resolve, reject);
+            try { this.dispatchConnections(mod, parsedUrl, resolve, reject); } catch(e) { reject(e); }
+          });
         });
 
         res.on('error', (err) => {
@@ -817,24 +827,43 @@ class DownloadTask extends EventEmitter {
     req.end();
   }
 
-  private mergeChunks(outputPath: string): void {
+  private async mergeChunks(outputPath: string): Promise<void> {
     if (this.cancelled) return;
     this.dl.status = 'merging';
+    this.emitProgress();
 
     const writeStream = fs.createWriteStream(outputPath);
+    const sortedChunks = this.dl.chunks.sort((a, b) => a.index - b.index);
 
-    for (const chunk of this.dl.chunks.sort(
-      (a, b) => a.index - b.index,
-    )) {
-      const partPath = `${this.getTempPath()}.part${chunk.index}`;
-      const data = fs.readFileSync(partPath);
-      writeStream.write(data);
-      fs.unlinkSync(partPath);
+    try {
+      for (const chunk of sortedChunks) {
+        if (this.cancelled) break;
+        const partPath = `${this.getTempPath()}.part${chunk.index}`;
+        if (!fs.existsSync(partPath)) continue;
+
+        await new Promise<void>((res, rej) => {
+          const readStream = fs.createReadStream(partPath);
+          readStream.on('error', rej);
+          readStream.on('end', () => {
+            try { fs.unlinkSync(partPath); } catch {}
+            res();
+          });
+          readStream.pipe(writeStream, { end: false });
+        });
+      }
+
+      await new Promise<void>((res) => {
+        writeStream.end(() => {
+          if (!this.cancelled) {
+            this.runAntivirusScanAndComplete(outputPath);
+          }
+          res();
+        });
+      });
+    } catch (err) {
+      writeStream.destroy();
+      throw err;
     }
-
-    writeStream.end(() => {
-      this.runAntivirusScanAndComplete(outputPath);
-    });
   }
 
   private runAntivirusScanAndComplete(outputPath: string): void {
@@ -867,11 +896,11 @@ class DownloadTask extends EventEmitter {
     });
   }
 
-  private handleCompletion(outputPath: string): void {
+  private async handleCompletion(outputPath: string): Promise<void> {
     this.dl.status = 'completing';
 
     if (this.dl.checksum) {
-      const verified = this.verifyChecksum(outputPath);
+      const verified = await this.verifyChecksum(outputPath);
       if (!verified) {
         this.dl.status = 'error';
         this.dl.errorMessage = 'Checksum verification failed';
@@ -903,14 +932,21 @@ class DownloadTask extends EventEmitter {
     this.emit('completed', this.snapshot());
   }
 
-  private verifyChecksum(filePath: string): boolean {
-    try {
-      const data = fs.readFileSync(filePath);
-      const hash = crypto.createHash('md5').update(data).digest('hex');
-      return hash.toLowerCase() === this.dl.checksum!.toLowerCase();
-    } catch {
-      return false;
-    }
+  private async verifyChecksum(filePath: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      try {
+        const hash = crypto.createHash('md5');
+        const stream = fs.createReadStream(filePath);
+        stream.on('error', () => resolve(false));
+        stream.on('data', (chunk) => hash.update(chunk));
+        stream.on('end', () => {
+          const fileHash = hash.digest('hex');
+          resolve(fileHash.toLowerCase() === this.dl.checksum!.toLowerCase());
+        });
+      } catch {
+        resolve(false);
+      }
+    });
   }
 
   private emitProgress(): void {

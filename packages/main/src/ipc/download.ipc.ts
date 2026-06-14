@@ -127,6 +127,22 @@ export function registerDownloadIpc(): void {
     return getDownloadEngine().setConnections(id, count);
   });
 
+  ipcMain.handle(IPC_CHANNELS.DOWNLOAD_OPEN_FILE, async (_event, id: string): Promise<boolean> => {
+    const dl = getDownloadEngine().getDownload(id);
+    if (!dl || !dl.filepath) return false;
+    const { shell } = require('electron');
+    const result = await shell.openPath(dl.filepath);
+    return result === '';
+  });
+
+  ipcMain.handle(IPC_CHANNELS.DOWNLOAD_OPEN_FOLDER, (_event, id: string): boolean => {
+    const dl = getDownloadEngine().getDownload(id);
+    if (!dl || !dl.filepath) return false;
+    const { shell } = require('electron');
+    shell.showItemInFolder(dl.filepath);
+    return true;
+  });
+
   ipcMain.handle(IPC_CHANNELS.QUEUE_START_ALL, (): boolean => {
     try { getDownloadEngine().resumeAll(); emitQueueStatus(); return true; } catch { return false; }
   });

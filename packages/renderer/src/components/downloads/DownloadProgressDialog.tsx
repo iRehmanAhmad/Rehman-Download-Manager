@@ -73,26 +73,26 @@ export function DownloadProgressDialog({
         </div>
 
         {/* Content */}
-        <div className="bg-[#fff] p-3 border border-[#ccc] border-t-0 mx-2 mb-2 shadow-inner h-[170px]">
+        <div className="bg-[#fff] p-3 border border-[#ccc] border-t-0 mx-2 mb-2 shadow-inner min-h-[140px] flex flex-col">
           {activeTab === 'status' && (
-            <>
+            <div className="flex-1">
               <div className="truncate text-xs mb-2 text-brand-600">{download.url}</div>
               
               <div className="grid grid-cols-[130px_1fr] gap-y-0.5 text-[11px] mb-3">
                 <div className="text-[#333]">Status</div>
                 <div className="text-[#0000ff]">{
                   isDownloading ? 'Receiving data...' : 
-                  isPaused ? 'Paused' : download.status
+                  isPaused ? 'Paused' : download.status === 'completed' ? 'Finished' : download.status
                 }</div>
                 
                 <div className="text-[#333]">File size</div>
                 <div>{formatFileSize(download.fileSize)}</div>
                 
                 <div className="text-[#333]">Downloaded</div>
-                <div>{formatFileSize(download.downloaded)} ({download.progress.toFixed(2)} %)</div>
+                <div>{formatFileSize(download.downloaded)} ({Number.isNaN(download.progress) ? 0 : download.progress.toFixed(2)}%)</div>
                 
                 <div className="text-[#333]">Transfer rate</div>
-                <div>{isDownloading ? `${formatFileSize(download.speed)}/sec` : '0 bytes/sec'}</div>
+                <div>{isDownloading ? `${formatFileSize(download.speed)}/sec` : '--'}</div>
                 
                 <div className="text-[#333]">Time left</div>
                 <div>{isDownloading ? formatEta(download.eta) : '--'}</div>
@@ -102,17 +102,17 @@ export function DownloadProgressDialog({
               </div>
 
               {/* Progress Bar */}
-              <div className="w-full h-3.5 bg-[#e6e6e6] border border-[#ccc] relative overflow-hidden mb-3 shadow-[inset_0_1px_3px_rgba(0,0,0,0.1)]">
+              <div className="w-full h-3.5 bg-[#e6e6e6] border border-[#ccc] relative overflow-hidden mb-1 shadow-[inset_0_1px_3px_rgba(0,0,0,0.1)]">
                 <div 
                   className="absolute top-0 bottom-0 left-0 bg-gradient-to-b from-[#00d800] to-[#00a800]"
-                  style={{ width: `${download.progress}%` }}
+                  style={{ width: `${Number.isNaN(download.progress) ? 0 : download.progress}%` }}
                 />
               </div>
-            </>
+            </div>
           )}
 
           {activeTab === 'speed' && (
-            <div className="text-xs text-[#333] h-full flex flex-col justify-center items-center">
+            <div className="text-xs text-[#333] flex-1 flex flex-col justify-center items-center">
               <label className="flex items-center gap-2 mb-4">
                 <input 
                   type="checkbox" 
@@ -134,7 +134,7 @@ export function DownloadProgressDialog({
           )}
 
           {activeTab === 'options' && (
-            <div className="text-xs text-[#333] h-full flex flex-col justify-center items-center">
+            <div className="text-xs text-[#333] flex-1 flex flex-col justify-center items-center">
               <label className="flex items-center gap-2 mb-2">
                 <input type="checkbox" /> Show download complete dialog
               </label>
@@ -148,23 +148,49 @@ export function DownloadProgressDialog({
           )}
 
           {/* Buttons */}
-          <div className="flex items-center justify-between mt-auto">
+          <div className="flex items-center justify-between mt-auto pt-2 border-t border-[#eee]">
             <button className="px-5 py-0.5 bg-[#e0e0e0] hover:bg-[#d0d0d0] border border-[#999] rounded text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none">
-              Show details {">>"}
+              Options
             </button>
             <div className="flex items-center gap-2">
-              <button 
-                onClick={isDownloading ? onPause : isPaused ? onResume : undefined}
-                className="px-5 py-0.5 bg-[#e0e0e0] hover:bg-[#d0d0d0] border border-[#999] rounded text-xs min-w-[75px] focus:ring-1 focus:ring-brand-500 focus:outline-none"
-              >
-                {isDownloading ? 'Pause' : isPaused ? 'Resume' : 'Pause'}
-              </button>
-              <button 
-                onClick={onCancel}
-                className="px-5 py-0.5 bg-[#e0e0e0] hover:bg-[#d0d0d0] border border-[#999] rounded text-xs min-w-[75px] focus:ring-1 focus:ring-brand-500 focus:outline-none"
-              >
-                Cancel
-              </button>
+              {download.status === 'completed' ? (
+                <>
+                  <button 
+                    onClick={() => { window.api.download.openFile(download.id); onClose(); }}
+                    className="px-4 py-0.5 bg-[#e0e0e0] hover:bg-[#d0d0d0] border border-[#999] rounded text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none"
+                  >
+                    Open
+                  </button>
+                  <button 
+                    onClick={() => { window.api.download.openFolder(download.id); onClose(); }}
+                    className="px-4 py-0.5 bg-[#e0e0e0] hover:bg-[#d0d0d0] border border-[#999] rounded text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none"
+                  >
+                    Open Folder
+                  </button>
+                  <button 
+                    onClick={onClose}
+                    className="px-4 py-0.5 bg-[#e0e0e0] hover:bg-[#d0d0d0] border border-[#999] rounded text-xs focus:ring-1 focus:ring-brand-500 focus:outline-none"
+                  >
+                    Close
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button 
+                    onClick={isDownloading ? onPause : isPaused ? onResume : undefined}
+                    className="px-5 py-0.5 bg-[#e0e0e0] hover:bg-[#d0d0d0] border border-[#999] rounded text-xs min-w-[75px] focus:ring-1 focus:ring-brand-500 focus:outline-none"
+                    disabled={download.status !== 'downloading' && download.status !== 'paused'}
+                  >
+                    {isDownloading ? 'Pause' : 'Resume'}
+                  </button>
+                  <button 
+                    onClick={onCancel}
+                    className="px-5 py-0.5 bg-[#e0e0e0] hover:bg-[#d0d0d0] border border-[#999] rounded text-xs min-w-[75px] focus:ring-1 focus:ring-brand-500 focus:outline-none"
+                  >
+                    Cancel
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
