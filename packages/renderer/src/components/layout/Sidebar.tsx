@@ -13,9 +13,9 @@ import {
 const NAV_ITEMS = [
   { path: '/', label: 'Downloads', icon: ArrowDown },
   { path: '/completed', label: 'Completed', icon: CheckCircle },
-  { path: '/scheduler', label: 'Scheduler', icon: Clock, disabled: true },
+  { path: '/scheduler', label: 'Scheduler', icon: Clock },
   { path: '/grabber', label: 'Grabber', icon: Globe, disabled: true },
-  { path: '/automation', label: 'Automation', icon: Zap, disabled: true },
+  { path: '/automation', label: 'Automation', icon: Zap },
   { path: '/plugins', label: 'Plugins', icon: Puzzle, disabled: true },
   { path: '/cloud', label: 'Cloud', icon: Cloud, disabled: true },
   { path: '/settings', label: 'Settings', icon: Settings },

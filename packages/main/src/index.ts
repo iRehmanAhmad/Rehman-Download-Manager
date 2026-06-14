@@ -1,11 +1,13 @@
 import { app, BrowserWindow, Tray, Menu, nativeImage } from 'electron';
 import { join } from 'path';
-import { registerAllIpc } from './ipc';
+import { registerAllIpc, getDownloadEngine } from './ipc';
 import { initDatabase } from './storage/database';
+import { DownloadEngine } from './download/engine';
 import { APP_NAME } from '@rdm/shared';
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
+let engine: DownloadEngine;
 
 function createWindow(): void {
   mainWindow = new BrowserWindow({
@@ -48,8 +50,18 @@ function createTray(): void {
 
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Show RDM', click: () => mainWindow?.show() },
-    { label: 'Pause All', click: () => { /* TODO */ } },
-    { label: 'Resume All', click: () => { /* TODO */ } },
+    {
+      label: 'Pause All',
+      click: () => {
+        try { engine.pauseAll(); } catch { /* ignore */ }
+      },
+    },
+    {
+      label: 'Resume All',
+      click: () => {
+        try { engine.resumeAll(); } catch { /* ignore */ }
+      },
+    },
     { type: 'separator' },
     { label: 'Quit', click: () => app.quit() },
   ]);
@@ -65,7 +77,9 @@ function createTray(): void {
 app.whenReady().then(async () => {
   await initDatabase();
 
-  registerAllIpc();
+  engine = new DownloadEngine();
+
+  registerAllIpc(engine);
   createWindow();
   createTray();
 

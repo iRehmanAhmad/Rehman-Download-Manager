@@ -15,14 +15,34 @@ export interface RdmApi {
     onCompleted(callback: (download: Download) => void): () => void;
     onError(callback: (download: Download) => void): () => void;
   };
+  queue: {
+    startAll(): Promise<boolean>;
+    pauseAll(): Promise<boolean>;
+    setConcurrency(n: number): Promise<boolean>;
+    setGlobalSpeedLimit(limit: number): Promise<boolean>;
+  };
   settings: {
-    get(key: string): Promise<unknown>;
-    set(key: string, value: unknown): Promise<boolean>;
-    getAll(): Promise<Record<string, unknown>>;
+    get(key: string): Promise<string | null>;
+    set(key: string, value: string): Promise<boolean>;
+    getAll(): Promise<Record<string, string>>;
   };
   categories: {
     getAll(): Promise<Category[]>;
     create(category: Omit<Category, 'id'>): Promise<Category>;
+    update(category: Category): Promise<boolean>;
+    delete(id: string): Promise<boolean>;
+  };
+  schedule: {
+    getAll(): Promise<import('@rdm/shared').ScheduleEntry[]>;
+    create(entry: Omit<import('@rdm/shared').ScheduleEntry, 'id'>): Promise<import('@rdm/shared').ScheduleEntry>;
+    update(entry: import('@rdm/shared').ScheduleEntry): Promise<boolean>;
+    delete(id: string): Promise<boolean>;
+  };
+  automation: {
+    getRules(): Promise<import('@rdm/shared').AutomationRule[]>;
+    createRule(rule: Omit<import('@rdm/shared').AutomationRule, 'id'>): Promise<import('@rdm/shared').AutomationRule>;
+    updateRule(rule: import('@rdm/shared').AutomationRule): Promise<boolean>;
+    deleteRule(id: string): Promise<boolean>;
   };
   app: {
     getVersion(): Promise<string>;

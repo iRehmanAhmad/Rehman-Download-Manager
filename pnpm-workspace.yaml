@@ -4,3 +4,16 @@ allowBuilds:
   better-sqlite3: true
   electron: true
   esbuild: true
+  protobufjs: true
+  tesseract.js: true
+  tree-sitter-c: true
+  tree-sitter-cpp: true
+  tree-sitter-go: true
+  tree-sitter-java: true
+  tree-sitter-javascript: true
+  tree-sitter-lua: true
+  tree-sitter-php: true
+  tree-sitter-python: true
+  tree-sitter-ruby: true
+  tree-sitter-rust: true
+  tree-sitter-typescript: true

@@ -1,39 +1,55 @@
 import { ipcMain } from 'electron';
+import { getDatabase } from '../storage/database';
 
-const settings = new Map<string, unknown>();
-
-const defaults: Record<string, unknown> = {
-  globalSpeedLimit: 0,
-  maxConcurrent: 5,
+const defaults: Record<string, string> = {
+  globalSpeedLimit: '0',
+  maxConcurrent: '5',
   defaultFolder: '',
   tempFolder: '',
   theme: 'dark',
-  autoStart: false,
-  minimizeToTray: true,
-  showNotifications: true,
-  clipboardMonitor: true,
+  autoStart: 'false',
+  minimizeToTray: 'true',
+  showNotifications: 'true',
+  clipboardMonitor: 'true',
 };
 
-export function registerSettingsIpc(): void {
+function ensureDefaults(): void {
+  const db = getDatabase();
+  const insertStmt = db.prepare('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)');
   for (const [key, value] of Object.entries(defaults)) {
-    if (!settings.has(key)) {
-      settings.set(key, value);
-    }
+    insertStmt.run(key, value);
   }
+}
 
-  ipcMain.handle('settings:get', (_event, key: string): unknown => {
-    return settings.get(key) ?? defaults[key] ?? null;
+export function registerSettingsIpc(): void {
+  ensureDefaults();
+
+  ipcMain.handle('settings:get', (_event, key: string): string | null => {
+    const db = getDatabase();
+    const row = db.prepare('SELECT value FROM settings WHERE key = ?').get(key) as
+      | { value: string }
+      | undefined;
+    return row?.value ?? defaults[key] ?? null;
   });
 
-  ipcMain.handle('settings:set', (_event, key: string, value: unknown): boolean => {
-    settings.set(key, value);
+  ipcMain.handle('settings:set', (_event, key: string, value: string): boolean => {
+    const db = getDatabase();
+    db.prepare('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value').run(
+      key,
+      String(value),
+    );
     return true;
   });
 
-  ipcMain.handle('settings:get-all', (): Record<string, unknown> => {
-    const result: Record<string, unknown> = { ...defaults };
-    for (const [key, value] of settings.entries()) {
-      result[key] = value;
+  ipcMain.handle('settings:get-all', (): Record<string, string> => {
+    const db = getDatabase();
+    const rows = db.prepare('SELECT key, value FROM settings').all() as {
+      key: string;
+      value: string;
+    }[];
+    const result: Record<string, string> = { ...defaults };
+    for (const row of rows) {
+      result[row.key] = row.value;
     }
     return result;
   });
