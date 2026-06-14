@@ -108,13 +108,13 @@ rdm/
 - Native messaging host: Windows batch launcher, Node.js TCP bridge client using length-prefixed protocol, connects to RDM on 127.0.0.1:19527
 - Browser bridge: TCP server in main process, handles ping/add-download/get-status actions, starts/stops with app lifecycle
 
-### 📋 Phase 8: Clipboard & Notifications
+### ✅ Phase 8: Clipboard & Notifications
+**Status: Committed** (`d28fec3`)
 
-- Clipboard URL monitor — IPC channel: `CLIPBOARD_URL`
-- Native OS notifications (Windows/Mac/Linux)
-- Download complete/fail alerts
-- Auto-paste from clipboard on URL detect
-- Notification preferences in Settings
+- Clipboard URL monitor: 1.5s poll interval, URL regex detection via isValidUrl, sends CLIPBOARD_URL events to renderer, starts/stops via clipboardMonitor setting
+- Native OS notifications: download complete (normal), download error (critical, with error message), clipboard URL detected (low), all gate on showNotifications setting
+- Real-time setting changes: toggling clipboard monitor or notifications in Settings immediately starts/stops the underlying services
+- Preload bridge: clipboard.onUrlDetected listener exposed to renderer
 
 ### 📋 Phase 9: Polish & Production
 
