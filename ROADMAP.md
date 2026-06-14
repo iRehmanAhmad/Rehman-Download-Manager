@@ -100,14 +100,13 @@ rdm/
 - Floating "Download this video" button overlay
 - IPC channels: `GRABBER_DETECT_VIDEOS`, `GRABBER_CRAWL_SITE`
 
-### 📋 Phase 7: Browser Extensions
+### ✅ Phase 7: Browser Extensions
+**Status: Committed** (`f36b5c8`)
 
-- Chrome extension: popup, background service worker, content scripts
-- Firefox extension
-- Native messaging host bridge (resources/native-messaging/)
-- One-click "Send to RDM" from browser context menu
-- Download interception via content scripts
-- Browser-to-desktop communication via native messaging
+- Chrome extension: manifest v3, popup UI (download page, grab media, manual URL), background service worker with context menus (link/page/image/selection/grab all media), content script with floating download button injection on video/audio elements, MutationObserver for SPAs
+- Firefox extension: manifest v2, shared code using browser.* API
+- Native messaging host: Windows batch launcher, Node.js TCP bridge client using length-prefixed protocol, connects to RDM on 127.0.0.1:19527
+- Browser bridge: TCP server in main process, handles ping/add-download/get-status actions, starts/stops with app lifecycle
 
 ### 📋 Phase 8: Clipboard & Notifications
 
