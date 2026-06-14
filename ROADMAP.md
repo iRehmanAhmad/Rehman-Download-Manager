@@ -48,7 +48,7 @@ rdm/
 - Build system: electron-vite (main/preload/renderer), electron-builder
 
 ### ✅ Phase 2: Core Engines
-**Status: Done, uncommitted**
+**Status: Committed** (`bcd6589`)
 
 - `main/download/engine.ts` — chunked parallel HTTP/HTTPS downloading, resume, speed calc, ETA, speed limits
 - `main/automation/index.ts` — SQLite rule engine (10 condition types, 10 action types)
@@ -58,15 +58,18 @@ rdm/
 - `renderer/pages/SchedulerPage.tsx` — schedule CRUD UI with cron input, time windows
 - Wiring: IPC handlers, preload bridge, routing, sidebar nav items
 
-### 📋 Phase 3: Queue Management & Advanced Downloads
+### ✅ Phase 3: Queue Management & Advanced Downloads
+**Status: Committed** (`4169a28`)
 
-- Queue reorder (drag-drop priority) — IPC channel: `QUEUE_REORDER`
-- Concurrency control — IPC channel: `QUEUE_SET_CONCURRENCY`
-- Global speed limits — IPC channel: `QUEUE_SET_GLOBAL_SPEED_LIMIT`
-- Per-download speed/connection configuration
-- MD5/checksum verification on completion
-- Smart retry with exponential backoff
-- Live StatusBar stats (speed, ETA, active count)
+- Queue reorder (move up/down) — IPC channel: `QUEUE_REORDER`
+- Concurrency control (live from settings) — IPC channel: `QUEUE_SET_CONCURRENCY`
+- Global speed limits with per-task enforcement — IPC channel: `QUEUE_SET_GLOBAL_SPEED_LIMIT`
+- Per-download speed limit and connection count settings (inline gear icon)
+- MD5 checksum verification on download completion
+- Exponential backoff retry (2s/4s/8s) up to maxRetries
+- Live StatusBar stats via QUEUE_STATUS event stream (activeCount, maxConcurrent, totalSpeed, globalSpeedLimit)
+- Engine loads concurrency and speed limit from DB on startup
+- Add URL dialog: MD5 checksum field
 
 ### 📋 Phase 4: Cloud Integration
 
