@@ -21,7 +21,32 @@ function sendToRenderer(channel: string, data: unknown): void {
   });
 }
 
+function getQueueStatus() {
+  return getDownloadEngine().getQueueStatus();
+}
+
+function emitQueueStatus() {
+  sendToRenderer(IPC_CHANNELS.QUEUE_STATUS, getQueueStatus());
+}
+
 export function registerDownloadIpc(): void {
+  const engineEvents = getDownloadEngine();
+
+  engineEvents.on('progress', (dl: Download) => {
+    sendToRenderer(IPC_CHANNELS.DOWNLOAD_PROGRESS, dl);
+    emitQueueStatus();
+  });
+
+  engineEvents.on('completed', (dl: Download) => {
+    sendToRenderer(IPC_CHANNELS.DOWNLOAD_COMPLETED, dl);
+    emitQueueStatus();
+  });
+
+  engineEvents.on('error', (dl: Download) => {
+    sendToRenderer(IPC_CHANNELS.DOWNLOAD_ERROR, dl);
+    emitQueueStatus();
+  });
+
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_ADD, (_event, options: DownloadOptions): Download => {
     const eng = getDownloadEngine();
     const id = uuid();
@@ -52,19 +77,7 @@ export function registerDownloadIpc(): void {
     };
 
     eng.add(download);
-
-    eng.on('progress', (dl: Download) => {
-      sendToRenderer(IPC_CHANNELS.DOWNLOAD_PROGRESS, dl);
-    });
-
-    eng.on('completed', (dl: Download) => {
-      sendToRenderer(IPC_CHANNELS.DOWNLOAD_COMPLETED, dl);
-    });
-
-    eng.on('error', (dl: Download) => {
-      sendToRenderer(IPC_CHANNELS.DOWNLOAD_ERROR, dl);
-    });
-
+    emitQueueStatus();
     return download;
   });
 
@@ -77,19 +90,27 @@ export function registerDownloadIpc(): void {
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_PAUSE, (_event, id: string): boolean => {
-    return getDownloadEngine().pause(id);
+    const ok = getDownloadEngine().pause(id);
+    if (ok) emitQueueStatus();
+    return ok;
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_RESUME, (_event, id: string): boolean => {
-    return getDownloadEngine().resume(id);
+    const ok = getDownloadEngine().resume(id);
+    if (ok) emitQueueStatus();
+    return ok;
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_CANCEL, (_event, id: string): boolean => {
-    return getDownloadEngine().cancel(id);
+    const ok = getDownloadEngine().cancel(id);
+    if (ok) emitQueueStatus();
+    return ok;
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_REMOVE, (_event, id: string): boolean => {
-    return getDownloadEngine().remove(id);
+    const ok = getDownloadEngine().remove(id);
+    if (ok) emitQueueStatus();
+    return ok;
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_SET_SPEED_LIMIT, (_event, id: string, limit: number): boolean => {
@@ -101,18 +122,22 @@ export function registerDownloadIpc(): void {
   });
 
   ipcMain.handle(IPC_CHANNELS.QUEUE_START_ALL, (): boolean => {
-    try { getDownloadEngine().resumeAll(); return true; } catch { return false; }
+    try { getDownloadEngine().resumeAll(); emitQueueStatus(); return true; } catch { return false; }
   });
 
   ipcMain.handle(IPC_CHANNELS.QUEUE_PAUSE_ALL, (): boolean => {
-    try { getDownloadEngine().pauseAll(); return true; } catch { return false; }
+    try { getDownloadEngine().pauseAll(); emitQueueStatus(); return true; } catch { return false; }
   });
 
   ipcMain.handle(IPC_CHANNELS.QUEUE_SET_CONCURRENCY, (_event, n: number): boolean => {
-    try { getDownloadEngine().setMaxConcurrent(n); return true; } catch { return false; }
+    try { getDownloadEngine().setMaxConcurrent(n); emitQueueStatus(); return true; } catch { return false; }
   });
 
   ipcMain.handle(IPC_CHANNELS.QUEUE_SET_GLOBAL_SPEED_LIMIT, (_event, limit: number): boolean => {
-    try { getDownloadEngine().setGlobalSpeedLimit(limit); return true; } catch { return false; }
+    try { getDownloadEngine().setGlobalSpeedLimit(limit); emitQueueStatus(); return true; } catch { return false; }
+  });
+
+  ipcMain.handle(IPC_CHANNELS.QUEUE_REORDER, (_event, orderedIds: string[]): boolean => {
+    try { getDownloadEngine().reorder(orderedIds); return true; } catch { return false; }
   });
 }

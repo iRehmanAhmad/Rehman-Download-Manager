@@ -14,6 +14,7 @@ export function DownloadsPage() {
   const [url, setUrl] = useState('');
   const [filename, setFilename] = useState('');
   const [connections, setConnections] = useState(8);
+  const [checksum, setChecksum] = useState('');
   const [adding, setAdding] = useState(false);
 
   useEffect(() => {
@@ -41,35 +42,29 @@ export function DownloadsPage() {
         url: url.trim(),
         filename: filename.trim() || undefined,
         numConnections: connections,
+        checksum: checksum.trim() || undefined,
       };
       const dl = await window.api.download.add(options);
       addDownload(dl);
       setUrl('');
       setFilename('');
       setConnections(8);
+      setChecksum('');
       setShowDialog(false);
     } catch (err) {
       console.error('Failed to add download:', err);
     } finally {
       setAdding(false);
     }
-  }, [url, filename, connections, adding, addDownload]);
+  }, [url, filename, connections, checksum, adding, addDownload]);
 
   const handleStartAll = useCallback(async () => {
     await window.api.queue.startAll();
-    const all = await window.api.download.getAll();
-    for (const dl of all) {
-      updateDownload(dl.id, dl);
-    }
-  }, [updateDownload]);
+  }, []);
 
   const handlePauseAll = useCallback(async () => {
     await window.api.queue.pauseAll();
-    const all = await window.api.download.getAll();
-    for (const dl of all) {
-      updateDownload(dl.id, dl);
-    }
-  }, [updateDownload]);
+  }, []);
 
   const handleClear = useCallback(async () => {
     const completed = downloads.filter(
@@ -80,6 +75,36 @@ export function DownloadsPage() {
       removeDownload(dl.id);
     }
   }, [downloads, removeDownload]);
+
+  const handleMoveUp = useCallback(
+    async (id: string) => {
+      const arr = downloads.filter(
+        (d) => d.status === 'queued' || d.status === 'paused' || d.status === 'downloading',
+      );
+      const idx = arr.findIndex((d) => d.id === id);
+      if (idx <= 0) return;
+      const reordered = [...arr];
+      [reordered[idx - 1], reordered[idx]] = [reordered[idx], reordered[idx - 1]];
+      const orderedIds = reordered.map((d) => d.id);
+      await window.api.queue.reorder(orderedIds);
+    },
+    [downloads],
+  );
+
+  const handleMoveDown = useCallback(
+    async (id: string) => {
+      const arr = downloads.filter(
+        (d) => d.status === 'queued' || d.status === 'paused' || d.status === 'downloading',
+      );
+      const idx = arr.findIndex((d) => d.id === id);
+      if (idx === -1 || idx >= arr.length - 1) return;
+      const reordered = [...arr];
+      [reordered[idx], reordered[idx + 1]] = [reordered[idx + 1], reordered[idx]];
+      const orderedIds = reordered.map((d) => d.id);
+      await window.api.queue.reorder(orderedIds);
+    },
+    [downloads],
+  );
 
   return (
     <div className="flex flex-col h-full">
@@ -124,7 +149,11 @@ export function DownloadsPage() {
             <p className="text-xs mt-1">Add a URL or drag a link here to start downloading</p>
           </div>
         ) : (
-          <DownloadList downloads={downloads} />
+          <DownloadList
+            downloads={downloads}
+            onMoveUp={handleMoveUp}
+            onMoveDown={handleMoveDown}
+          />
         )}
       </div>
 
@@ -133,10 +162,12 @@ export function DownloadsPage() {
           url={url}
           filename={filename}
           connections={connections}
+          checksum={checksum}
           adding={adding}
           onUrlChange={setUrl}
           onFilenameChange={setFilename}
           onConnectionsChange={setConnections}
+          onChecksumChange={setChecksum}
           onAdd={handleAddUrl}
           onClose={() => setShowDialog(false)}
         />
@@ -149,20 +180,24 @@ function AddUrlDialog({
   url,
   filename,
   connections,
+  checksum,
   adding,
   onUrlChange,
   onFilenameChange,
   onConnectionsChange,
+  onChecksumChange,
   onAdd,
   onClose,
 }: {
   url: string;
   filename: string;
   connections: number;
+  checksum: string;
   adding: boolean;
   onUrlChange: (v: string) => void;
   onFilenameChange: (v: string) => void;
   onConnectionsChange: (v: number) => void;
+  onChecksumChange: (v: string) => void;
   onAdd: () => void;
   onClose: () => void;
 }) {
@@ -186,16 +221,29 @@ function AddUrlDialog({
               onKeyDown={(e) => e.key === 'Enter' && onAdd()}
             />
           </div>
-          <div>
-            <label className="block text-xs text-slate-400 mb-1">Filename (optional)</label>
-            <input
-              type="text"
-              value={filename}
-              onChange={(e) => onFilenameChange(e.target.value)}
-              placeholder="Leave blank to auto-detect"
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-brand-500"
-              onKeyDown={(e) => e.key === 'Enter' && onAdd()}
-            />
+          <div className="grid grid-cols-2 gap-3">
+            <div>
+              <label className="block text-xs text-slate-400 mb-1">Filename (optional)</label>
+              <input
+                type="text"
+                value={filename}
+                onChange={(e) => onFilenameChange(e.target.value)}
+                placeholder="Auto-detect"
+                className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-brand-500"
+                onKeyDown={(e) => e.key === 'Enter' && onAdd()}
+              />
+            </div>
+            <div>
+              <label className="block text-xs text-slate-400 mb-1">MD5 (optional)</label>
+              <input
+                type="text"
+                value={checksum}
+                onChange={(e) => onChecksumChange(e.target.value)}
+                placeholder="d41d8cd98f..."
+                className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-brand-500 font-mono"
+                onKeyDown={(e) => e.key === 'Enter' && onAdd()}
+              />
+            </div>
           </div>
           <div>
             <label className="block text-xs text-slate-400 mb-1">Connections: {connections}</label>

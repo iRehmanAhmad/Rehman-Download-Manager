@@ -4,8 +4,9 @@ import https from 'node:https';
 import { URL } from 'node:url';
 import fs from 'node:fs';
 import path from 'node:path';
+import crypto from 'node:crypto';
 import { app } from 'electron';
-import type { Download, ChunkInfo, DownloadOptions } from '@rdm/shared';
+import type { Download, ChunkInfo } from '@rdm/shared';
 import { v4 as uuid } from 'uuid';
 import {
   PROGRESS_UPDATE_INTERVAL,
@@ -15,10 +16,17 @@ import {
 
 const MIN_CHUNK_SIZE = 1024 * 256;
 const SPEED_AVERAGE_WINDOW = 3000;
+const BASE_RETRY_DELAY = 2000;
 
 interface SpeedSample {
   time: number;
   bytes: number;
+}
+
+interface ChunkStream {
+  pause: () => void;
+  resume: () => void;
+  destroy: () => void;
 }
 
 export interface DownloadEngineEvents {
@@ -44,7 +52,7 @@ export class DownloadEngine extends EventEmitter {
   }
 
   add(download: Download): void {
-    this.tasks.set(download.id, new DownloadTask(download, this.tempDir));
+    this.tasks.set(download.id, new DownloadTask(download, this.tempDir, () => this.getGlobalBytesPerSecond()));
     this.queue.push(download.id);
     this.processQueue();
   }
@@ -62,7 +70,9 @@ export class DownloadEngine extends EventEmitter {
     const task = this.tasks.get(id);
     if (!task) return false;
     task.resume();
-    this.queue.push(id);
+    if (!this.queue.includes(id)) {
+      this.queue.push(id);
+    }
     this.processQueue();
     return true;
   }
@@ -84,6 +94,16 @@ export class DownloadEngine extends EventEmitter {
     this.queue = this.queue.filter((qid) => qid !== id);
     this.tasks.delete(id);
     return true;
+  }
+
+  reorder(orderedIds: string[]): void {
+    const currentSet = new Set(this.queue);
+    this.queue = orderedIds.filter((id) => currentSet.has(id));
+    for (const id of this.queue) {
+      if (!orderedIds.includes(id)) {
+        this.queue.push(id);
+      }
+    }
   }
 
   setSpeedLimit(id: string, limit: number): boolean {
@@ -117,6 +137,24 @@ export class DownloadEngine extends EventEmitter {
     return Array.from(this.tasks.values()).map((t) => t.snapshot());
   }
 
+  getQueueOrder(): string[] {
+    return [...this.queue];
+  }
+
+  getQueueStatus(): { queue: string[]; activeCount: number; maxConcurrent: number; globalSpeedLimit: number; totalSpeed: number } {
+    let totalSpeed = 0;
+    for (const [, task] of this.tasks) {
+      totalSpeed += task.currentSpeed;
+    }
+    return {
+      queue: [...this.queue],
+      activeCount: this.activeCount,
+      maxConcurrent: this.maxConcurrent,
+      globalSpeedLimit: this.globalSpeedLimit,
+      totalSpeed,
+    };
+  }
+
   pauseAll(): void {
     for (const [, task] of this.tasks) {
       task.pause();
@@ -135,6 +173,13 @@ export class DownloadEngine extends EventEmitter {
       if (task.status === 'downloading') count++;
     }
     return count;
+  }
+
+  private getGlobalBytesPerSecond(): number {
+    if (this.globalSpeedLimit <= 0) return 0;
+    const active = this.activeCount;
+    if (active === 0) return 0;
+    return this.globalSpeedLimit / active;
   }
 
   private processQueue(): void {
@@ -162,11 +207,14 @@ export class DownloadEngine extends EventEmitter {
 class DownloadTask extends EventEmitter {
   private dl: Download;
   private tempDir: string;
-  private activeChunks: Map<number, ChunkDownloader> = new Map();
+  private activeChunks: Set<ChunkStream> = new Set();
   private speedSamples: SpeedSample[] = [];
   private paused = false;
   private cancelled = false;
   private lastProgressTime = 0;
+  private globalRetryCount = 0;
+  private getGlobalLimit: () => number;
+  private isThrottleTimer: ReturnType<typeof setInterval> | null = null;
 
   speedLimit = 0;
 
@@ -182,11 +230,16 @@ class DownloadTask extends EventEmitter {
     this.dl.numConnections = n;
   }
 
-  constructor(download: Download, tempDir: string) {
+  get currentSpeed(): number {
+    return this.dl.speed;
+  }
+
+  constructor(download: Download, tempDir: string, getGlobalLimit: () => number) {
     super();
     this.dl = { ...download };
     this.tempDir = tempDir;
     this.speedLimit = download.speedLimit || 0;
+    this.getGlobalLimit = getGlobalLimit;
   }
 
   snapshot(): Download {
@@ -198,20 +251,12 @@ class DownloadTask extends EventEmitter {
     this.dl.startedAt = Date.now();
 
     try {
-      const parsedUrl = new URL(this.dl.url);
-      const mod = parsedUrl.protocol === 'https:' ? https : http;
-
-      const resumeInfo = await this.getResumeInfo(mod, parsedUrl);
-
-      if (resumeInfo.supportsRange && resumeInfo.fileSize > 0) {
-        this.dl.fileSize = resumeInfo.fileSize;
-        await this.downloadChunked(mod, parsedUrl, resumeInfo);
-      } else {
-        this.dl.numConnections = 1;
-        await this.downloadSequential(mod, parsedUrl);
-      }
+      await this.performDownload();
     } catch (err) {
-      if (!this.cancelled) {
+      if (this.cancelled) return;
+      if (this.globalRetryCount < this.dl.maxRetries) {
+        await this.retryWithBackoff(err);
+      } else {
         this.dl.status = 'error';
         this.dl.errorMessage = String(err);
         this.emit('error', this.snapshot());
@@ -219,10 +264,39 @@ class DownloadTask extends EventEmitter {
     }
   }
 
+  private async retryWithBackoff(err: unknown): Promise<void> {
+    this.globalRetryCount++;
+    this.dl.retryCount = this.globalRetryCount;
+    this.dl.status = 'queued';
+    this.dl.errorMessage = `Retry ${this.globalRetryCount}/${this.dl.maxRetries}: ${String(err)}`;
+
+    const delay = BASE_RETRY_DELAY * Math.pow(2, this.globalRetryCount - 1);
+    await new Promise<void>((resolve) => setTimeout(resolve, delay));
+
+    if (this.cancelled || this.paused) return;
+    await this.start();
+  }
+
+  private async performDownload(): Promise<void> {
+    const parsedUrl = new URL(this.dl.url);
+    const mod = parsedUrl.protocol === 'https:' ? https : http;
+
+    const resumeInfo = await this.getResumeInfo(mod, parsedUrl);
+
+    if (resumeInfo.supportsRange && resumeInfo.fileSize > 0) {
+      this.dl.fileSize = resumeInfo.fileSize;
+      await this.downloadChunked(mod, parsedUrl, resumeInfo);
+    } else {
+      this.dl.numConnections = 1;
+      await this.downloadSequential(mod, parsedUrl);
+    }
+  }
+
   pause(): void {
     this.paused = true;
     this.dl.status = 'paused';
-    for (const [, chunk] of this.activeChunks) {
+    this.clearThrottleTimer();
+    for (const chunk of this.activeChunks) {
       chunk.destroy();
     }
     this.activeChunks.clear();
@@ -238,7 +312,8 @@ class DownloadTask extends EventEmitter {
   cancel(): void {
     this.cancelled = true;
     this.dl.status = 'cancelled';
-    for (const [, chunk] of this.activeChunks) {
+    this.clearThrottleTimer();
+    for (const chunk of this.activeChunks) {
       chunk.destroy();
     }
     this.activeChunks.clear();
@@ -272,7 +347,6 @@ class DownloadTask extends EventEmitter {
         ...(this.dl.headers || {}),
         ...(range ? { Range: range } : {}),
         ...(this.dl.referer ? { Referer: this.dl.referer } : {}),
-        ...(this.dl.userAgent ? { 'User-Agent': this.dl.userAgent } : {}),
         'User-Agent': this.dl.userAgent || 'Mozilla/5.0',
       },
     };
@@ -307,17 +381,68 @@ class DownloadTask extends EventEmitter {
     });
   }
 
+  private applySpeedThrottle(): void {
+    this.clearThrottleTimer();
+    const effectiveLimit = this.getEffectiveSpeedLimit();
+    if (effectiveLimit <= 0) return;
+
+    this.isThrottleTimer = setInterval(() => {
+      if (this.paused || this.cancelled) {
+        this.clearThrottleTimer();
+        return;
+      }
+      const currentBps = this.calculateSpeed();
+      if (currentBps > effectiveLimit * 1.05) {
+        const pauseTime = Math.max(50, ((currentBps - effectiveLimit) / currentBps) * 1000);
+        for (const chunk of this.activeChunks) {
+          chunk.pause();
+        }
+        setTimeout(() => {
+          if (!this.paused && !this.cancelled) {
+            for (const chunk of this.activeChunks) {
+              chunk.resume();
+            }
+          }
+        }, pauseTime);
+      }
+    }, 1000);
+  }
+
+  private clearThrottleTimer(): void {
+    if (this.isThrottleTimer) {
+      clearInterval(this.isThrottleTimer);
+      this.isThrottleTimer = null;
+    }
+  }
+
+  private getEffectiveSpeedLimit(): number {
+    const global = this.getGlobalLimit();
+    if (this.speedLimit > 0 && global > 0) return Math.min(this.speedLimit, global);
+    if (this.speedLimit > 0) return this.speedLimit;
+    if (global > 0) return global;
+    return 0;
+  }
+
   private async downloadSequential(
     mod: typeof http | typeof https,
     parsedUrl: URL,
   ): Promise<void> {
     const outputPath = this.getTempPath();
     const fileStream = fs.createWriteStream(outputPath);
+    this.applySpeedThrottle();
 
     return new Promise((resolve, reject) => {
       const req = mod.request(this.getRequestOptions(parsedUrl), (res) => {
+        const streamHandle: ChunkStream = {
+          pause: () => res.pause(),
+          resume: () => res.resume(),
+          destroy: () => req.destroy(),
+        };
+        this.activeChunks.add(streamHandle);
+
         if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
           fileStream.close();
+          this.activeChunks.clear();
           const redirectUrl = new URL(res.headers.location, this.dl.url);
           const rmod = redirectUrl.protocol === 'https:' ? https : http;
           this.downloadSequential(rmod, redirectUrl).then(resolve).catch(reject);
@@ -378,29 +503,24 @@ class DownloadTask extends EventEmitter {
 
         fileStream.on('finish', () => {
           if (speedTimer) { clearInterval(speedTimer); speedTimer = null; }
+          this.clearThrottleTimer();
+          this.activeChunks.clear();
           if (this.cancelled) return;
-          this.dl.status = 'completing';
-          const finalPath = path.join(
-            this.tempDir,
-            `rdm-final-${Date.now()}-${this.dl.filename}`,
-          );
-          fs.renameSync(outputPath, finalPath);
-          this.dl.filepath = finalPath;
-          this.dl.downloaded = this.dl.fileSize;
-          this.dl.progress = 100;
-          this.dl.status = 'completed';
-          this.dl.completedAt = Date.now();
-          this.emit('completed', this.snapshot());
+          this.handleCompletion(outputPath);
           resolve();
         });
 
         res.on('error', (err) => {
           if (speedTimer) { clearInterval(speedTimer); speedTimer = null; }
+          this.clearThrottleTimer();
+          this.activeChunks.clear();
           if (!this.cancelled) reject(err);
         });
       });
 
       req.on('error', (err) => {
+        this.clearThrottleTimer();
+        this.activeChunks.clear();
         if (!this.cancelled) reject(err);
       });
       req.end();
@@ -412,6 +532,7 @@ class DownloadTask extends EventEmitter {
     parsedUrl: URL,
     resumeInfo: { supportsRange: boolean; fileSize: number },
   ): Promise<void> {
+    this.applySpeedThrottle();
     const chunkSize = Math.max(
       MIN_CHUNK_SIZE,
       Math.ceil(resumeInfo.fileSize / this.numConnections),
@@ -438,11 +559,14 @@ class DownloadTask extends EventEmitter {
       this.downloadChunk(mod, parsedUrl, chunk),
     );
     await Promise.all(promises);
+    this.clearThrottleTimer();
+    this.activeChunks.clear();
 
     if (this.cancelled) return;
     if (this.paused) return;
 
-    this.mergeChunks();
+    const outputPath = this.getTempPath();
+    this.mergeChunks(outputPath);
   }
 
   private downloadChunk(
@@ -458,6 +582,13 @@ class DownloadTask extends EventEmitter {
       const req = mod.request(
         this.getRequestOptions(parsedUrl, range),
         (res) => {
+          const streamHandle: ChunkStream = {
+            pause: () => res.pause(),
+            resume: () => res.resume(),
+            destroy: () => req.destroy(),
+          };
+          this.activeChunks.add(streamHandle);
+
           chunk.status = 'downloading';
 
           let lastBytes = 0;
@@ -502,27 +633,30 @@ class DownloadTask extends EventEmitter {
 
           fileStream.on('finish', () => {
             clearInterval(speedTimer);
+            this.activeChunks.delete(streamHandle);
             chunk.status = 'completed';
             resolve();
           });
 
           res.on('error', (err) => {
             clearInterval(speedTimer);
+            this.activeChunks.delete(streamHandle);
             reject(err);
           });
         },
       );
 
-      req.on('error', reject);
+      req.on('error', (err) => {
+        reject(err);
+      });
       req.end();
     });
   }
 
-  private mergeChunks(): void {
+  private mergeChunks(outputPath: string): void {
     if (this.cancelled) return;
     this.dl.status = 'merging';
 
-    const outputPath = this.getTempPath();
     const writeStream = fs.createWriteStream(outputPath);
 
     for (const chunk of this.dl.chunks.sort(
@@ -535,26 +669,54 @@ class DownloadTask extends EventEmitter {
     }
 
     writeStream.end(() => {
-      const finalPath = path.join(
-        path.dirname(this.tempDir),
-        this.dl.filename,
-      );
-      try {
-        fs.renameSync(outputPath, finalPath);
-      } catch {
-        const altPath = path.join(
-          path.dirname(this.tempDir),
-          `rdm-${Date.now()}-${this.dl.filename}`,
-        );
-        fs.renameSync(outputPath, altPath);
-        this.dl.filepath = altPath;
-      }
-      this.dl.filepath = finalPath;
-      this.dl.status = 'completed';
-      this.dl.completedAt = Date.now();
-      this.dl.progress = 100;
-      this.emit('completed', this.snapshot());
+      this.handleCompletion(outputPath);
     });
+  }
+
+  private handleCompletion(outputPath: string): void {
+    this.dl.status = 'completing';
+
+    if (this.dl.checksum) {
+      const verified = this.verifyChecksum(outputPath);
+      if (!verified) {
+        this.dl.status = 'error';
+        this.dl.errorMessage = 'Checksum verification failed';
+        this.emit('error', this.snapshot());
+        try { fs.unlinkSync(outputPath); } catch { /* ignore */ }
+        return;
+      }
+    }
+
+    const finalPath = path.join(
+      path.dirname(this.tempDir),
+      this.dl.filename,
+    );
+    try {
+      fs.renameSync(outputPath, finalPath);
+    } catch {
+      const altPath = path.join(
+        path.dirname(this.tempDir),
+        `rdm-${Date.now()}-${this.dl.filename}`,
+      );
+      fs.renameSync(outputPath, altPath);
+      this.dl.filepath = altPath;
+    }
+    this.dl.filepath = finalPath;
+    this.dl.downloaded = this.dl.fileSize;
+    this.dl.progress = 100;
+    this.dl.status = 'completed';
+    this.dl.completedAt = Date.now();
+    this.emit('completed', this.snapshot());
+  }
+
+  private verifyChecksum(filePath: string): boolean {
+    try {
+      const data = fs.readFileSync(filePath);
+      const hash = crypto.createHash('md5').update(data).digest('hex');
+      return hash.toLowerCase() === this.dl.checksum!.toLowerCase();
+    } catch {
+      return false;
+    }
   }
 
   private emitProgress(): void {

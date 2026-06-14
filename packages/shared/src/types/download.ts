@@ -62,3 +62,11 @@ export interface DownloadOptions {
   referer?: string;
   checksum?: string;
 }
+
+export interface QueueStatus {
+  queue: string[];
+  activeCount: number;
+  maxConcurrent: number;
+  globalSpeedLimit: number;
+  totalSpeed: number;
+}
