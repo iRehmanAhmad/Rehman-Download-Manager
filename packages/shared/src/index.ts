@@ -9,4 +9,4 @@ export * from './constants/defaults';
 export * from './constants/enums';
 export * from './utils/url';
 export * from './utils/filesize';
-export * from './utils/path';
+// path utils are Node-only, imported directly by main process packages

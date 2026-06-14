@@ -1,9 +1,9 @@
 import { app, BrowserWindow, Tray, Menu, nativeImage } from 'electron';
 import { join } from 'path';
 import { registerAllIpc, getDownloadEngine } from './ipc';
-import { initDatabase } from './storage/database';
+import { initDatabase, getDatabase } from './storage/database';
 import { DownloadEngine } from './download/engine';
-import { APP_NAME } from '@rdm/shared';
+import { APP_NAME, SETTINGS_KEY, MAX_CONCURRENT_DOWNLOADS } from '@rdm/shared';
 
 let mainWindow: BrowserWindow | null = null;
 let tray: Tray | null = null;
@@ -74,12 +74,32 @@ function createTray(): void {
   });
 }
 
+function loadEngineSettings(): void {
+  try {
+    const db = getDatabase();
+    const concurrencyRow = db
+      .prepare('SELECT value FROM settings WHERE key = ?')
+      .get(SETTINGS_KEY.MAX_CONCURRENT) as { value: string } | undefined;
+    const concurrency = parseInt(concurrencyRow?.value || String(MAX_CONCURRENT_DOWNLOADS), 10);
+    engine.setMaxConcurrent(Math.max(1, Math.min(concurrency, 32)));
+
+    const speedLimitRow = db
+      .prepare('SELECT value FROM settings WHERE key = ?')
+      .get(SETTINGS_KEY.GLOBAL_SPEED_LIMIT) as { value: string } | undefined;
+    const speedLimit = parseInt(speedLimitRow?.value || '0', 10);
+    engine.setGlobalSpeedLimit(Math.max(0, speedLimit));
+  } catch {
+    // settings table may not exist yet
+  }
+}
+
 app.whenReady().then(async () => {
   await initDatabase();
 
   engine = new DownloadEngine();
 
   registerAllIpc(engine);
+  loadEngineSettings();
   createWindow();
   createTray();
 

@@ -1,5 +1,5 @@
 import { Settings, Monitor, Download, Bell, Folder, Shield } from 'lucide-react';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { useSettingsStore } from '../stores/settings-store';
 
 const TABS = [
@@ -107,11 +107,25 @@ function AppearanceSettings() {
 function DownloadSettings() {
   const settings = useSettingsStore((s) => s.settings);
   const setValue = useSettingsStore((s) => s.setValue);
+  const [globalLimitInput, setGlobalLimitInput] = useState(settings.globalSpeedLimit || '0');
+  const [concurrencyInput, setConcurrencyInput] = useState(settings.maxConcurrent || '5');
 
   const handleMaxConcurrent = useCallback(
     async (v: number) => {
-      await setValue('maxConcurrent', String(v));
-      await window.api.queue.setConcurrency(v);
+      const clamped = Math.max(1, Math.min(v, 32));
+      setConcurrencyInput(String(clamped));
+      await setValue('maxConcurrent', String(clamped));
+      await window.api.queue.setConcurrency(clamped);
+    },
+    [setValue],
+  );
+
+  const handleGlobalSpeedLimit = useCallback(
+    async (v: number) => {
+      const clamped = Math.max(0, v);
+      setGlobalLimitInput(String(clamped));
+      await setValue('globalSpeedLimit', String(clamped));
+      await window.api.queue.setGlobalSpeedLimit(clamped);
     },
     [setValue],
   );
@@ -123,9 +137,9 @@ function DownloadSettings() {
         <label className="text-sm text-slate-400 block">Max concurrent downloads</label>
         <input
           type="number"
-          value={settings.maxConcurrent || '5'}
+          value={concurrencyInput}
           min={1}
-          max={20}
+          max={32}
           onChange={(e) => handleMaxConcurrent(parseInt(e.target.value) || 1)}
           className="w-24 bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-200"
         />
@@ -146,14 +160,10 @@ function DownloadSettings() {
         <div className="flex items-center gap-2">
           <input
             type="number"
-            value={settings.globalSpeedLimit || '0'}
+            value={globalLimitInput}
             min={0}
-            step={1024}
-            onChange={(e) => {
-              const v = String(e.target.value);
-              setValue('globalSpeedLimit', v);
-              window.api.queue.setGlobalSpeedLimit(parseInt(v) || 0);
-            }}
+            step={102400}
+            onChange={(e) => handleGlobalSpeedLimit(parseInt(e.target.value) || 0)}
             className="w-32 bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-200"
           />
           <span className="text-xs text-slate-500">bytes/s</span>
@@ -205,7 +215,8 @@ function SecuritySettings() {
   return (
     <div className="max-w-lg space-y-6">
       <h2 className="text-base font-medium text-slate-200">Security</h2>
-      <p className="text-sm text-slate-500">Checksum verification and SSL/TLS settings coming soon.</p>
+      <p className="text-sm text-slate-500">MD5 checksum verification runs automatically on download completion if a checksum is provided when adding a URL.</p>
+      <p className="text-sm text-slate-600 mt-1">More verification algorithms (SHA-256, SHA-512) coming soon.</p>
     </div>
   );
 }

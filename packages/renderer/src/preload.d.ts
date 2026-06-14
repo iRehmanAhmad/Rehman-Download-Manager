@@ -1,4 +1,4 @@
-import type { Download, DownloadOptions, Category } from '@rdm/shared';
+import type { Download, DownloadOptions, Category, QueueStatus } from '@rdm/shared';
 
 export interface RdmApi {
   download: {
@@ -20,6 +20,8 @@ export interface RdmApi {
     pauseAll(): Promise<boolean>;
     setConcurrency(n: number): Promise<boolean>;
     setGlobalSpeedLimit(limit: number): Promise<boolean>;
+    reorder(orderedIds: string[]): Promise<boolean>;
+    onStatus(callback: (status: QueueStatus) => void): () => void;
   };
   settings: {
     get(key: string): Promise<string | null>;

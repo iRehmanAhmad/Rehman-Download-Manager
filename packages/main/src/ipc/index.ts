@@ -21,7 +21,7 @@ export function registerAllIpc(engine: DownloadEngine): void {
       engine.add({
         id: `sched-${Date.now()}`,
         url: entry.url,
-        filename: entry.filename || undefined,
+        filename: entry.filename || 'scheduled-download',
         categoryId: entry.categoryId,
         tempDir: '',
         fileSize: -1,

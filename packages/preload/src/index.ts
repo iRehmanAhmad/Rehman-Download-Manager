@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { IPC_CHANNELS, type Download, type DownloadOptions, type Category } from '@rdm/shared';
+import { IPC_CHANNELS, type Download, type DownloadOptions, type Category, type QueueStatus } from '@rdm/shared';
 
 const api = {
   download: {
@@ -50,6 +50,14 @@ const api = {
       ipcRenderer.invoke(IPC_CHANNELS.QUEUE_SET_CONCURRENCY, n),
     setGlobalSpeedLimit: (limit: number): Promise<boolean> =>
       ipcRenderer.invoke(IPC_CHANNELS.QUEUE_SET_GLOBAL_SPEED_LIMIT, limit),
+    reorder: (orderedIds: string[]): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.QUEUE_REORDER, orderedIds),
+    onStatus: (callback: (status: QueueStatus) => void) => {
+      const handler = (_event: Electron.IpcRendererEvent, status: QueueStatus) =>
+        callback(status);
+      ipcRenderer.on(IPC_CHANNELS.QUEUE_STATUS, handler);
+      return () => ipcRenderer.removeListener(IPC_CHANNELS.QUEUE_STATUS, handler);
+    },
   },
 
   settings: {
