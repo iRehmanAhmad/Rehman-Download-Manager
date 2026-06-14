@@ -717,22 +717,32 @@ class DownloadTask extends EventEmitter {
     }
 
     const range = `bytes=${currentStart}-${chunk.endByte}`;
-    const req = mod.request(
+    
+    // Synchronously mark as downloading and add a placeholder to activeChunks
+    // to prevent dispatchConnections from infinite looping.
+    chunk.status = 'downloading';
+    let resObject: any = null;
+    let req: any = null;
+    
+    const streamHandle: ChunkStream = {
+      pause: () => { if (resObject) resObject.pause(); },
+      resume: () => { if (resObject) resObject.resume(); },
+      destroy: () => { if (req) req.destroy(); },
+    };
+    this.activeChunks.add(streamHandle);
+
+    req = mod.request(
       this.getRequestOptions(parsedUrl, range),
       (res) => {
         if (res.statusCode && res.statusCode >= 400) {
            req.destroy();
+           this.activeChunks.delete(streamHandle);
+           chunk.status = 'error';
            reject(new Error(`Server responded with ${res.statusCode}`));
            return;
         }
 
-        const streamHandle: ChunkStream = {
-          pause: () => res.pause(),
-          resume: () => res.resume(),
-          destroy: () => req.destroy(),
-        };
-        this.activeChunks.add(streamHandle);
-        chunk.status = 'downloading';
+        resObject = res;
 
         let lastBytes = chunk.downloaded;
         const speedTimer = setInterval(() => {
