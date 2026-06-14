@@ -9,4 +9,5 @@
 # Workflow
 - Prefer full production-grade builds over rapid prototypes. Confidence: 0.50
 - Record project plans and roadmaps in .md files for session continuity (recovery from crashes/restarts). Confidence: 0.85
+- When a command fails, report the error concisely and ask how to proceed — do not autonomously deep-dive into troubleshooting rabbit holes. Confidence: 0.80
 

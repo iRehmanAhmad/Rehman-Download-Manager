@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { IPC_CHANNELS, type Download, type DownloadOptions, type Category, type QueueStatus } from '@rdm/shared';
+import { IPC_CHANNELS, type Download, type DownloadOptions, type Category, type QueueStatus, type PluginInstance } from '@rdm/shared';
 
 const api = {
   download: {
@@ -108,6 +108,19 @@ const api = {
     minimize: () => ipcRenderer.send(IPC_CHANNELS.APP_MINIMIZE),
     maximize: () => ipcRenderer.send(IPC_CHANNELS.APP_MAXIMIZE),
     close: () => ipcRenderer.send(IPC_CHANNELS.APP_CLOSE),
+  },
+
+  plugins: {
+    getAll: (): Promise<PluginInstance[]> =>
+      ipcRenderer.invoke(IPC_CHANNELS.PLUGIN_GET_ALL),
+    install: (sourcePath: string): Promise<PluginInstance | null> =>
+      ipcRenderer.invoke(IPC_CHANNELS.PLUGIN_INSTALL, sourcePath),
+    uninstall: (id: string): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.PLUGIN_UNINSTALL, id),
+    enable: (id: string): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.PLUGIN_ENABLE, id),
+    disable: (id: string): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.PLUGIN_DISABLE, id),
   },
 };
 

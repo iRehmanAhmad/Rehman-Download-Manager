@@ -1,0 +1,10 @@
+{
+  "id": "youtube-extractor",
+  "name": "YouTube Extractor",
+  "version": "0.1.0",
+  "author": "RDM Team",
+  "description": "Extracts video and audio download links from YouTube pages. Detects available formats and resolutions.",
+  "minAppVersion": "0.1.0",
+  "permissions": ["network:request", "download:intercept"],
+  "main": "index.js"
+}
