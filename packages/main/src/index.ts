@@ -3,6 +3,7 @@ import { join } from 'path';
 import { registerAllIpc, getDownloadEngine } from './ipc';
 import { initDatabase, getDatabase } from './storage/database';
 import { DownloadEngine } from './download/engine';
+import { startBrowserBridge, stopBrowserBridge } from './browser-bridge';
 import { APP_NAME, SETTINGS_KEY, MAX_CONCURRENT_DOWNLOADS } from '@rdm/shared';
 
 let mainWindow: BrowserWindow | null = null;
@@ -100,6 +101,7 @@ app.whenReady().then(async () => {
 
   registerAllIpc(engine);
   loadEngineSettings();
+  startBrowserBridge(engine);
   createWindow();
   createTray();
 
@@ -119,6 +121,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('before-quit', () => {
+  stopBrowserBridge();
   tray?.destroy();
   tray = null;
 });

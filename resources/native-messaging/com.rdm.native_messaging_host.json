@@ -1,0 +1,10 @@
+{
+  "name": "com.rdm.native_messaging_host",
+  "description": "RDM Native Messaging Host — bridges browser extensions to RDM desktop app",
+  "path": "rdm-native-host.bat",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://*",
+    "chrome-extension://*/"
+  ]
+}
