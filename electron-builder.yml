@@ -1,0 +1,33 @@
+appId: com.rdm.app
+productName: RDM
+directories:
+  buildResources: resources
+  output: out
+files:
+  - dist/**/*
+  - package.json
+win:
+  target:
+    - target: nsis
+      arch: [x64]
+  icon: resources/icons/icon.ico
+  publisherName: RDM
+mac:
+  target:
+    - target: dmg
+      arch: [x64, arm64]
+  icon: resources/icons/icon.icns
+  category: public.app-category.utilities
+linux:
+  target:
+    - target: AppImage
+      arch: [x64]
+    - target: deb
+      arch: [x64]
+  icon: resources/icons/icon.png
+  category: Network
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
