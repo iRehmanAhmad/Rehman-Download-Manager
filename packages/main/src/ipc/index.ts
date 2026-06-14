@@ -1,5 +1,5 @@
 import { ipcMain, BrowserWindow, app } from 'electron';
-import { IPC_CHANNELS, type ScheduleEntry, type PluginInstance } from '@rdm/shared';
+import { IPC_CHANNELS, type ScheduleEntry, type PluginInstance, type GrabResult } from '@rdm/shared';
 import { registerDownloadIpc, setDownloadEngine, getDownloadEngine } from './download.ipc';
 import { registerSettingsIpc } from './settings.ipc';
 import { registerCategoryIpc } from './category.ipc';
@@ -8,6 +8,7 @@ import { registerScheduleIpc, loadSchedules } from '../scheduler';
 import { registerAutomationIpc } from '../automation';
 import { startClipboardMonitor, stopClipboardMonitor } from '../clipboard';
 import { setNotificationsEnabled } from '../notifications';
+import { detectVideos, crawlSite } from '../grabber';
 import {
   scanPlugins,
   enablePlugin,
@@ -44,6 +45,16 @@ function registerPluginIpc(): void {
   });
 }
 
+function registerGrabberIpc(): void {
+  ipcMain.handle(IPC_CHANNELS.GRABBER_DETECT_VIDEOS, async (_event, url: string): Promise<GrabResult[]> => {
+    return detectVideos(url);
+  });
+
+  ipcMain.handle(IPC_CHANNELS.GRABBER_CRAWL_SITE, async (_event, url: string): Promise<GrabResult[]> => {
+    return crawlSite(url);
+  });
+}
+
 export function registerAllIpc(engine: DownloadEngine): void {
   setDownloadEngine(engine);
 
@@ -51,6 +62,7 @@ export function registerAllIpc(engine: DownloadEngine): void {
   registerSettingsIpc();
   registerCategoryIpc();
   registerPluginIpc();
+  registerGrabberIpc();
 
   registerAutomationIpc();
 

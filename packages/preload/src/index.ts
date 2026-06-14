@@ -1,5 +1,5 @@
 import { contextBridge, ipcRenderer } from 'electron';
-import { IPC_CHANNELS, type Download, type DownloadOptions, type Category, type QueueStatus, type PluginInstance } from '@rdm/shared';
+import { IPC_CHANNELS, type Download, type DownloadOptions, type Category, type QueueStatus, type PluginInstance, type GrabResult } from '@rdm/shared';
 
 const api = {
   download: {
@@ -130,6 +130,13 @@ const api = {
       ipcRenderer.invoke(IPC_CHANNELS.PLUGIN_ENABLE, id),
     disable: (id: string): Promise<boolean> =>
       ipcRenderer.invoke(IPC_CHANNELS.PLUGIN_DISABLE, id),
+  },
+
+  grabber: {
+    detectVideos: (url: string): Promise<GrabResult[]> =>
+      ipcRenderer.invoke(IPC_CHANNELS.GRABBER_DETECT_VIDEOS, url),
+    crawlSite: (url: string): Promise<GrabResult[]> =>
+      ipcRenderer.invoke(IPC_CHANNELS.GRABBER_CRAWL_SITE, url),
   },
 };
 
