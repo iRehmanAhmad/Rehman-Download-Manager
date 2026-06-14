@@ -52,6 +52,9 @@ export interface RdmApi {
     maximize(): void;
     close(): void;
   };
+  clipboard: {
+    onUrlDetected(callback: (url: string) => void): () => void;
+  };
   plugins: {
     getAll(): Promise<PluginInstance[]>;
     install(sourcePath: string): Promise<PluginInstance | null>;

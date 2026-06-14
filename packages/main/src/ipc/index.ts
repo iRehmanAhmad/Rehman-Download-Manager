@@ -6,16 +6,14 @@ import { registerCategoryIpc } from './category.ipc';
 import { DownloadEngine } from '../download/engine';
 import { registerScheduleIpc, loadSchedules } from '../scheduler';
 import { registerAutomationIpc } from '../automation';
+import { startClipboardMonitor, stopClipboardMonitor } from '../clipboard';
+import { setNotificationsEnabled } from '../notifications';
 import {
   scanPlugins,
-  loadPlugin,
-  unloadPlugin,
   enablePlugin,
   disablePlugin,
   installPlugin,
   uninstallPlugin,
-  getLoadedPlugins,
-  isPluginLoaded,
 } from '../plugins/loader';
 
 function registerPluginIpc(): void {

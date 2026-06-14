@@ -1,5 +1,7 @@
 import { ipcMain } from 'electron';
 import { getDatabase } from '../storage/database';
+import { startClipboardMonitor, stopClipboardMonitor } from '../clipboard';
+import { setNotificationsEnabled } from '../notifications';
 
 const defaults: Record<string, string> = {
   globalSpeedLimit: '0',
@@ -21,6 +23,16 @@ function ensureDefaults(): void {
   }
 }
 
+function applySettingSideEffect(key: string, value: string): void {
+  if (key === 'clipboardMonitor') {
+    if (value === 'true') startClipboardMonitor();
+    else stopClipboardMonitor();
+  }
+  if (key === 'showNotifications') {
+    setNotificationsEnabled(value === 'true');
+  }
+}
+
 export function registerSettingsIpc(): void {
   ensureDefaults();
 
@@ -38,6 +50,7 @@ export function registerSettingsIpc(): void {
       key,
       String(value),
     );
+    applySettingSideEffect(key, String(value));
     return true;
   });
 

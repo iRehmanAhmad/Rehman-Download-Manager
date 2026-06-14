@@ -3,6 +3,7 @@ import { IPC_CHANNELS, type Download, type DownloadOptions } from '@rdm/shared';
 import { v4 as uuid } from 'uuid';
 import { DownloadEngine } from '../download/engine';
 import { extractFilename, isValidUrl } from '@rdm/shared';
+import { notifyDownloadComplete, notifyDownloadError } from '../notifications';
 
 let engine: DownloadEngine | null = null;
 
@@ -39,11 +40,13 @@ export function registerDownloadIpc(): void {
 
   engineEvents.on('completed', (dl: Download) => {
     sendToRenderer(IPC_CHANNELS.DOWNLOAD_COMPLETED, dl);
+    notifyDownloadComplete(dl);
     emitQueueStatus();
   });
 
   engineEvents.on('error', (dl: Download) => {
     sendToRenderer(IPC_CHANNELS.DOWNLOAD_ERROR, dl);
+    notifyDownloadError(dl);
     emitQueueStatus();
   });
 
