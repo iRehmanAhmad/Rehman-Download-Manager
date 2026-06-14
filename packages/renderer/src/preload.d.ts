@@ -1,4 +1,4 @@
-import type { Download, DownloadOptions, Category, QueueStatus, PluginInstance } from '@rdm/shared';
+import type { Download, DownloadOptions, Category, QueueStatus, PluginInstance, GrabResult } from '@rdm/shared';
 
 export interface RdmApi {
   download: {
@@ -61,6 +61,10 @@ export interface RdmApi {
     uninstall(id: string): Promise<boolean>;
     enable(id: string): Promise<boolean>;
     disable(id: string): Promise<boolean>;
+  };
+  grabber: {
+    detectVideos(url: string): Promise<GrabResult[]>;
+    crawlSite(url: string): Promise<GrabResult[]>;
   };
 }
 

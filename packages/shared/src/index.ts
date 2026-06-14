@@ -4,6 +4,7 @@ export * from './types/schedule';
 export * from './types/plugin';
 export * from './types/cloud';
 export * from './types/automation';
+export * from './types/grabber';
 export * from './types/ipc';
 export * from './constants/defaults';
 export * from './constants/enums';
