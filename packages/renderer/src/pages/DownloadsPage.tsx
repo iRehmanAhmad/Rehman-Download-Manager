@@ -1,12 +1,30 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
+import { useParams } from 'react-router-dom';
 import { Plus, Play, Pause, Trash2 } from 'lucide-react';
 import { DownloadList } from '../components/downloads/DownloadList';
 import { useDownloadStore } from '../stores/download-store';
 
 export function DownloadsPage() {
+  const { status, categoryId } = useParams<{ status: string; categoryId?: string }>();
   const downloadsMap = useDownloadStore((s) => s.downloads);
-  const downloads = Array.from(downloadsMap.values());
+  const allDownloads = Array.from(downloadsMap.values());
   const removeDownload = useDownloadStore((s) => s.removeDownload);
+
+  const downloads = useMemo(() => {
+    let filtered = allDownloads;
+
+    if (status === 'unfinished') {
+      filtered = filtered.filter((d) => d.status !== 'completed' && d.status !== 'cancelled');
+    } else if (status === 'finished') {
+      filtered = filtered.filter((d) => d.status === 'completed');
+    }
+
+    if (categoryId) {
+      filtered = filtered.filter((d) => d.categoryId === categoryId);
+    }
+
+    return filtered;
+  }, [allDownloads, status, categoryId]);
 
   const handleStartAll = useCallback(async () => {
     await window.api.queue.startAll();
@@ -17,7 +35,7 @@ export function DownloadsPage() {
   }, []);
 
   const handleClear = useCallback(async () => {
-    const completed = downloads.filter(
+    const completed = allDownloads.filter(
       (d) => d.status === 'completed' || d.status === 'cancelled' || d.status === 'error',
     );
     for (const dl of completed) {
@@ -28,7 +46,7 @@ export function DownloadsPage() {
 
   const handleMoveUp = useCallback(
     async (id: string) => {
-      const arr = downloads.filter(
+      const arr = allDownloads.filter(
         (d) => d.status === 'queued' || d.status === 'paused' || d.status === 'downloading',
       );
       const idx = arr.findIndex((d) => d.id === id);
@@ -43,7 +61,7 @@ export function DownloadsPage() {
 
   const handleMoveDown = useCallback(
     async (id: string) => {
-      const arr = downloads.filter(
+      const arr = allDownloads.filter(
         (d) => d.status === 'queued' || d.status === 'paused' || d.status === 'downloading',
       );
       const idx = arr.findIndex((d) => d.id === id);

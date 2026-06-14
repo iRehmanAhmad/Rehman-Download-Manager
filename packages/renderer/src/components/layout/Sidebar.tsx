@@ -48,19 +48,19 @@ export function Sidebar() {
             id="all"
             icon={FolderOpen}
             label={t('sidebar.allDownloads')}
-            path="/"
+            path="/list/all"
             expanded={expanded.all}
             onToggle={(e) => toggle('all', e)}
-            onClick={() => navigate('/')}
-            active={location.pathname === '/' || location.pathname.startsWith('/category/')}
+            onClick={() => navigate('/list/all')}
+            active={location.pathname === '/list/all'}
           >
             {categories.map((cat) => (
               <TreeItem
                 key={cat.id}
                 icon={getCategoryIcon(cat.name)}
                 label={cat.name}
-                active={location.pathname === `/category/${cat.id}`}
-                onClick={() => navigate(`/category/${cat.id}`)}
+                active={location.pathname === `/list/all/${cat.id}`}
+                onClick={() => navigate(`/list/all/${cat.id}`)}
                 indentLevel={1}
               />
             ))}
@@ -71,24 +71,46 @@ export function Sidebar() {
             id="unfinished"
             icon={Download}
             label={t('sidebar.unfinished')}
-            path="/unfinished"
+            path="/list/unfinished"
             expanded={expanded.unfinished}
             onToggle={(e) => toggle('unfinished', e)}
-            onClick={() => navigate('/unfinished')}
-            active={location.pathname === '/unfinished'}
-          />
+            onClick={() => navigate('/list/unfinished')}
+            active={location.pathname === '/list/unfinished'}
+          >
+            {categories.map((cat) => (
+              <TreeItem
+                key={cat.id}
+                icon={getCategoryIcon(cat.name)}
+                label={cat.name}
+                active={location.pathname === `/list/unfinished/${cat.id}`}
+                onClick={() => navigate(`/list/unfinished/${cat.id}`)}
+                indentLevel={1}
+              />
+            ))}
+          </CollapsibleNode>
 
           {/* Finished */}
           <CollapsibleNode
             id="finished"
             icon={CheckCircle}
             label={t('sidebar.finished')}
-            path="/completed"
+            path="/list/finished"
             expanded={expanded.finished}
             onToggle={(e) => toggle('finished', e)}
-            onClick={() => navigate('/completed')}
-            active={location.pathname === '/completed'}
-          />
+            onClick={() => navigate('/list/finished')}
+            active={location.pathname === '/list/finished'}
+          >
+            {categories.map((cat) => (
+              <TreeItem
+                key={cat.id}
+                icon={getCategoryIcon(cat.name)}
+                label={cat.name}
+                active={location.pathname === `/list/finished/${cat.id}`}
+                onClick={() => navigate(`/list/finished/${cat.id}`)}
+                indentLevel={1}
+              />
+            ))}
+          </CollapsibleNode>
 
           {/* Grabber projects */}
           <CollapsibleNode
