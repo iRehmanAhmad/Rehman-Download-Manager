@@ -82,7 +82,9 @@ export class DownloadEngine extends EventEmitter {
 
   add(download: Download): void {
     this.tasks.set(download.id, new DownloadTask(download, this.tempDir, () => this.getGlobalBytesPerSecond()));
-    this.queue.push(download.id);
+    if (download.status !== 'paused') {
+      this.queue.push(download.id);
+    }
     DownloadRepository.saveDownload(download);
     this.processQueue();
   }
@@ -127,6 +129,16 @@ export class DownloadEngine extends EventEmitter {
     this.queue = this.queue.filter((qid) => qid !== id);
     this.tasks.delete(id);
     DownloadRepository.removeDownload(id);
+    this.processQueue();
+    return true;
+  }
+
+  updateFilePath(id: string, filepath: string): boolean {
+    const task = this.tasks.get(id);
+    if (!task) return false;
+    task.updateFilePath(filepath);
+    DownloadRepository.saveDownload(task.snapshot());
+    this.emit('progress', task.snapshot());
     return true;
   }
 
@@ -289,6 +301,10 @@ class DownloadTask extends EventEmitter {
 
   snapshot(): Download {
     return { ...this.dl };
+  }
+
+  updateFilePath(filepath: string) {
+    this.dl.filepath = filepath;
   }
 
   async start(): Promise<void> {

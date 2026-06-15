@@ -2,8 +2,10 @@ import { useState, useCallback } from 'react';
 import type { Download } from '@rdm/shared';
 import { formatFileSize } from '@rdm/shared';
 import { Pause, Play, X, RotateCcw, Settings2 } from 'lucide-react';
+import * as ContextMenu from '@radix-ui/react-context-menu';
 import { useDownloadStore } from '../../stores/download-store';
 import { DownloadProgressDialog } from './DownloadProgressDialog';
+import { DownloadPropertiesDialog } from './DownloadPropertiesDialog';
 
 interface DownloadItemProps {
   download: Download;
@@ -19,7 +21,16 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
   const selectedIds = useDownloadStore((s) => s.selectedIds);
   const toggleSelection = useDownloadStore((s) => s.toggleSelection);
   const [showDialog, setShowDialog] = useState(false);
+  const [showProperties, setShowProperties] = useState(false);
   const isSelected = selectedIds?.has(download.id);
+
+  const handleOpen = () => {
+    window.api.download.openFile(download.id);
+  };
+
+  const handleOpenFolder = () => {
+    window.api.download.openFolder(download.id);
+  };
 
   const handleClick = (e: React.MouseEvent) => {
     toggleSelection(download.id, e.ctrlKey || e.metaKey);
@@ -82,13 +93,15 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
 
   return (
     <>
-      <div 
-        onClick={handleClick}
-        onDoubleClick={() => setShowDialog(true)}
-        className={`grid grid-cols-[30px_auto_100px_100px_120px_100px_80px] gap-3 px-4 py-2.5 items-center hover:bg-white/5 transition-colors group relative cursor-pointer ${
-          isSelected ? 'bg-brand-500/20 hover:bg-brand-500/30 border-l-2 border-brand-500' : 'border-l-2 border-transparent'
-        }`}
-      >
+      <ContextMenu.Root>
+        <ContextMenu.Trigger asChild>
+          <div 
+            onClick={handleClick}
+            onDoubleClick={() => setShowDialog(true)}
+            className={`grid grid-cols-[30px_auto_100px_100px_120px_100px_80px] gap-3 px-4 py-2.5 items-center hover:bg-white/5 transition-colors group relative cursor-pointer ${
+              isSelected ? 'bg-brand-500/20 hover:bg-brand-500/30 border-l-2 border-brand-500' : 'border-l-2 border-transparent'
+            }`}
+          >
         {/* Background Progress Bar (IDM Style) */}
         {download.status === 'downloading' && (
           <div 
@@ -158,6 +171,127 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
           )}
         </div>
       </div>
+      </ContextMenu.Trigger>
+
+      <ContextMenu.Portal>
+        <ContextMenu.Content 
+          className="min-w-[220px] bg-slate-800 border border-white/10 rounded-md shadow-2xl p-1 text-sm text-slate-200 z-50 animate-in fade-in zoom-in-95 duration-150"
+        >
+          <ContextMenu.Item 
+            onSelect={handleOpen}
+            className="px-3 py-1.5 rounded outline-none hover:bg-brand-500 hover:text-white cursor-default"
+          >
+            Open
+          </ContextMenu.Item>
+          
+          <ContextMenu.Item 
+            className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed"
+          >
+            Open with...
+          </ContextMenu.Item>
+
+          <ContextMenu.Item 
+            onSelect={handleOpenFolder}
+            className="px-3 py-1.5 rounded outline-none hover:bg-brand-500 hover:text-white cursor-default"
+          >
+            Open folder
+          </ContextMenu.Item>
+
+          <ContextMenu.Separator className="h-px bg-white/10 my-1 mx-2" />
+
+          <ContextMenu.Item 
+            className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed flex items-center justify-between"
+          >
+            <span>Move/Rename</span>
+            <span className="text-xs opacity-60">Ctrl-M</span>
+          </ContextMenu.Item>
+
+          <ContextMenu.Item 
+            className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed"
+          >
+            Redownload
+          </ContextMenu.Item>
+
+          {download.status === 'paused' ? (
+            <ContextMenu.Item 
+              onSelect={handleResume}
+              className="px-3 py-1.5 rounded outline-none hover:bg-brand-500 hover:text-white cursor-default"
+            >
+              Resume Download
+            </ContextMenu.Item>
+          ) : (
+            <ContextMenu.Item 
+              disabled
+              className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed"
+            >
+              Resume Download
+            </ContextMenu.Item>
+          )}
+
+          {download.status === 'downloading' ? (
+            <ContextMenu.Item 
+              onSelect={handlePause}
+              className="px-3 py-1.5 rounded outline-none hover:bg-brand-500 hover:text-white cursor-default"
+            >
+              Stop Download
+            </ContextMenu.Item>
+          ) : (
+            <ContextMenu.Item 
+              disabled
+              className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed"
+            >
+              Stop Download
+            </ContextMenu.Item>
+          )}
+
+          <ContextMenu.Separator className="h-px bg-white/10 my-1 mx-2" />
+
+          <ContextMenu.Item 
+            className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed"
+          >
+            Refresh download address
+          </ContextMenu.Item>
+
+          <ContextMenu.Item 
+            onSelect={handleRemove}
+            className="px-3 py-1.5 rounded outline-none hover:bg-red-500 hover:text-white cursor-default"
+          >
+            Remove
+          </ContextMenu.Item>
+
+          <ContextMenu.Separator className="h-px bg-white/10 my-1 mx-2" />
+
+          <ContextMenu.Item 
+            className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed flex items-center justify-between"
+          >
+            <span>Add to queue</span>
+            <span className="opacity-60">›</span>
+          </ContextMenu.Item>
+
+          <ContextMenu.Item 
+            className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed pl-6"
+          >
+            Create a new queue
+          </ContextMenu.Item>
+
+          <ContextMenu.Item 
+            className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed pl-6"
+          >
+            Synchronization queue
+          </ContextMenu.Item>
+
+          <ContextMenu.Separator className="h-px bg-white/10 my-1 mx-2" />
+
+          <ContextMenu.Item 
+            onSelect={() => setShowProperties(true)}
+            className="px-3 py-1.5 rounded outline-none hover:bg-brand-500 hover:text-white cursor-default"
+          >
+            Properties
+          </ContextMenu.Item>
+
+        </ContextMenu.Content>
+      </ContextMenu.Portal>
+      </ContextMenu.Root>
 
       {showDialog && (
         <DownloadProgressDialog
@@ -166,6 +300,14 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
           onPause={handlePause}
           onResume={handleResume}
           onCancel={handleCancel}
+        />
+      )}
+
+      {showProperties && (
+        <DownloadPropertiesDialog
+          download={download}
+          onClose={() => setShowProperties(false)}
+          onOpen={handleOpen}
         />
       )}
     </>

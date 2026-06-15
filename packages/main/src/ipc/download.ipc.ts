@@ -5,6 +5,9 @@ import { DownloadEngine } from '../download/engine';
 import { extractFilename, isValidUrl } from '@rdm/shared';
 import { notifyDownloadComplete, notifyDownloadError } from '../notifications';
 import { evaluateRules } from '../automation';
+import http from 'node:http';
+import https from 'node:https';
+import { URL } from 'node:url';
 
 let engine: DownloadEngine | null = null;
 
@@ -62,10 +65,11 @@ export function registerDownloadIpc(): void {
       id,
       url: options.url,
       filename: options.filename || extractFilename(options.url) || 'download',
+      filepath: options.filepath,
       tempDir: '',
       fileSize: -1,
       downloaded: 0,
-      status: 'queued',
+      status: options.paused ? 'paused' : 'queued',
       priority: options.priority || 'normal',
       categoryId: options.categoryId,
       addedAt: now,
@@ -76,6 +80,7 @@ export function registerDownloadIpc(): void {
       headers: options.headers,
       referer: options.referer,
       checksum: options.checksum,
+      metadata: options.metadata,
       chunks: [],
       speed: 0,
       progress: 0,
@@ -89,6 +94,59 @@ export function registerDownloadIpc(): void {
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_GET_ALL, (): Download[] => {
     return getDownloadEngine().getAll();
+  });
+
+  ipcMain.handle(IPC_CHANNELS.DOWNLOAD_GET_FILE_INFO, async (_event, urlStr: string) => {
+    const fetchInfo = (currentUrl: string, redirectCount = 0): Promise<{ supportsRange: boolean; fileSize: number }> => {
+      return new Promise((resolve) => {
+        if (redirectCount > 5) return resolve({ supportsRange: false, fileSize: -1 });
+        try {
+          const parsedUrl = new URL(currentUrl);
+          const mod = parsedUrl.protocol === 'https:' ? https : http;
+          const req = mod.request(
+            {
+              hostname: parsedUrl.hostname,
+              port: parsedUrl.port,
+              path: parsedUrl.pathname + parsedUrl.search,
+              method: 'HEAD',
+              headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': '*/*'
+              }
+            },
+            (res) => {
+              if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+                res.destroy();
+                let nextUrl = res.headers.location;
+                if (!nextUrl.startsWith('http')) {
+                  nextUrl = new URL(nextUrl, currentUrl).href;
+                }
+                return resolve(fetchInfo(nextUrl, redirectCount + 1));
+              }
+
+              const headers = res.headers;
+              const acceptRanges = String(headers['accept-ranges'] || '');
+              const supportsRange =
+                acceptRanges.includes('bytes') &&
+                headers['content-length'] != null;
+              let fileSize = parseInt(headers['content-length'] || '-1', 10);
+              if (isNaN(fileSize)) fileSize = -1;
+              res.destroy();
+              resolve({ supportsRange, fileSize });
+            }
+          );
+          req.on('error', () => resolve({ supportsRange: false, fileSize: -1 }));
+          req.setTimeout(5000, () => {
+            req.destroy();
+            resolve({ supportsRange: false, fileSize: -1 });
+          });
+          req.end();
+        } catch (err) {
+          resolve({ supportsRange: false, fileSize: -1 });
+        }
+      });
+    };
+    return fetchInfo(urlStr);
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_GET, (_event, id: string): Download | undefined => {
@@ -117,6 +175,27 @@ export function registerDownloadIpc(): void {
     const ok = getDownloadEngine().remove(id);
     if (ok) emitQueueStatus();
     return ok;
+  });
+
+  ipcMain.handle(IPC_CHANNELS.DOWNLOAD_MOVE, (_event, id: string, newPath: string): boolean => {
+    const dl = getDownloadEngine().getDownload(id);
+    if (!dl) return false;
+    
+    try {
+      if (dl.status === 'completed' && dl.filepath) {
+        const fs = require('fs');
+        if (fs.existsSync(dl.filepath)) {
+          fs.renameSync(dl.filepath, newPath);
+        }
+      }
+      
+      const ok = getDownloadEngine().updateFilePath(id, newPath);
+      if (ok) emitQueueStatus();
+      return ok;
+    } catch (e) {
+      console.error('Move error:', e);
+      return false;
+    }
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_SET_SPEED_LIMIT, (_event, id: string, limit: number): boolean => {

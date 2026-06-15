@@ -1,16 +1,143 @@
 import { useState, useCallback, useEffect } from 'react';
-import type { DownloadOptions } from '@rdm/shared';
+import { extractFilename, type DownloadOptions } from '@rdm/shared';
 import { useDownloadStore } from '../../stores/download-store';
+import { useSettingsStore } from '../../stores/settings-store';
+import { Folder, File as FileIcon, Music, Video, Archive, FileText } from 'lucide-react';
 
 export function GlobalAddUrlDialog() {
   const addDownload = useDownloadStore((s) => s.addDownload);
+  const categories = useSettingsStore((s) => s.categories);
+  const updateCategory = useSettingsStore((s) => s.setCategories); // Wait, this doesn't exist, we'd need to use window.api.categories.update
 
   const [showDialog, setShowDialog] = useState(false);
   const [url, setUrl] = useState('');
-  const [filename, setFilename] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [filepath, setFilepath] = useState('');
+  const [description, setDescription] = useState('');
+  const [rememberPath, setRememberPath] = useState(false);
   const [connections, setConnections] = useState(8);
   const [checksum, setChecksum] = useState('');
   const [adding, setAdding] = useState(false);
+  const [fileSize, setFileSize] = useState<number>(-1);
+  const [fetchingSize, setFetchingSize] = useState(false);
+
+  // Initialize category to "other" or first available
+  // Initialize category to "other" or first available, and auto-detect based on URL
+  useEffect(() => {
+    if (showDialog && url && categories.length > 0) {
+      const filename = extractFilename(url);
+      const ext = filename.substring(filename.lastIndexOf('.')).toLowerCase();
+      
+      let detectedCatId = categoryId;
+      
+      // Auto-detect category
+      if (!categoryId) {
+        let foundCat = categories.find(c => c.name.toLowerCase() === 'other') || categories.find(c => c.name.toLowerCase() === 'general');
+        if (['.zip', '.rar', '.7z', '.tar', '.gz'].includes(ext)) {
+          foundCat = categories.find(c => c.name.toLowerCase() === 'compressed');
+        } else if (['.mp3', '.wav', '.flac', '.aac'].includes(ext)) {
+          foundCat = categories.find(c => c.name.toLowerCase() === 'music');
+        } else if (['.mp4', '.mkv', '.avi', '.mov'].includes(ext)) {
+          foundCat = categories.find(c => c.name.toLowerCase() === 'video');
+        } else if (['.exe', '.msi', '.apk'].includes(ext)) {
+          foundCat = categories.find(c => c.name.toLowerCase() === 'programs');
+        } else if (['.pdf', '.doc', '.docx', '.txt'].includes(ext)) {
+          foundCat = categories.find(c => c.name.toLowerCase() === 'documents');
+        }
+        
+        if (foundCat) {
+          detectedCatId = foundCat.id;
+          setCategoryId(foundCat.id);
+        } else {
+          detectedCatId = categories[0].id;
+          setCategoryId(categories[0].id);
+        }
+      }
+
+      // Auto-fill Save As path
+      const currentCat = categories.find((c) => c.id === detectedCatId) || categories[0];
+      if (currentCat) {
+        const baseDir = (currentCat.defaultDir || 'Downloads').replace(/[\\/]$/, '');
+        const sep = baseDir.includes('/') && !baseDir.includes('\\') ? '/' : '\\';
+        setFilepath(`${baseDir}${sep}${filename}`);
+      }
+    } else if (showDialog && !url && categories.length > 0 && !categoryId) {
+      setCategoryId(categories[0].id);
+      setFilepath(categories[0].defaultDir);
+    }
+  }, [showDialog, url, categories, categoryId]);
+
+  useEffect(() => {
+    if (!showDialog || !url || !window.api?.download?.getFileInfo) return;
+    const isValid = url.startsWith('http://') || url.startsWith('https://') || url.startsWith('ftp://');
+    if (!isValid) return;
+
+    let cancelled = false;
+    setFetchingSize(true);
+    setFileSize(-1);
+
+    const timer = setTimeout(async () => {
+      try {
+        const info = await window.api.download.getFileInfo(url);
+        if (!cancelled && info && info.fileSize > 0) {
+          setFileSize(info.fileSize);
+        }
+      } catch (err) {
+        // ignore
+      } finally {
+        if (!cancelled) setFetchingSize(false);
+      }
+    }, 50); // fast fetch
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [showDialog, url]);
+
+  const formatSize = (bytes: number) => {
+    if (bytes <= 0) return 'Unknown size';
+    const mb = bytes / (1024 * 1024);
+    if (mb < 1024) return `${mb.toFixed(2)} MB`;
+    return `${(mb / 1024).toFixed(2)} GB`;
+  };
+
+  const getEstTime = (bytes: number, speedMBps: number) => {
+    if (bytes <= 0) return '--';
+    const seconds = bytes / (speedMBps * 1024 * 1024);
+    if (seconds < 60) return `${Math.round(seconds)} sec`;
+    if (seconds < 3600) return `${Math.round(seconds / 60)} min`;
+    return `${(seconds / 3600).toFixed(1)} hr`;
+  };
+
+  const getCategoryIcon = (catName: string) => {
+    const name = catName.toLowerCase();
+    if (name === 'music') return <Music className="w-12 h-12 text-brand-400 mb-2" />;
+    if (name === 'video') return <Video className="w-12 h-12 text-brand-400 mb-2" />;
+    if (name === 'compressed') return <Archive className="w-12 h-12 text-brand-400 mb-2" />;
+    if (name === 'documents') return <FileText className="w-12 h-12 text-brand-400 mb-2" />;
+    if (name === 'programs') return <FileIcon className="w-12 h-12 text-brand-400 mb-2" />;
+    return <FileIcon className="w-12 h-12 text-brand-400 mb-2" />;
+  };
+
+  const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newId = e.target.value;
+    setCategoryId(newId);
+    const cat = categories.find((c) => c.id === newId);
+    if (cat) {
+      const filename = url ? extractFilename(url) : '';
+      const baseDir = (cat.defaultDir || 'Downloads').replace(/[\\/]$/, '');
+      const sep = baseDir.includes('/') && !baseDir.includes('\\') ? '/' : '\\';
+      setFilepath(filename ? `${baseDir}${sep}${filename}` : (cat.defaultDir || `Downloads${sep}`));
+    }
+  };
+
+  const handleBrowse = async () => {
+    const selected = await window.api.system.selectSavePath(filepath);
+    if (selected) {
+      setFilepath(selected);
+    }
+  };
 
   useEffect(() => {
     const handleOpenAddUrl = async (e: Event) => {
@@ -30,112 +157,233 @@ export function GlobalAddUrlDialog() {
       }
       setShowDialog(true);
     };
+    
     window.addEventListener('open-add-url-dialog', handleOpenAddUrl);
+
+    // Also open dialog instantly when clipboard monitor detects a new URL
+    const unsubUrlDetected = window.api?.clipboard?.onUrlDetected((detectedUrl) => {
+      setUrl(detectedUrl);
+      setShowDialog(true);
+    });
+
+    // When the window is focused, we can also manually check clipboard
+    const handleFocus = async () => {
+      if (showDialog) return;
+      try {
+        const clipText = await window.api.clipboard.readText();
+        if (clipText && (clipText.startsWith('http://') || clipText.startsWith('https://') || clipText.startsWith('ftp://'))) {
+           setUrl(clipText.trim());
+           setShowDialog(true);
+        }
+      } catch (err) {}
+    };
+    window.addEventListener('focus', handleFocus);
 
     return () => {
       window.removeEventListener('open-add-url-dialog', handleOpenAddUrl);
+      window.removeEventListener('focus', handleFocus);
+      if (unsubUrlDetected) unsubUrlDetected();
     };
-  }, []);
+  }, [showDialog]);
 
-  const handleAddUrl = useCallback(async () => {
-    if (!url.trim() || adding) return;
-    setAdding(true);
-    try {
-      const options: DownloadOptions = {
-        url: url.trim(),
-        filename: filename.trim() || undefined,
-        numConnections: connections,
-        checksum: checksum.trim() || undefined,
-      };
-      const dl = await window.api.download.add(options);
-      addDownload(dl);
-      setUrl('');
-      setFilename('');
-      setConnections(8);
-      setChecksum('');
-      setShowDialog(false);
-    } catch (err) {
-      console.error('Failed to add download:', err);
-    } finally {
-      setAdding(false);
-    }
-  }, [url, filename, connections, checksum, adding, addDownload]);
+  const handleAdd = useCallback(
+    async (paused: boolean) => {
+      if (!url.trim() || adding) return;
+      setAdding(true);
+      try {
+        if (rememberPath) {
+          const cat = categories.find((c) => c.id === categoryId);
+          if (cat) {
+            // Very naive way to get directory, should ideally be backend logic or path.dirname
+            const dir = filepath.substring(0, Math.max(filepath.lastIndexOf('\\'), filepath.lastIndexOf('/'))) || filepath;
+            await window.api.categories.update({ ...cat, defaultDir: dir });
+            const newCats = await window.api.categories.getAll();
+            useSettingsStore.getState().setCategories(newCats);
+          }
+        }
+
+        const options: DownloadOptions = {
+          url: url.trim(),
+          filepath: filepath.trim() || undefined,
+          categoryId: categoryId || undefined,
+          numConnections: connections,
+          checksum: checksum.trim() || undefined,
+          paused,
+          metadata: { description: description.trim() },
+        };
+        const dl = await window.api.download.add(options);
+        addDownload(dl);
+        setUrl('');
+        setFilepath('');
+        setDescription('');
+        setChecksum('');
+        setShowDialog(false);
+      } catch (err) {
+        console.error('Failed to add download:', err);
+      } finally {
+        setAdding(false);
+      }
+    },
+    [url, filepath, categoryId, connections, checksum, description, rememberPath, adding, addDownload, categories],
+  );
 
   const handleClose = () => setShowDialog(false);
 
   if (!showDialog) return null;
 
+  const currentCategoryName = categories.find((c) => c.id === categoryId)?.name || 'General';
+
   return (
-    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100]" onClick={handleClose}>
+    <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100]" onMouseDown={handleClose}>
       <div
-        className="bg-slate-900 border border-slate-700 rounded-xl p-6 w-full max-w-md shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
+        className="bg-[#2b2b2b] border border-slate-700 rounded-md p-3 w-full max-w-[620px] shadow-2xl font-sans"
+        onMouseDown={(e) => e.stopPropagation()}
       >
-        <h2 className="text-lg font-semibold text-slate-100 mb-4">Add Download</h2>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-xs text-slate-400 mb-1">URL</label>
+        <div className="flex items-center justify-between mb-3 border-b border-slate-700 pb-2">
+          <div className="flex items-center gap-2">
+            <img src="/logo.png" alt="Icon" className="w-4 h-4 object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
+            <h2 className="text-[13px] text-slate-100 font-medium">Download File Info</h2>
+          </div>
+          <button onClick={handleClose} className="text-slate-400 hover:text-white px-1">✕</button>
+        </div>
+
+        <div className="flex gap-4">
+          {/* Left Column */}
+          <div className="flex-1 flex flex-col">
+            <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <label className="w-16 text-right text-[13px] text-slate-300">URL</label>
             <input
               type="text"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://example.com/file.zip"
-              className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-brand-500"
+              className="flex-1 px-2 py-1 bg-[#1e1e1e] border border-slate-600 rounded text-[13px] text-slate-200 focus:outline-none focus:border-brand-500"
               autoFocus
-              onKeyDown={(e) => e.key === 'Enter' && handleAddUrl()}
             />
           </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs text-slate-400 mb-1">Filename (optional)</label>
-              <input
-                type="text"
-                value={filename}
-                onChange={(e) => setFilename(e.target.value)}
-                placeholder="Auto-detect"
-                className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-brand-500"
-                onKeyDown={(e) => e.key === 'Enter' && handleAddUrl()}
-              />
-            </div>
-            <div>
-              <label className="block text-xs text-slate-400 mb-1">MD5 (optional)</label>
-              <input
-                type="text"
-                value={checksum}
-                onChange={(e) => setChecksum(e.target.value)}
-                placeholder="d41d8cd98f..."
-                className="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded-md text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-brand-500 font-mono"
-                onKeyDown={(e) => e.key === 'Enter' && handleAddUrl()}
-              />
+
+          <div className="flex items-center gap-2">
+            <label className="w-16 text-right text-[13px] text-slate-300">Category</label>
+            <div className="flex-1 flex gap-2">
+              <select
+                value={categoryId}
+                onChange={handleCategoryChange}
+                className="flex-1 px-2 py-1 bg-[#1e1e1e] border border-slate-600 rounded text-[13px] text-slate-200 focus:outline-none focus:border-brand-500"
+              >
+                {categories.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+              <button className="px-2 py-0.5 bg-[#3a3a3a] hover:bg-[#4a4a4a] border border-slate-600 rounded text-slate-200 text-[13px]">
+                +
+              </button>
             </div>
           </div>
-          <div>
-            <label className="block text-xs text-slate-400 mb-1">Connections: {connections}</label>
+
+          <div className="flex items-center gap-2">
+            <label className="w-16 text-right text-[13px] text-slate-300">Save As</label>
+            <div className="flex-1 flex gap-2">
+              <input
+                type="text"
+                value={filepath}
+                onChange={(e) => setFilepath(e.target.value)}
+                className="flex-1 px-2 py-1 bg-[#1e1e1e] border border-slate-600 rounded text-[13px] text-slate-200 focus:outline-none focus:border-brand-500"
+              />
+              <button
+                onClick={handleBrowse}
+                className="px-3 py-1 bg-[#3a3a3a] hover:bg-[#4a4a4a] border border-slate-600 rounded text-slate-200 text-[13px]"
+              >
+                Browse
+              </button>
+            </div>
+          </div>
+
+          <div className="flex">
+            <div className="w-16 mr-2"></div>
+            <fieldset className="flex-1 border border-slate-500 rounded px-2 pb-1.5 pt-0 mt-1">
+              <legend className="px-1 ml-1 flex items-center gap-1.5 text-[12px] text-slate-300 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={rememberPath}
+                  onChange={(e) => setRememberPath(e.target.checked)}
+                  className="rounded border-slate-600 bg-[#1e1e1e] text-brand-500 focus:ring-brand-500 scale-90"
+                />
+                Remember this path for "{currentCategoryName}" category
+              </legend>
+              <input 
+                type="text" 
+                value={(filepath.substring(0, Math.max(filepath.lastIndexOf('\\'), filepath.lastIndexOf('/'))) || filepath) + (filepath.includes('\\') ? '\\' : '/')} 
+                readOnly 
+                className="w-full bg-transparent border-none text-[13px] text-slate-300 focus:outline-none px-1" 
+              />
+            </fieldset>
+          </div>
+
+          <div className="flex items-center gap-2 mt-1">
+            <label className="w-16 text-right text-[13px] text-slate-300">Description</label>
             <input
-              type="range"
-              min={1}
-              max={32}
-              value={connections}
-              onChange={(e) => setConnections(parseInt(e.target.value))}
-              className="w-full accent-brand-500"
+              type="text"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              className="flex-1 px-2 py-1 bg-[#1e1e1e] border border-slate-600 rounded text-[13px] text-slate-200 focus:outline-none focus:border-brand-500"
             />
           </div>
         </div>
-        <div className="flex items-center gap-3 mt-6">
+
+        <div className="flex justify-center gap-2 mt-4">
+          <button
+            onClick={() => handleAdd(true)}
+            disabled={!url.trim() || adding}
+            className="px-4 py-1.5 bg-[#3a3a3a] hover:bg-[#4a4a4a] border border-slate-600 text-slate-200 text-[13px] rounded transition-colors disabled:opacity-50"
+          >
+            Download Later
+          </button>
+          <button
+            onClick={() => handleAdd(false)}
+            disabled={!url.trim() || adding}
+            className="px-4 py-1.5 bg-[#3a3a3a] hover:bg-[#4a4a4a] border border-slate-600 text-slate-200 text-[13px] rounded transition-colors disabled:opacity-50"
+          >
+            Start Download
+          </button>
           <button
             onClick={handleClose}
-            className="flex-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm rounded-md transition-colors"
+            className="px-4 py-1.5 bg-[#3a3a3a] hover:bg-[#4a4a4a] border border-slate-600 text-slate-200 text-[13px] rounded transition-colors"
           >
             Cancel
           </button>
-          <button
-            onClick={handleAddUrl}
-            disabled={!url.trim() || adding}
-            className="flex-1 px-3 py-2 bg-brand-600 hover:bg-brand-500 disabled:opacity-50 text-white text-sm rounded-md transition-colors"
-          >
-            {adding ? 'Adding...' : 'Add'}
-          </button>
         </div>
+      </div>
+
+      {/* Right Column */}
+      <div className="w-[150px] flex flex-col items-center justify-start border-l border-slate-700 pl-4 py-1">
+        {getCategoryIcon(currentCategoryName)}
+        
+        <div className="text-[13px] font-medium text-slate-200 mt-2 mb-1">
+          {fetchingSize ? 'Fetching size...' : formatSize(fileSize)}
+        </div>
+        
+        <div className="w-full h-px bg-slate-700 my-2"></div>
+        
+        <div className="w-full text-center space-y-1">
+          <div className="text-[11px] text-slate-400">Est. Time (5MB/s)</div>
+          <div className="text-[12px] text-brand-400 font-medium">
+            {fetchingSize ? '--' : getEstTime(fileSize, 5)}
+          </div>
+        </div>
+        
+        <div className="w-full h-px bg-slate-700 my-2"></div>
+        
+        <div className="w-full text-center space-y-1">
+          <div className="text-[11px] text-slate-400">Time Saved ({connections}x)</div>
+          <div className="text-[12px] text-green-400 font-medium">
+            {fetchingSize || fileSize <= 0 ? '--' : getEstTime(fileSize * (1 - 1/connections), 5)}
+          </div>
+        </div>
+      </div>
+      
+      </div>
       </div>
     </div>
   );

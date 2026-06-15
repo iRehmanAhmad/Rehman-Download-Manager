@@ -55,6 +55,7 @@ export interface Download {
 export interface DownloadOptions {
   url: string;
   filename?: string;
+  filepath?: string;
   categoryId?: string;
   priority?: DownloadPriority;
   numConnections?: number;
@@ -62,6 +63,8 @@ export interface DownloadOptions {
   headers?: Record<string, string>;
   referer?: string;
   checksum?: string;
+  paused?: boolean;
+  metadata?: Record<string, unknown>;
 }
 
 export interface QueueStatus {

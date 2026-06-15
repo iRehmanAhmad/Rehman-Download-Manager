@@ -1,4 +1,4 @@
-import { ipcMain, BrowserWindow, app } from 'electron';
+import { ipcMain, BrowserWindow, app, dialog } from 'electron';
 import { IPC_CHANNELS, type ScheduleEntry, type PluginInstance, type GrabResult } from '@rdm/shared';
 import { registerDownloadIpc, setDownloadEngine, getDownloadEngine } from './download.ipc';
 import { registerSettingsIpc } from './settings.ipc';
@@ -115,6 +115,15 @@ export function registerAllIpc(engine: DownloadEngine): void {
 
   ipcMain.handle(IPC_CHANNELS.CLIPBOARD_READ_TEXT, () => {
     return require('electron').clipboard.readText();
+  });
+
+  ipcMain.handle(IPC_CHANNELS.SYSTEM_SELECT_SAVE_PATH, async (event, defaultPath?: string) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    if (!win) return null;
+    const result = await dialog.showSaveDialog(win, {
+      defaultPath,
+    });
+    return result.canceled ? null : result.filePath;
   });
 
   app.on('before-quit', () => {

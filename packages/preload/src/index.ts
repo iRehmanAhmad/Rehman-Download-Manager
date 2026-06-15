@@ -3,6 +3,8 @@ import { IPC_CHANNELS, type Download, type DownloadOptions, type Category, type 
 
 const api = {
   download: {
+    getFileInfo: (url: string): Promise<{ fileSize: number; supportsRange: boolean }> =>
+      ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_GET_FILE_INFO, url),
     add: (options: DownloadOptions): Promise<Download> =>
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_ADD, options),
     getAll: (): Promise<Download[]> =>
@@ -17,6 +19,8 @@ const api = {
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_CANCEL, id),
     remove: (id: string): Promise<boolean> =>
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_REMOVE, id),
+    move: (id: string, newPath: string): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_MOVE, id, newPath),
     setSpeedLimit: (id: string, limit: number): Promise<boolean> =>
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_SET_SPEED_LIMIT, id, limit),
     setConnections: (id: string, count: number): Promise<boolean> =>
@@ -143,6 +147,11 @@ const api = {
       ipcRenderer.invoke(IPC_CHANNELS.GRABBER_DETECT_VIDEOS, url),
     crawlSite: (url: string): Promise<GrabResult[]> =>
       ipcRenderer.invoke(IPC_CHANNELS.GRABBER_CRAWL_SITE, url),
+  },
+
+  system: {
+    selectSavePath: (defaultPath?: string): Promise<string | null> =>
+      ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_SELECT_SAVE_PATH, defaultPath),
   },
 };
 

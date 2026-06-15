@@ -17,6 +17,7 @@ export const IPC_CHANNELS = {
   DOWNLOAD_ERROR: 'download:error',
   DOWNLOAD_STATUS_CHANGED: 'download:status-changed',
   DOWNLOAD_ADDED: 'download:added',
+  DOWNLOAD_GET_FILE_INFO: 'download:get-file-info',
   QUEUE_REORDER: 'queue:reorder',
   QUEUE_START_ALL: 'queue:start-all',
   QUEUE_PAUSE_ALL: 'queue:pause-all',
@@ -55,6 +56,7 @@ export const IPC_CHANNELS = {
   APP_MINIMIZE: 'app:minimize',
   APP_MAXIMIZE: 'app:maximize',
   APP_CLOSE: 'app:close',
+  SYSTEM_SELECT_SAVE_PATH: 'system:select-save-path',
 } as const;
 
 export type IpcChannel = (typeof IPC_CHANNELS)[keyof typeof IPC_CHANNELS];
