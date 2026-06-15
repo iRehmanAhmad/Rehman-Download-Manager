@@ -4,12 +4,12 @@
 - cluster-only mode — file stats not available
 
 ## Summary
-- 187 nodes · 181 edges · 78 communities (5 shown, 73 thin omitted)
+- 189 nodes · 184 edges · 78 communities (5 shown, 73 thin omitted)
 - Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.95)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `2f227a72`
+- Built from commit: `c14be8bd`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -123,16 +123,16 @@
 ## Communities (78 total, 73 thin omitted)
 
 ### Community 2 - "Community 2"
+Cohesion: 0.17
+Nodes (10): BatchDownloadDialog(), BatchDownloadListDialog(), BatchLink, ExportDialog(), GlobalAddUrlDialog(), MenuBar(), StatusBar, TitleBar (+2 more)
+
+### Community 3 - "Community 3"
 Cohesion: 0.20
 Nodes (12): ChunkStream, SpeedSample, emitQueueStatus(), getDownloadEngine, getQueueStatus(), registerDownloadIpc, sendToRenderer(), setDownloadEngine (+4 more)
 
-### Community 3 - "Community 3"
+### Community 4 - "Community 4"
 Cohesion: 0.16
 Nodes (12): DownloadEngineEvents, RdmApi, Window, ChunkInfo, Download, DownloadOptions, DownloadPriority, DownloadStatus (+4 more)
-
-### Community 4 - "Community 4"
-Cohesion: 0.19
-Nodes (9): BatchDownloadDialog(), BatchDownloadListDialog(), BatchLink, GlobalAddUrlDialog(), MenuBar(), StatusBar, TitleBar, TopToolbar (+1 more)
 
 ### Community 6 - "Community 6"
 Cohesion: 0.67
@@ -150,15 +150,15 @@ Nodes (3): Tech Stack, Roadmap Tech Stack, Taste Tech Stack
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `DownloadTask` connect `Community 1` to `Community 0`, `Community 2`?**
-  _High betweenness centrality (0.103) - this node is a cross-community bridge._
-- **Why does `DownloadEngine` connect `Community 0` to `Community 1`, `Community 2`?**
-  _High betweenness centrality (0.085) - this node is a cross-community bridge._
-- **Why does `DownloadEngineEvents` connect `Community 3` to `Community 2`?**
-  _High betweenness centrality (0.055) - this node is a cross-community bridge._
+- **Why does `DownloadTask` connect `Community 1` to `Community 0`, `Community 3`?**
+  _High betweenness centrality (0.101) - this node is a cross-community bridge._
+- **Why does `DownloadEngine` connect `Community 0` to `Community 1`, `Community 3`?**
+  _High betweenness centrality (0.083) - this node is a cross-community bridge._
+- **Why does `DownloadEngineEvents` connect `Community 4` to `Community 3`?**
+  _High betweenness centrality (0.054) - this node is a cross-community bridge._
 - **What connects `evaluateRules`, `getRules`, `registerAutomationIpc` to the rest of the system?**
   _98 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.09885057471264368 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1032258064516129 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.13054187192118227 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1349206349206349 - nodes in this community are weakly interconnected._

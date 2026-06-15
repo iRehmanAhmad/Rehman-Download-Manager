@@ -95,9 +95,9 @@
     "semantic_hash": "192e8a6fa2d5ad12565cb5436ba74250"
   },
   "packages/main/src/ipc/download.ipc.ts": {
-    "mtime": 1781521367.432232,
-    "ast_hash": "71853ddecbcc6578804d0911f41feb8c",
-    "semantic_hash": "71853ddecbcc6578804d0911f41feb8c"
+    "mtime": 1781523065.8339553,
+    "ast_hash": "f5b0ecc2064c94b73575c7475d5e219e",
+    "semantic_hash": "f5b0ecc2064c94b73575c7475d5e219e"
   },
   "packages/main/src/ipc/index.ts": {
     "mtime": 1781508789.4048507,
@@ -155,9 +155,9 @@
     "semantic_hash": "b34b71148c1f616d4da2f8c43ef8267f"
   },
   "packages/preload/src/index.ts": {
-    "mtime": 1781520822.255321,
-    "ast_hash": "0d3d8ad891dfda227825346bc74770a9",
-    "semantic_hash": "0d3d8ad891dfda227825346bc74770a9"
+    "mtime": 1781523051.5781603,
+    "ast_hash": "9b90922c7c7af520ae806b385684e57a",
+    "semantic_hash": "9b90922c7c7af520ae806b385684e57a"
   },
   "packages/preload/tsconfig.json": {
     "mtime": 1781435328.6630664,
@@ -170,9 +170,9 @@
     "semantic_hash": "6755b37be23c1a66cc92fd34aeee04c2"
   },
   "packages/renderer/src/App.tsx": {
-    "mtime": 1781521012.5281284,
-    "ast_hash": "d18c467904291774a953c906a1cfa26b",
-    "semantic_hash": "d18c467904291774a953c906a1cfa26b"
+    "mtime": 1781522392.9287472,
+    "ast_hash": "f44693cd515a161e1bd770196e151343",
+    "semantic_hash": "f44693cd515a161e1bd770196e151343"
   },
   "packages/renderer/src/components/downloads/DownloadItem.tsx": {
     "mtime": 1781513794.9334433,
@@ -200,9 +200,9 @@
     "semantic_hash": "c2c9765fa895f9094727abc9706e6166"
   },
   "packages/renderer/src/components/layout/MenuBar.tsx": {
-    "mtime": 1781519125.36855,
-    "ast_hash": "d3139e4cf3c01c41ce9a74582818f9e9",
-    "semantic_hash": "d3139e4cf3c01c41ce9a74582818f9e9"
+    "mtime": 1781523065.8733408,
+    "ast_hash": "09b8444e95096bbe1ee620f25663a62a",
+    "semantic_hash": "09b8444e95096bbe1ee620f25663a62a"
   },
   "packages/renderer/src/components/layout/Sidebar.tsx": {
     "mtime": 1781463463.1462762,
@@ -265,9 +265,9 @@
     "semantic_hash": "d63a7bd9a17a407b22df944f7ca3f609"
   },
   "packages/renderer/src/preload.d.ts": {
-    "mtime": 1781520869.8125834,
-    "ast_hash": "273866cfa77503bbcb7678837aa566b2",
-    "semantic_hash": "273866cfa77503bbcb7678837aa566b2"
+    "mtime": 1781523051.4801562,
+    "ast_hash": "6c038725abbfa2ac487ce768aa8ba4d7",
+    "semantic_hash": "6c038725abbfa2ac487ce768aa8ba4d7"
   },
   "packages/renderer/src/stores/download-store.ts": {
     "mtime": 1781462829.2605364,
@@ -345,9 +345,9 @@
     "semantic_hash": "3a433bc0f6f9c3a388ab05a34a8f780f"
   },
   "packages/shared/src/types/ipc.ts": {
-    "mtime": 1781519938.5848863,
-    "ast_hash": "a64f0f8bb6a48bd423f223ca296223f9",
-    "semantic_hash": "a64f0f8bb6a48bd423f223ca296223f9"
+    "mtime": 1781523051.4350195,
+    "ast_hash": "8395e3b81231027a5d6afd8b1b7a6069",
+    "semantic_hash": "8395e3b81231027a5d6afd8b1b7a6069"
   },
   "packages/shared/src/types/plugin.ts": {
     "mtime": 1781435246.0373683,
@@ -498,5 +498,10 @@
     "mtime": 1781520402.5748236,
     "ast_hash": "e74fe291ffc6561019f07afc3604a488",
     "semantic_hash": "e74fe291ffc6561019f07afc3604a488"
+  },
+  "packages/renderer/src/components/downloads/ExportDialog.tsx": {
+    "mtime": 1781522384.1356788,
+    "ast_hash": "434de134a895b86a0f31a375b78db677",
+    "semantic_hash": "434de134a895b86a0f31a375b78db677"
   }
 }

@@ -89,7 +89,7 @@
       "source_file": "packages/main/src/download/engine.ts",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 3,
+      "community": 4,
       "norm_label": "downloadengineevents",
       "id": "download_engine_downloadengineevents"
     },
@@ -149,7 +149,7 @@
       "source_file": "packages/main/src/ipc/download.ipc.ts",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 2,
+      "community": 3,
       "norm_label": "setdownloadengine",
       "id": "ipc_download_ipc_setdownloadengine"
     },
@@ -159,7 +159,7 @@
       "source_file": "packages/main/src/ipc/download.ipc.ts",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 2,
+      "community": 3,
       "norm_label": "getdownloadengine",
       "id": "ipc_download_ipc_getdownloadengine"
     },
@@ -169,7 +169,7 @@
       "source_file": "packages/main/src/ipc/download.ipc.ts",
       "source_location": "L37",
       "_origin": "ast",
-      "community": 2,
+      "community": 3,
       "norm_label": "registerdownloadipc",
       "id": "ipc_download_ipc_registerdownloadipc"
     },
@@ -219,7 +219,7 @@
       "source_file": "packages/main/src/notifications/index.ts",
       "source_location": "L24",
       "_origin": "ast",
-      "community": 2,
+      "community": 3,
       "norm_label": "notifydownloadcomplete",
       "id": "notifications_index_notifydownloadcomplete"
     },
@@ -229,7 +229,7 @@
       "source_file": "packages/main/src/notifications/index.ts",
       "source_location": "L39",
       "_origin": "ast",
-      "community": 2,
+      "community": 3,
       "norm_label": "notifydownloaderror",
       "id": "notifications_index_notifydownloaderror"
     },
@@ -409,7 +409,7 @@
       "source_file": "packages/main/src/storage/database.ts",
       "source_location": "L8",
       "_origin": "ast",
-      "community": 2,
+      "community": 3,
       "norm_label": "getdatabase",
       "id": "storage_database_getdatabase"
     },
@@ -429,7 +429,7 @@
       "source_file": "packages/main/src/storage/download.repository.ts",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 2,
+      "community": 3,
       "norm_label": "downloadrepository",
       "id": "storage_download_repository_downloadrepository"
     },
@@ -449,7 +449,7 @@
       "source_file": "packages/renderer/src/App.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "community": 4,
+      "community": 2,
       "norm_label": "app",
       "id": "src_app_app"
     },
@@ -469,7 +469,7 @@
       "source_file": "packages/renderer/src/components/layout/StatusBar.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 4,
+      "community": 2,
       "norm_label": "statusbar",
       "id": "layout_statusbar_statusbar"
     },
@@ -479,7 +479,7 @@
       "source_file": "packages/renderer/src/components/layout/TitleBar.tsx",
       "source_location": "L3",
       "_origin": "ast",
-      "community": 4,
+      "community": 2,
       "norm_label": "titlebar",
       "id": "layout_titlebar_titlebar"
     },
@@ -489,7 +489,7 @@
       "source_file": "packages/renderer/src/components/layout/TopToolbar.tsx",
       "source_location": "L15",
       "_origin": "ast",
-      "community": 4,
+      "community": 2,
       "norm_label": "toptoolbar",
       "id": "layout_toptoolbar_toptoolbar"
     },
@@ -499,7 +499,7 @@
       "source_file": "packages/renderer/src/preload.d.ts",
       "source_location": "L3",
       "_origin": "ast",
-      "community": 3,
+      "community": 4,
       "norm_label": "rdmapi",
       "id": "src_preload_d_rdmapi"
     },
@@ -589,7 +589,7 @@
       "source_file": "packages/shared/src/types/download.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 4,
       "norm_label": "downloadstatus",
       "id": "types_download_downloadstatus"
     },
@@ -599,7 +599,7 @@
       "source_file": "packages/shared/src/types/download.ts",
       "source_location": "L12",
       "_origin": "ast",
-      "community": 3,
+      "community": 4,
       "norm_label": "downloadpriority",
       "id": "types_download_downloadpriority"
     },
@@ -609,7 +609,7 @@
       "source_file": "packages/shared/src/types/download.ts",
       "source_location": "L14",
       "_origin": "ast",
-      "community": 3,
+      "community": 4,
       "norm_label": "chunkinfo",
       "id": "types_download_chunkinfo"
     },
@@ -619,7 +619,7 @@
       "source_file": "packages/shared/src/types/download.ts",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 3,
+      "community": 4,
       "norm_label": "download",
       "id": "types_download_download"
     },
@@ -629,7 +629,7 @@
       "source_file": "packages/shared/src/types/download.ts",
       "source_location": "L55",
       "_origin": "ast",
-      "community": 3,
+      "community": 4,
       "norm_label": "downloadoptions",
       "id": "types_download_downloadoptions"
     },
@@ -639,7 +639,7 @@
       "source_file": "packages/shared/src/types/download.ts",
       "source_location": "L70",
       "_origin": "ast",
-      "community": 3,
+      "community": 4,
       "norm_label": "queuestatus",
       "id": "types_download_queuestatus"
     },
@@ -649,7 +649,7 @@
       "source_file": "packages/shared/src/types/grabber.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 4,
       "norm_label": "grabresult",
       "id": "types_grabber_grabresult"
     },
@@ -689,7 +689,7 @@
       "source_file": "packages/shared/src/types/plugin.ts",
       "source_location": "L22",
       "_origin": "ast",
-      "community": 3,
+      "community": 4,
       "norm_label": "plugininstance",
       "id": "types_plugin_plugininstance"
     },
@@ -719,7 +719,7 @@
       "source_file": "packages/shared/src/types/settings.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 4,
       "norm_label": "category",
       "id": "types_settings_category"
     },
@@ -1086,7 +1086,7 @@
       "source_file": "packages/main/src/download/engine.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 2,
+      "community": 3,
       "norm_label": "engine.ts",
       "id": "download_engine"
     },
@@ -1096,7 +1096,7 @@
       "source_file": "packages/main/src/download/engine.ts",
       "source_location": "L26",
       "_origin": "ast",
-      "community": 2,
+      "community": 3,
       "norm_label": "speedsample",
       "id": "download_engine_speedsample"
     },
@@ -1106,7 +1106,7 @@
       "source_file": "packages/main/src/download/engine.ts",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 2,
+      "community": 3,
       "norm_label": "chunkstream",
       "id": "download_engine_chunkstream"
     },
@@ -1216,7 +1216,7 @@
       "source_file": "packages/main/src/download/engine.ts",
       "source_location": "L185",
       "_origin": "ast",
-      "community": 1,
+      "community": 0,
       "norm_label": ".updatefilepath()",
       "id": "download_engine_downloadengine_updatefilepath"
     },
@@ -1426,7 +1426,7 @@
       "source_file": "packages/main/src/download/engine.ts",
       "source_location": "L352",
       "_origin": "ast",
-      "community": 1,
+      "community": 0,
       "norm_label": ".snapshot()",
       "id": "download_engine_downloadtask_snapshot"
     },
@@ -1436,7 +1436,7 @@
       "source_file": "packages/main/src/download/engine.ts",
       "source_location": "L356",
       "_origin": "ast",
-      "community": 1,
+      "community": 0,
       "norm_label": ".updatefilepath()",
       "id": "download_engine_downloadtask_updatefilepath"
     },
@@ -1526,7 +1526,7 @@
       "source_file": "packages/main/src/download/engine.ts",
       "source_location": "L456",
       "_origin": "ast",
-      "community": 0,
+      "community": 1,
       "norm_label": ".cleanuptemp()",
       "id": "download_engine_downloadtask_cleanuptemp"
     },
@@ -1566,7 +1566,7 @@
       "source_file": "packages/main/src/download/engine.ts",
       "source_location": "L559",
       "_origin": "ast",
-      "community": 0,
+      "community": 1,
       "norm_label": ".clearthrottletimer()",
       "id": "download_engine_downloadtask_clearthrottletimer"
     },
@@ -1696,7 +1696,7 @@
       "source_file": "packages/main/src/ipc/download.ipc.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 2,
+      "community": 3,
       "norm_label": "download.ipc.ts",
       "id": "ipc_download_ipc"
     },
@@ -1706,7 +1706,7 @@
       "source_file": "packages/main/src/ipc/download.ipc.ts",
       "source_location": "L25",
       "_origin": "ast",
-      "community": 2,
+      "community": 3,
       "norm_label": "sendtorenderer()",
       "id": "ipc_download_ipc_sendtorenderer"
     },
@@ -1716,7 +1716,7 @@
       "source_file": "packages/main/src/ipc/download.ipc.ts",
       "source_location": "L31",
       "_origin": "ast",
-      "community": 2,
+      "community": 3,
       "norm_label": "getqueuestatus()",
       "id": "ipc_download_ipc_getqueuestatus"
     },
@@ -1726,7 +1726,7 @@
       "source_file": "packages/main/src/ipc/download.ipc.ts",
       "source_location": "L35",
       "_origin": "ast",
-      "community": 2,
+      "community": 3,
       "norm_label": "emitqueuestatus()",
       "id": "ipc_download_ipc_emitqueuestatus"
     },
@@ -1756,7 +1756,7 @@
       "source_file": "packages/renderer/src/App.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 4,
+      "community": 2,
       "norm_label": "app.tsx",
       "id": "src_app"
     },
@@ -1766,7 +1766,7 @@
       "source_file": "packages/renderer/src/components/downloads/BatchDownloadDialog.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 4,
+      "community": 2,
       "norm_label": "batchdownloaddialog.tsx",
       "id": "downloads_batchdownloaddialog"
     },
@@ -1776,7 +1776,7 @@
       "source_file": "packages/renderer/src/components/downloads/BatchDownloadDialog.tsx",
       "source_location": "L3",
       "_origin": "ast",
-      "community": 4,
+      "community": 2,
       "norm_label": "batchdownloaddialog()",
       "id": "downloads_batchdownloaddialog_batchdownloaddialog"
     },
@@ -1786,7 +1786,7 @@
       "source_file": "packages/renderer/src/components/downloads/BatchDownloadListDialog.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 4,
+      "community": 2,
       "norm_label": "batchdownloadlistdialog.tsx",
       "id": "downloads_batchdownloadlistdialog"
     },
@@ -1796,7 +1796,7 @@
       "source_file": "packages/renderer/src/components/downloads/BatchDownloadListDialog.tsx",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 4,
+      "community": 2,
       "norm_label": "batchlink",
       "id": "downloads_batchdownloadlistdialog_batchlink"
     },
@@ -1806,7 +1806,7 @@
       "source_file": "packages/renderer/src/components/downloads/BatchDownloadListDialog.tsx",
       "source_location": "L16",
       "_origin": "ast",
-      "community": 4,
+      "community": 2,
       "norm_label": "batchdownloadlistdialog()",
       "id": "downloads_batchdownloadlistdialog_batchdownloadlistdialog"
     },
@@ -1846,7 +1846,7 @@
       "source_file": "packages/renderer/src/components/downloads/GlobalAddUrlDialog.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 4,
+      "community": 2,
       "norm_label": "globaladdurldialog.tsx",
       "id": "downloads_globaladdurldialog"
     },
@@ -1856,7 +1856,7 @@
       "source_file": "packages/renderer/src/components/downloads/GlobalAddUrlDialog.tsx",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 4,
+      "community": 2,
       "norm_label": "globaladdurldialog()",
       "id": "downloads_globaladdurldialog_globaladdurldialog"
     },
@@ -1866,7 +1866,7 @@
       "source_file": "packages/renderer/src/components/layout/MenuBar.tsx",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 4,
+      "community": 2,
       "norm_label": "menubar.tsx",
       "id": "layout_menubar"
     },
@@ -1876,7 +1876,7 @@
       "source_file": "packages/renderer/src/components/layout/MenuBar.tsx",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 4,
+      "community": 2,
       "norm_label": "menubar()",
       "id": "layout_menubar_menubar"
     },
@@ -1886,7 +1886,7 @@
       "source_file": "packages/renderer/src/preload.d.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 4,
       "norm_label": "preload.d.ts",
       "id": "src_preload_d"
     },
@@ -1896,7 +1896,7 @@
       "source_file": "packages/renderer/src/preload.d.ts",
       "source_location": "L77",
       "_origin": "ast",
-      "community": 3,
+      "community": 4,
       "norm_label": "window",
       "id": "src_preload_d_window"
     },
@@ -1906,7 +1906,7 @@
       "source_file": "packages/shared/src/types/download.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 3,
+      "community": 4,
       "norm_label": "download.ts",
       "id": "types_download"
     },
@@ -1929,6 +1929,26 @@
       "community": 9,
       "norm_label": "ipc_channels",
       "id": "types_ipc_ipc_channels"
+    },
+    {
+      "label": "ExportDialog.tsx",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/downloads/ExportDialog.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "exportdialog.tsx",
+      "id": "downloads_exportdialog"
+    },
+    {
+      "label": "ExportDialog()",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/downloads/ExportDialog.tsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "exportdialog()",
+      "id": "downloads_exportdialog_exportdialog"
     }
   ],
   "links": [
@@ -2335,7 +2355,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/preload/src/index.ts",
-      "source_location": "L170",
+      "source_location": "L174",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_index",
@@ -2345,7 +2365,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/renderer/src/App.tsx",
-      "source_location": "L21",
+      "source_location": "L22",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_app",
@@ -2524,7 +2544,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/shared/src/types/ipc.ts",
-      "source_location": "L64",
+      "source_location": "L66",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "types_ipc",
@@ -3699,6 +3719,28 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "downloads_exportdialog"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "downloads_exportdialog_exportdialog"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
       "source_location": "L15",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -3812,7 +3854,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "packages/renderer/src/preload.d.ts",
-      "source_location": "L77",
+      "source_location": "L79",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "src_preload_d",
@@ -3827,8 +3869,18 @@
       "confidence_score": 1.0,
       "source": "types_ipc",
       "target": "types_ipc_ipc_channels"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/ExportDialog.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "downloads_exportdialog",
+      "target": "downloads_exportdialog_exportdialog"
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "2f227a72f71f740065b34608dc08d25bc72d1415"
+  "built_at_commit": "c14be8bdd5d516e68fc09888d347df891e017fe0"
 }
