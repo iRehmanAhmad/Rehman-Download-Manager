@@ -294,7 +294,7 @@ const fetchInfo = (currentUrl: string, redirectCount = 0): Promise<{ supportsRan
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_EXPORT, async (_event, options: { format: 'ef2' | 'txt', mode: 'queue' | 'selected' | 'all', selectedIds: string[] }): Promise<void> => {
     const { format, mode, selectedIds } = options;
     const eng = getDownloadEngine();
-    let downloads = eng.getAllDownloads();
+    let downloads = eng.getAll();
 
     if (mode === 'queue') {
       downloads = downloads.filter(d => ['queued', 'paused', 'downloading'].includes(d.status));
