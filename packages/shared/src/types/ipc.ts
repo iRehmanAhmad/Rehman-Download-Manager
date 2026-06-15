@@ -21,6 +21,7 @@ export const IPC_CHANNELS = {
   DOWNLOAD_GET_FILE_INFO_BASIC: 'download:get-file-info-basic',
   DOWNLOAD_DISCARD_PRE: 'download:discard-pre',
   DOWNLOAD_EXPORT: 'download:export',
+  DOWNLOAD_IMPORT: 'download:import',
   QUEUE_REORDER: 'queue:reorder',
   QUEUE_START_ALL: 'queue:start-all',
   QUEUE_PAUSE_ALL: 'queue:pause-all',

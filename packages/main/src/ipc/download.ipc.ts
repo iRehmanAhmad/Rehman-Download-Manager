@@ -326,6 +326,47 @@ const fetchInfo = (currentUrl: string, redirectCount = 0): Promise<{ supportsRan
     }
   });
 
+  ipcMain.handle(IPC_CHANNELS.DOWNLOAD_IMPORT, async (_event, format: 'ef2' | 'txt'): Promise<string | void> => {
+    const { canceled, filePaths } = await dialog.showOpenDialog({
+      title: 'Import download list',
+      filters: format === 'ef2' 
+        ? [{ name: 'RDM Export Files', extensions: ['ef2'] }]
+        : [{ name: 'Text Files', extensions: ['txt'] }],
+      properties: ['openFile']
+    });
+
+    if (canceled || filePaths.length === 0) return;
+
+    const fs = require('node:fs');
+    const content = fs.readFileSync(filePaths[0], 'utf-8');
+
+    if (format === 'txt') {
+      return content; // Return to renderer to handle via Batch dialog
+    } else {
+      try {
+        const downloads: Download[] = JSON.parse(content);
+        const eng = getDownloadEngine();
+        for (const dl of downloads) {
+          const newDl = {
+            ...dl,
+            id: uuid(), // Generate new ID to avoid collisions
+            downloaded: 0,
+            status: 'queued',
+            addedAt: Date.now(),
+            retryCount: 0,
+            error: undefined
+          } as Download;
+          eng.add(newDl);
+        }
+        emitQueueStatus();
+        return 'success';
+      } catch (err) {
+        console.error('Failed to parse ef2 file:', err);
+        throw new Error('Invalid EF2 file format');
+      }
+    }
+  });
+
   ipcMain.handle(IPC_CHANNELS.QUEUE_START_ALL, (): boolean => {
     try { getDownloadEngine().resumeAll(); emitQueueStatus(); return true; } catch { return false; }
   });

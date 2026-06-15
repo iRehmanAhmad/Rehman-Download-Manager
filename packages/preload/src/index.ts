@@ -35,6 +35,8 @@ const api = {
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_OPEN_FOLDER, id),
     export: (options: { format: 'ef2' | 'txt', mode: 'queue' | 'selected' | 'all', selectedIds: string[] }): Promise<void> =>
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_EXPORT, options),
+    import: (format: 'ef2' | 'txt'): Promise<string | void> =>
+      ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_IMPORT, format),
     onAdded: (callback: (download: Download) => void) => {
       const handler = (_event: Electron.IpcRendererEvent, download: Download) =>
         callback(download);

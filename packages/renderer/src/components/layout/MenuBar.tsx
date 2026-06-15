@@ -40,8 +40,26 @@ export function MenuBar() {
           { label: 'To text file', action: () => window.dispatchEvent(new CustomEvent('open-export-dialog', { detail: 'txt' })) }
         ]},
         { label: 'Import', subItems: [
-          { label: 'From RDM export file', action: () => {} },
-          { label: 'From text file', action: () => {} }
+          { label: 'From RDM export file', action: async () => {
+            try {
+              const res = await window.api.download.import('ef2');
+              if (res === 'success') {
+                console.log('Imported successfully');
+              }
+            } catch (err) {
+              console.error(err);
+            }
+          }},
+          { label: 'From text file', action: async () => {
+            try {
+              const text = await window.api.download.import('txt');
+              if (text) {
+                window.dispatchEvent(new CustomEvent('open-batch-download-dialog', { detail: text }));
+              }
+            } catch (err) {
+              console.error(err);
+            }
+          }}
         ]},
         { divider: true },
         { label: 'Exit', action: () => window.api.app.close() },
