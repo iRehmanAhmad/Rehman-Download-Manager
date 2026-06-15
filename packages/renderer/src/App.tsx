@@ -17,6 +17,7 @@ import { BatchDownloadDialog } from './components/downloads/BatchDownloadDialog'
 import { BatchDownloadListDialog } from './components/downloads/BatchDownloadListDialog';
 import { ImportLinksDialog } from './components/downloads/ImportLinksDialog';
 import { ExportDialog } from './components/downloads/ExportDialog';
+import { FindDialog } from './components/layout/FindDialog';
 import { useSettingsStore } from './stores/settings-store';
 import { useDownloadStore } from './stores/download-store';
 
@@ -112,6 +113,7 @@ export function App() {
         <BatchDownloadListDialog />
         <ImportLinksDialog />
         <ExportDialog />
+        <FindDialog />
       </div>
     </HashRouter>
   );

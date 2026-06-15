@@ -257,6 +257,15 @@ export class DownloadEngine extends EventEmitter {
     this.queue = [];
   }
 
+  clearCompleted(): void {
+    for (const [id, task] of this.tasks) {
+      if (task.status === 'completed') {
+        this.tasks.delete(id);
+      }
+    }
+    this.queue = this.queue.filter(id => this.tasks.has(id));
+  }
+
   resumeAll(): void {
     this.queue = Array.from(this.tasks.keys());
     this.processQueue();

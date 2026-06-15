@@ -110,10 +110,13 @@ export function MenuBar() {
         { label: 'Pause All Downloads', action: () => window.api.queue.pauseAll() },
         { label: 'Stop All Downloads', action: () => window.api.queue.pauseAll() },
         { divider: true },
-        { label: 'Clear Completed Downloads', action: () => {} },
+        { label: 'Clear Completed Downloads', action: async () => {
+          await window.api.download.clearCompleted();
+          useDownloadStore.getState().clearCompletedDownloads();
+        }},
         { divider: true },
-        { label: 'Search (Ctrl+F)', action: () => {} },
-        { label: 'Find Next (F3)', action: () => {} },
+        { label: 'Search (Ctrl+F)', action: () => window.dispatchEvent(new CustomEvent('open-find-dialog')) },
+        { label: 'Find Next (F3)', action: () => window.dispatchEvent(new CustomEvent('find-next')) },
         { divider: true },
         { label: 'Job Scheduler', action: () => window.location.hash = '#/scheduler' },
         { label: 'Start Queue...', action: () => window.api.queue.startAll() },

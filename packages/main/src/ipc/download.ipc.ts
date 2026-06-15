@@ -232,9 +232,16 @@ const fetchInfo = (currentUrl: string, redirectCount = 0): Promise<{ supportsRan
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_REMOVE, (_event, id: string): boolean => {
-    const ok = getDownloadEngine().remove(id);
-    if (ok) emitQueueStatus();
-    return ok;
+    const eng = getDownloadEngine();
+    return eng.remove(id);
+  });
+
+  ipcMain.handle(IPC_CHANNELS.DOWNLOAD_CLEAR_COMPLETED, async () => {
+    const eng = getDownloadEngine();
+    eng.clearCompleted();
+    const db = getDatabase();
+    db.prepare("DELETE FROM downloads WHERE status = 'completed'").run();
+    return true;
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_MOVE, async (_event, id: string, newPath: string): Promise<boolean> => {

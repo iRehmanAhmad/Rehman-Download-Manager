@@ -96,6 +96,7 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
       <ContextMenu.Root>
         <ContextMenu.Trigger asChild>
           <div 
+            id={`download-row-${download.id}`}
             onClick={handleClick}
             onDoubleClick={() => setShowDialog(true)}
             className={`grid grid-cols-[30px_auto_100px_100px_120px_100px_80px] gap-3 px-4 py-2.5 items-center hover:bg-white/5 transition-colors group relative cursor-pointer ${

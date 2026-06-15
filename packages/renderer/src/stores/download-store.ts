@@ -12,6 +12,7 @@ interface DownloadState {
   toggleSelection: (id: string, multi?: boolean) => void;
   selectAll: () => void;
   clearSelection: () => void;
+  clearCompletedDownloads: () => void;
 }
 
 export const useDownloadStore = create<DownloadState>((set, get) => ({
@@ -40,6 +41,19 @@ export const useDownloadStore = create<DownloadState>((set, get) => ({
       next.delete(id);
       const nextSelected = new Set(state.selectedIds);
       nextSelected.delete(id);
+      return { downloads: next, selectedIds: nextSelected };
+    }),
+
+  clearCompletedDownloads: () =>
+    set((state) => {
+      const next = new Map(state.downloads);
+      const nextSelected = new Set(state.selectedIds);
+      for (const [id, dl] of next) {
+        if (dl.status === 'completed') {
+          next.delete(id);
+          nextSelected.delete(id);
+        }
+      }
       return { downloads: next, selectedIds: nextSelected };
     }),
 

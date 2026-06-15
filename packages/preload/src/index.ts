@@ -23,6 +23,8 @@ const api = {
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_CANCEL, id),
     remove: (id: string): Promise<boolean> =>
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_REMOVE, id),
+    clearCompleted: (): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_CLEAR_COMPLETED),
     move: (id: string, newPath: string): Promise<boolean> =>
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_MOVE, id, newPath),
     setSpeedLimit: (id: string, limit: number): Promise<boolean> =>

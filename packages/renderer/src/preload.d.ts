@@ -11,6 +11,7 @@ export interface RdmApi {
     resume(id: string): Promise<boolean>;
     cancel(id: string): Promise<boolean>;
     remove(id: string): Promise<boolean>;
+    clearCompleted(): Promise<boolean>;
     setSpeedLimit(id: string, limit: number): Promise<boolean>;
     setConnections(id: string, count: number): Promise<boolean>;
     openFile(id: string): Promise<boolean>;
