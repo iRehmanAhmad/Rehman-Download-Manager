@@ -1,44 +1,15 @@
 {
   "communities": {
     "0": [
-      "download_engine_downloadengine",
-      "download_engine_downloadengine_activecount",
       "download_engine_downloadengine_add",
-      "download_engine_downloadengine_cancel",
-      "download_engine_downloadengine_constructor",
-      "download_engine_downloadengine_discardpredownload",
-      "download_engine_downloadengine_getall",
+      "download_engine_downloadengine_addpredownload",
       "download_engine_downloadengine_getdownload",
-      "download_engine_downloadengine_getglobalbytespersecond",
-      "download_engine_downloadengine_getqueueorder",
-      "download_engine_downloadengine_getqueuestatus",
-      "download_engine_downloadengine_loadfromdb",
       "download_engine_downloadengine_pause",
       "download_engine_downloadengine_pauseall",
-      "download_engine_downloadengine_processqueue",
-      "download_engine_downloadengine_remove",
-      "download_engine_downloadengine_reorder",
-      "download_engine_downloadengine_resume",
-      "download_engine_downloadengine_resumeall",
-      "download_engine_downloadengine_setconnections",
-      "download_engine_downloadengine_setglobalspeedlimit",
-      "download_engine_downloadengine_setmaxconcurrent",
-      "download_engine_downloadengine_setspeedlimit",
-      "download_engine_downloadengine_startsaveloop",
       "download_engine_downloadengine_updatefilepath",
-      "download_engine_downloadtask_cancel",
-      "download_engine_downloadtask_pause",
-      "download_engine_downloadtask_resume",
-      "download_engine_downloadtask_snapshot",
-      "download_engine_downloadtask_updatefilepath",
-      "download_engine_downloadtask_updateoptions"
-    ],
-    "1": [
-      "download_engine_downloadengine_addpredownload",
       "download_engine_downloadtask",
       "download_engine_downloadtask_applyspeedthrottle",
       "download_engine_downloadtask_calculatespeed",
-      "download_engine_downloadtask_cleanuptemp",
       "download_engine_downloadtask_clearthrottletimer",
       "download_engine_downloadtask_constructor",
       "download_engine_downloadtask_currentspeed",
@@ -55,36 +26,60 @@
       "download_engine_downloadtask_handlecompletion",
       "download_engine_downloadtask_mergechunks",
       "download_engine_downloadtask_numconnections",
+      "download_engine_downloadtask_pause",
       "download_engine_downloadtask_performdownload",
       "download_engine_downloadtask_prunespeedsamples",
       "download_engine_downloadtask_retrywithbackoff",
       "download_engine_downloadtask_runantivirusscanandcomplete",
+      "download_engine_downloadtask_snapshot",
       "download_engine_downloadtask_start",
       "download_engine_downloadtask_status",
-      "download_engine_downloadtask_verifychecksum"
+      "download_engine_downloadtask_updatefilepath",
+      "download_engine_downloadtask_updateoptions",
+      "download_engine_downloadtask_verifychecksum",
+      "types_download_download"
     ],
-    "2": [
-      "downloads_batchdownloaddialog",
-      "downloads_batchdownloaddialog_batchdownloaddialog",
-      "downloads_batchdownloadlistdialog",
-      "downloads_batchdownloadlistdialog_batchdownloadlistdialog",
-      "downloads_batchdownloadlistdialog_batchlink",
-      "downloads_exportdialog",
-      "downloads_exportdialog_exportdialog",
-      "downloads_globaladdurldialog",
-      "downloads_globaladdurldialog_globaladdurldialog",
-      "layout_menubar",
-      "layout_menubar_menubar",
-      "layout_statusbar_statusbar",
-      "layout_titlebar_titlebar",
-      "layout_toptoolbar_toptoolbar",
-      "src_app",
-      "src_app_app"
-    ],
-    "3": [
+    "1": [
+      "browser_bridge_index_startbrowserbridge",
+      "browser_bridge_index_stopbrowserbridge",
+      "clipboard_index_startclipboardmonitor",
       "download_engine",
       "download_engine_chunkstream",
+      "download_engine_downloadengineevents",
       "download_engine_speedsample",
+      "ipc_queue_ipc",
+      "ipc_queue_ipc_registerqueuehandlers",
+      "notifications_index_initnotifications",
+      "packages_main_src_index_ts_src_index",
+      "queue_queue_manager",
+      "queue_queue_manager_getqueuemanager",
+      "queue_queue_repository",
+      "queue_queue_repository_getqueuerepository",
+      "queue_queue_repository_queuerepository",
+      "queue_queue_repository_queuerepository_create",
+      "queue_queue_repository_queuerepository_delete",
+      "queue_queue_repository_queuerepository_getall",
+      "queue_queue_repository_queuerepository_getbyid",
+      "queue_queue_repository_queuerepository_maprowtoqueue",
+      "queue_queue_repository_queuerepository_update",
+      "src_index",
+      "src_index_createtray",
+      "src_index_createwindow",
+      "src_index_desktoppath",
+      "src_index_getclipboardenabled",
+      "src_index_loadenginesettings",
+      "storage_database",
+      "storage_database_getdatabase",
+      "storage_database_initdatabase",
+      "storage_download_repository_downloadrepository",
+      "types_queue_queuesettings"
+    ],
+    "2": [
+      "automation_index_registerautomationipc",
+      "clipboard_index_stopclipboardmonitor",
+      "grabber_index_crawlsite",
+      "grabber_index_detectvideos",
+      "ipc_category_ipc_registercategoryipc",
       "ipc_download_ipc",
       "ipc_download_ipc_emitqueuestatus",
       "ipc_download_ipc_getdownloadengine",
@@ -92,51 +87,126 @@
       "ipc_download_ipc_registerdownloadipc",
       "ipc_download_ipc_sendtorenderer",
       "ipc_download_ipc_setdownloadengine",
+      "ipc_index",
+      "ipc_index_registerallipc",
+      "ipc_index_registergrabberipc",
+      "ipc_index_registerpluginipc",
+      "ipc_settings_ipc_registersettingsipc",
       "notifications_index_notifydownloadcomplete",
       "notifications_index_notifydownloaderror",
-      "storage_database_getdatabase",
-      "storage_download_repository_downloadrepository"
+      "notifications_index_setnotificationsenabled",
+      "plugins_loader_disableplugin",
+      "plugins_loader_enableplugin",
+      "plugins_loader_installplugin",
+      "plugins_loader_scanplugins",
+      "plugins_loader_uninstallplugin",
+      "scheduler_index_loadschedules",
+      "scheduler_index_registerscheduleipc"
+    ],
+    "3": [
+      "download_engine_downloadengine",
+      "download_engine_downloadengine_activecount",
+      "download_engine_downloadengine_cancel",
+      "download_engine_downloadengine_clearcompleted",
+      "download_engine_downloadengine_constructor",
+      "download_engine_downloadengine_discardpredownload",
+      "download_engine_downloadengine_getall",
+      "download_engine_downloadengine_getglobalbytespersecond",
+      "download_engine_downloadengine_getqueueorder",
+      "download_engine_downloadengine_getqueuestatus",
+      "download_engine_downloadengine_loadfromdb",
+      "download_engine_downloadengine_processqueue",
+      "download_engine_downloadengine_remove",
+      "download_engine_downloadengine_reorder",
+      "download_engine_downloadengine_resume",
+      "download_engine_downloadengine_resumeall",
+      "download_engine_downloadengine_setconnections",
+      "download_engine_downloadengine_setglobalspeedlimit",
+      "download_engine_downloadengine_setmaxconcurrent",
+      "download_engine_downloadengine_setspeedlimit",
+      "download_engine_downloadengine_startsaveloop",
+      "download_engine_downloadtask_cancel",
+      "download_engine_downloadtask_cleanuptemp",
+      "download_engine_downloadtask_resume"
     ],
     "4": [
-      "download_engine_downloadengineevents",
+      "packages_preload_src_index_ts_src_index",
+      "packages_shared_src_index_ts_src_index",
+      "src_index_api",
+      "src_index_rdmapi",
       "src_preload_d",
       "src_preload_d_rdmapi",
       "src_preload_d_window",
       "types_download",
       "types_download_chunkinfo",
-      "types_download_download",
       "types_download_downloadoptions",
       "types_download_downloadpriority",
       "types_download_downloadstatus",
       "types_download_queuestatus",
       "types_grabber_grabresult",
+      "types_ipc",
+      "types_ipc_ipc_channels",
+      "types_ipc_ipcchannel",
       "types_plugin_plugininstance",
+      "types_queue",
+      "types_queue_queuetype",
+      "types_queue_scheduletype",
       "types_settings_category"
     ],
     "5": [
-      "downloads_downloadpropertiesdialog",
-      "downloads_downloadpropertiesdialog_downloadpropertiesdialog",
-      "downloads_downloadpropertiesdialog_downloadpropertiesdialogprops"
+      "layout_finddialog",
+      "layout_finddialog_finddialog",
+      "layout_menubar",
+      "layout_menubar_menubar",
+      "layout_statusbar_statusbar",
+      "layout_titlebar_titlebar",
+      "layout_toptoolbar_toptoolbar",
+      "pages_schedulerpage",
+      "pages_schedulerpage_schedulerpage",
+      "pages_settingspage_settingspage",
+      "scheduler_helpdialog",
+      "scheduler_helpdialog_helpdialog",
+      "scheduler_helpdialog_helpdialogprops",
+      "scheduler_newqueuedialog",
+      "scheduler_newqueuedialog_newqueuedialog",
+      "scheduler_newqueuedialog_newqueuedialogprops",
+      "src_app",
+      "src_app_app",
+      "stores_download_store",
+      "stores_download_store_downloadstate",
+      "stores_download_store_usedownloadstore"
     ],
     "6": [
+      "pages_settingspage",
+      "pages_settingspage_appearancesettings",
+      "pages_settingspage_downloadsettings",
+      "pages_settingspage_foldersettings",
+      "pages_settingspage_generalsettings",
+      "pages_settingspage_networksettings",
+      "pages_settingspage_notificationsettings",
+      "pages_settingspage_securitysettings",
+      "pages_settingspage_tabs",
+      "settings_downloadpanelsdialog",
+      "settings_downloadpanelsdialog_downloadpanelsdialog",
+      "settings_downloadpanelsdialog_downloadpanelsdialogprops"
+    ],
+    "7": [
+      "queue_queue_manager_queuemanager",
+      "queue_queue_manager_queuemanager_checkschedules",
+      "queue_queue_manager_queuemanager_start",
+      "queue_queue_manager_queuemanager_startqueue",
+      "queue_queue_manager_queuemanager_stop",
+      "queue_queue_manager_queuemanager_stopqueue"
+    ],
+    "8": [
       "icons_icon",
       "icons_icon_arrow",
       "icons_icon_bg"
     ],
-    "7": [
+    "9": [
       "readme_tech_stack",
       "roadmap_tech_stack",
       "taste_taste_tech_stack"
-    ],
-    "8": [
-      "src_index",
-      "src_index_api",
-      "src_index_rdmapi"
-    ],
-    "9": [
-      "types_ipc",
-      "types_ipc_ipc_channels",
-      "types_ipc_ipcchannel"
     ],
     "10": [
       "chrome_popup_ui",
@@ -157,204 +227,141 @@
       "automation_index_getrules"
     ],
     "15": [
-      "automation_index_registerautomationipc"
-    ],
-    "16": [
-      "browser_bridge_index_startbrowserbridge"
-    ],
-    "17": [
-      "browser_bridge_index_stopbrowserbridge"
-    ],
-    "18": [
       "clipboard_index_isclipboardmonitorrunning"
     ],
-    "19": [
-      "clipboard_index_startclipboardmonitor"
-    ],
-    "20": [
-      "clipboard_index_stopclipboardmonitor"
-    ],
-    "21": [
-      "downloads_downloadprogressdialog_downloadprogressdialog"
-    ],
-    "22": [
+    "16": [
       "electron_builder_config"
     ],
-    "23": [
-      "grabber_index_crawlsite"
-    ],
-    "24": [
-      "grabber_index_detectvideos"
-    ],
-    "25": [
+    "17": [
       "grabber_index_grabresult"
     ],
-    "26": [
-      "ipc_category_ipc_registercategoryipc"
-    ],
-    "27": [
-      "ipc_index_registerallipc"
-    ],
-    "28": [
-      "ipc_settings_ipc_registersettingsipc"
-    ],
-    "29": [
-      "notifications_index_initnotifications"
-    ],
-    "30": [
+    "18": [
       "notifications_index_notifyclipboardurl"
     ],
-    "31": [
-      "notifications_index_setnotificationsenabled"
-    ],
-    "32": [
-      "plugins_loader_disableplugin"
-    ],
-    "33": [
-      "plugins_loader_enableplugin"
-    ],
-    "34": [
+    "19": [
       "plugins_loader_getloadedplugins"
     ],
-    "35": [
+    "20": [
       "plugins_loader_getplugindir"
     ],
-    "36": [
+    "21": [
       "plugins_loader_getplugininstance"
     ],
-    "37": [
-      "plugins_loader_installplugin"
-    ],
-    "38": [
+    "22": [
       "plugins_loader_ispluginloaded"
     ],
-    "39": [
+    "23": [
       "plugins_loader_loadplugin"
     ],
-    "40": [
-      "plugins_loader_scanplugins"
-    ],
-    "41": [
-      "plugins_loader_uninstallplugin"
-    ],
-    "42": [
+    "24": [
       "plugins_loader_unloadplugin"
     ],
-    "43": [
+    "25": [
       "pnpm_workspace_config"
     ],
-    "44": [
+    "26": [
       "rdm_screenshot_text"
     ],
-    "45": [
+    "27": [
       "renderer_index_html"
     ],
-    "46": [
+    "28": [
       "roadmap_database_schema"
     ],
-    "47": [
+    "29": [
       "roadmap_design_decisions"
     ],
-    "48": [
+    "30": [
       "scheduler_cron_getnextrun"
     ],
-    "49": [
+    "31": [
       "scheduler_cron_isvalidcron"
     ],
-    "50": [
+    "32": [
       "scheduler_cron_parsecron"
     ],
-    "51": [
-      "scheduler_index_loadschedules"
-    ],
-    "52": [
-      "scheduler_index_registerscheduleipc"
-    ],
-    "53": [
-      "storage_database_initdatabase"
-    ],
-    "54": [
+    "33": [
       "stores_ui_store_thememode"
     ],
-    "55": [
+    "34": [
       "taste_taste_workflow"
     ],
-    "56": [
+    "35": [
       "types_automation_automationrule"
     ],
-    "57": [
+    "36": [
       "types_automation_ruleaction"
     ],
-    "58": [
+    "37": [
       "types_automation_rulecondition"
     ],
-    "59": [
+    "38": [
       "types_cloud_cloudfile"
     ],
-    "60": [
+    "39": [
       "types_cloud_cloudproviderconfig"
     ],
-    "61": [
+    "40": [
       "types_cloud_cloudprovidertype"
     ],
-    "62": [
+    "41": [
       "types_cloud_icloudprovider"
     ],
-    "63": [
+    "42": [
       "types_plugin_pluginapi"
     ],
-    "64": [
+    "43": [
       "types_plugin_pluginmanifest"
     ],
-    "65": [
+    "44": [
       "types_plugin_pluginpermission"
     ],
-    "66": [
+    "45": [
       "types_schedule_scheduleentry"
     ],
-    "67": [
+    "46": [
       "utils_filesize_formatduration"
     ],
-    "68": [
+    "47": [
       "utils_filesize_formatfilesize"
     ],
-    "69": [
+    "48": [
       "utils_filesize_formatspeed"
     ],
-    "70": [
+    "49": [
       "utils_path_ensuredir"
     ],
-    "71": [
+    "50": [
       "utils_path_getappdatadir"
     ],
-    "72": [
+    "51": [
       "utils_path_getdownloadsdir"
     ],
-    "73": [
+    "52": [
       "utils_path_getplugindir"
     ],
-    "74": [
+    "53": [
       "utils_url_extractfilename"
     ],
-    "75": [
+    "54": [
       "utils_url_getdomain"
     ],
-    "76": [
+    "55": [
       "utils_url_getextension"
     ],
-    "77": [
+    "56": [
       "utils_url_isvalidurl"
     ]
   },
   "cohesion": {
-    "0": 0.1032258064516129,
-    "1": 0.1349206349206349,
-    "2": 0.16666666666666666,
-    "3": 0.1978021978021978,
-    "4": 0.16483516483516483,
-    "5": 0.6666666666666666,
-    "6": 0.6666666666666666,
-    "7": 0.6666666666666666,
+    "0": 0.1111111111111111,
+    "1": 0.11931818181818182,
+    "2": 0.10541310541310542,
+    "3": 0.11594202898550725,
+    "4": 0.11688311688311688,
+    "5": 0.17142857142857143,
+    "6": 0.18181818181818182,
+    "7": 0.6,
     "8": 0.6666666666666666,
     "9": 0.6666666666666666,
     "10": 1.0,
@@ -403,39 +410,48 @@
     "53": 1.0,
     "54": 1.0,
     "55": 1.0,
-    "56": 1.0,
-    "57": 1.0,
-    "58": 1.0,
-    "59": 1.0,
-    "60": 1.0,
-    "61": 1.0,
-    "62": 1.0,
-    "63": 1.0,
-    "64": 1.0,
-    "65": 1.0,
-    "66": 1.0,
-    "67": 1.0,
-    "68": 1.0,
-    "69": 1.0,
-    "70": 1.0,
-    "71": 1.0,
-    "72": 1.0,
-    "73": 1.0,
-    "74": 1.0,
-    "75": 1.0,
-    "76": 1.0,
-    "77": 1.0
+    "56": 1.0
   },
   "gods": [
     {
       "id": "download_engine_downloadtask",
       "label": "DownloadTask",
-      "degree": 33
+      "degree": 34
     },
     {
       "id": "download_engine_downloadengine",
       "label": "DownloadEngine",
-      "degree": 27
+      "degree": 30
+    },
+    {
+      "id": "types_download_download",
+      "label": "Download",
+      "degree": 18
+    },
+    {
+      "id": "storage_database_getdatabase",
+      "label": "getDatabase",
+      "degree": 13
+    },
+    {
+      "id": "types_queue_queuesettings",
+      "label": "QueueSettings",
+      "degree": 10
+    },
+    {
+      "id": "stores_download_store_usedownloadstore",
+      "label": "useDownloadStore",
+      "degree": 9
+    },
+    {
+      "id": "ipc_download_ipc_getdownloadengine",
+      "label": "getDownloadEngine",
+      "degree": 8
+    },
+    {
+      "id": "ipc_index_registerallipc",
+      "label": "registerAllIpc",
+      "degree": 7
     },
     {
       "id": "src_preload_d_rdmapi",
@@ -443,39 +459,9 @@
       "degree": 7
     },
     {
-      "id": "ipc_download_ipc_getdownloadengine",
-      "label": "getDownloadEngine",
-      "degree": 3
-    },
-    {
-      "id": "types_download_download",
-      "label": "Download",
-      "degree": 3
-    },
-    {
-      "id": "ipc_download_ipc_getqueuestatus",
-      "label": "getQueueStatus()",
-      "degree": 3
-    },
-    {
-      "id": "ipc_download_ipc_emitqueuestatus",
-      "label": "emitQueueStatus()",
-      "degree": 3
-    },
-    {
-      "id": "download_engine_downloadengineevents",
-      "label": "DownloadEngineEvents",
-      "degree": 2
-    },
-    {
-      "id": "ipc_download_ipc_registerdownloadipc",
-      "label": "registerDownloadIpc",
-      "degree": 2
-    },
-    {
-      "id": "storage_database_getdatabase",
-      "label": "getDatabase",
-      "degree": 2
+      "id": "queue_queue_repository_queuerepository",
+      "label": "QueueRepository",
+      "degree": 7
     }
   ],
   "surprises": [
@@ -524,15 +510,15 @@
       "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
     },
     {
-      "source": "Chrome Popup UI",
-      "target": "Firefox Popup UI",
+      "source": "DownloadEngineEvents",
+      "target": "Download",
       "source_files": [
-        "packages/browser-extensions/chrome/popup.html",
-        "packages/browser-extensions/firefox/popup.html"
+        "packages/main/src/download/engine.ts",
+        "packages/shared/src/types/download.ts"
       ],
-      "confidence": "INFERRED",
-      "relation": "semantically_similar_to",
-      "why": "inferred connection - not explicitly stated in source; semantically similar concepts with no structural link"
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "bridges separate communities; peripheral node `DownloadEngineEvents` unexpectedly reaches hub `Download`"
     }
   ],
   "tokens": {

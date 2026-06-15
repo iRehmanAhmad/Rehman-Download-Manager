@@ -150,6 +150,22 @@ To successfully implement all of IDM's legendary features, we are executing a ph
 - README: complete project documentation — features, tech stack, getting started, project structure, phase status
 - SQL schema inlined into database.ts to eliminate migration file ENOENT crash at runtime
 
+### ✅ Phase 10: Core Engine Stability
+**Status: Committed**
+
+- Async chunk I/O streaming using Node.js Streams
+- Reduced memory overhead for large files
+- Graceful error handling for stream interruptions
+- Fixed pause/resume lock states
+
+### ✅ Phase 11: IDM Style UI Refinements
+**Status: Committed**
+
+- Customized "Download Panels in Browsers" dialog
+- "Keys" settings dialog
+- IDM Menu items configuration dialog
+- Refactored settings to accurately mimic classic IDM experience while maintaining modern React/Tailwind base
+
 ---
 
 ## Database Schema (7 tables)

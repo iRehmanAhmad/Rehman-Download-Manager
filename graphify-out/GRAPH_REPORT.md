@@ -4,12 +4,12 @@
 - cluster-only mode — file stats not available
 
 ## Summary
-- 189 nodes · 184 edges · 78 communities (5 shown, 73 thin omitted)
-- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.95)
+- 238 nodes · 368 edges · 57 communities (7 shown, 50 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.95)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `c14be8bd`
+- Built from commit: `1228deba`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -71,39 +71,18 @@
 - [[_COMMUNITY_Community 54|Community 54]]
 - [[_COMMUNITY_Community 55|Community 55]]
 - [[_COMMUNITY_Community 56|Community 56]]
-- [[_COMMUNITY_Community 57|Community 57]]
-- [[_COMMUNITY_Community 58|Community 58]]
-- [[_COMMUNITY_Community 59|Community 59]]
-- [[_COMMUNITY_Community 60|Community 60]]
-- [[_COMMUNITY_Community 61|Community 61]]
-- [[_COMMUNITY_Community 62|Community 62]]
-- [[_COMMUNITY_Community 63|Community 63]]
-- [[_COMMUNITY_Community 64|Community 64]]
-- [[_COMMUNITY_Community 65|Community 65]]
-- [[_COMMUNITY_Community 66|Community 66]]
-- [[_COMMUNITY_Community 67|Community 67]]
-- [[_COMMUNITY_Community 68|Community 68]]
-- [[_COMMUNITY_Community 69|Community 69]]
-- [[_COMMUNITY_Community 70|Community 70]]
-- [[_COMMUNITY_Community 71|Community 71]]
-- [[_COMMUNITY_Community 72|Community 72]]
-- [[_COMMUNITY_Community 73|Community 73]]
-- [[_COMMUNITY_Community 74|Community 74]]
-- [[_COMMUNITY_Community 75|Community 75]]
-- [[_COMMUNITY_Community 76|Community 76]]
-- [[_COMMUNITY_Community 77|Community 77]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `DownloadTask` - 33 edges
-2. `DownloadEngine` - 27 edges
-3. `RdmApi` - 7 edges
-4. `getDownloadEngine` - 3 edges
-5. `Download` - 3 edges
-6. `getQueueStatus()` - 3 edges
-7. `emitQueueStatus()` - 3 edges
-8. `DownloadEngineEvents` - 2 edges
-9. `registerDownloadIpc` - 2 edges
-10. `getDatabase` - 2 edges
+1. `DownloadTask` - 34 edges
+2. `DownloadEngine` - 30 edges
+3. `Download` - 18 edges
+4. `getDatabase` - 13 edges
+5. `QueueSettings` - 10 edges
+6. `useDownloadStore` - 9 edges
+7. `getDownloadEngine` - 8 edges
+8. `registerAllIpc` - 7 edges
+9. `RdmApi` - 7 edges
+10. `QueueRepository` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `RDM Roadmap` --semantically_similar_to--> `RDM`  [INFERRED] [semantically similar]
@@ -114,51 +93,62 @@
   ROADMAP.md → README.md
 - `Taste Tech Stack` --conceptually_related_to--> `Roadmap Tech Stack`  [INFERRED]
   .commandcode/taste/taste.md → ROADMAP.md
-- `Chrome Popup UI` --semantically_similar_to--> `Firefox Popup UI`  [INFERRED] [semantically similar]
-  packages/browser-extensions/chrome/popup.html → packages/browser-extensions/firefox/popup.html
+- `DownloadEngineEvents` --references--> `Download`  [EXTRACTED]
+  packages/main/src/download/engine.ts → packages/shared/src/types/download.ts
 
 ## Import Cycles
-- None detected.
+- 1-file cycle: `packages/preload/src/index.ts -> packages/preload/src/index.ts`
+- 1-file cycle: `packages/main/src/index.ts -> packages/main/src/index.ts`
 
-## Communities (78 total, 73 thin omitted)
+## Communities (57 total, 50 thin omitted)
+
+### Community 1 - "Community 1"
+Cohesion: 0.12
+Nodes (18): startBrowserBridge, stopBrowserBridge, startClipboardMonitor, ChunkStream, DownloadEngineEvents, SpeedSample, registerQueueHandlers(), initNotifications (+10 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.17
-Nodes (10): BatchDownloadDialog(), BatchDownloadListDialog(), BatchLink, ExportDialog(), GlobalAddUrlDialog(), MenuBar(), StatusBar, TitleBar (+2 more)
-
-### Community 3 - "Community 3"
-Cohesion: 0.20
-Nodes (12): ChunkStream, SpeedSample, emitQueueStatus(), getDownloadEngine, getQueueStatus(), registerDownloadIpc, sendToRenderer(), setDownloadEngine (+4 more)
+Cohesion: 0.11
+Nodes (25): registerAutomationIpc, stopClipboardMonitor, crawlSite, detectVideos, registerCategoryIpc, emitQueueStatus(), getDownloadEngine, getQueueStatus() (+17 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.16
-Nodes (12): DownloadEngineEvents, RdmApi, Window, ChunkInfo, Download, DownloadOptions, DownloadPriority, DownloadStatus (+4 more)
+Cohesion: 0.12
+Nodes (16): api, RdmApi, RdmApi, Window, ChunkInfo, DownloadOptions, DownloadPriority, DownloadStatus (+8 more)
+
+### Community 5 - "Community 5"
+Cohesion: 0.17
+Nodes (14): FindDialog(), MenuBar(), StatusBar, TitleBar, TopToolbar, SchedulerPage(), SettingsPage(), HelpDialog() (+6 more)
 
 ### Community 6 - "Community 6"
+Cohesion: 0.18
+Nodes (3): TABS, DownloadPanelsDialog(), DownloadPanelsDialogProps
+
+### Community 8 - "Community 8"
 Cohesion: 0.67
 Nodes (3): App Icon, Download Arrow, Background Gradient
 
-### Community 7 - "Community 7"
+### Community 9 - "Community 9"
 Cohesion: 0.67
 Nodes (3): Tech Stack, Roadmap Tech Stack, Taste Tech Stack
 
 ## Knowledge Gaps
-- **97 isolated node(s):** `evaluateRules`, `getRules`, `registerAutomationIpc`, `startBrowserBridge`, `stopBrowserBridge` (+92 more)
+- **91 isolated node(s):** `evaluateRules`, `getRules`, `registerAutomationIpc`, `startBrowserBridge`, `stopBrowserBridge` (+86 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **73 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **50 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `DownloadTask` connect `Community 1` to `Community 0`, `Community 3`?**
-  _High betweenness centrality (0.101) - this node is a cross-community bridge._
-- **Why does `DownloadEngine` connect `Community 0` to `Community 1`, `Community 3`?**
-  _High betweenness centrality (0.083) - this node is a cross-community bridge._
-- **Why does `DownloadEngineEvents` connect `Community 4` to `Community 3`?**
-  _High betweenness centrality (0.054) - this node is a cross-community bridge._
+- **Why does `DownloadTask` connect `Community 0` to `Community 1`, `Community 3`?**
+  _High betweenness centrality (0.144) - this node is a cross-community bridge._
+- **Why does `Download` connect `Community 0` to `Community 1`, `Community 2`, `Community 3`, `Community 4`, `Community 5`?**
+  _High betweenness centrality (0.141) - this node is a cross-community bridge._
+- **Why does `DownloadEngine` connect `Community 3` to `Community 0`, `Community 1`, `Community 2`?**
+  _High betweenness centrality (0.129) - this node is a cross-community bridge._
 - **What connects `evaluateRules`, `getRules`, `registerAutomationIpc` to the rest of the system?**
-  _98 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _92 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.1032258064516129 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.1111111111111111 - nodes in this community are weakly interconnected._
 - **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.1349206349206349 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.11931818181818182 - nodes in this community are weakly interconnected._
+- **Should `Community 2` be split into smaller, more focused modules?**
+  _Cohesion score 0.10541310541310542 - nodes in this community are weakly interconnected._

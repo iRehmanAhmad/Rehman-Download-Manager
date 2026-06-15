@@ -75,9 +75,9 @@
     "semantic_hash": "847220d39ab964c86ad361cffcd0b6fa"
   },
   "packages/main/src/download/engine.ts": {
-    "mtime": 1781521332.9323115,
-    "ast_hash": "eb34cb9d9fa67a5c7432011902979fdf",
-    "semantic_hash": "eb34cb9d9fa67a5c7432011902979fdf"
+    "mtime": 1781537882.5573266,
+    "ast_hash": "1ea189bd769799f722470d673cf51cf4",
+    "semantic_hash": "1ea189bd769799f722470d673cf51cf4"
   },
   "packages/main/src/grabber/index.ts": {
     "mtime": 1781447240.2867699,
@@ -85,9 +85,9 @@
     "semantic_hash": "f322e44ce83ba3a6f0b36fea922d4300"
   },
   "packages/main/src/index.ts": {
-    "mtime": 1781462420.7437675,
-    "ast_hash": "1ea1d266f9c01e27b62210b6491d71e7",
-    "semantic_hash": "1ea1d266f9c01e27b62210b6491d71e7"
+    "mtime": 1781536716.0075817,
+    "ast_hash": "7707a2eed8582efa3fcd29cde6ad3c3f",
+    "semantic_hash": "7707a2eed8582efa3fcd29cde6ad3c3f"
   },
   "packages/main/src/ipc/category.ipc.ts": {
     "mtime": 1781436833.845328,
@@ -95,14 +95,14 @@
     "semantic_hash": "192e8a6fa2d5ad12565cb5436ba74250"
   },
   "packages/main/src/ipc/download.ipc.ts": {
-    "mtime": 1781523065.8339553,
-    "ast_hash": "f5b0ecc2064c94b73575c7475d5e219e",
-    "semantic_hash": "f5b0ecc2064c94b73575c7475d5e219e"
+    "mtime": 1781535434.040559,
+    "ast_hash": "cfebb13bc72b2fe8b04e355e60d08184",
+    "semantic_hash": "cfebb13bc72b2fe8b04e355e60d08184"
   },
   "packages/main/src/ipc/index.ts": {
-    "mtime": 1781508789.4048507,
-    "ast_hash": "87440e5d95309ee7c809f3642a3f6fd8",
-    "semantic_hash": "87440e5d95309ee7c809f3642a3f6fd8"
+    "mtime": 1781539528.2291906,
+    "ast_hash": "0ec812320a1343867ded99dfb602caab",
+    "semantic_hash": "0ec812320a1343867ded99dfb602caab"
   },
   "packages/main/src/ipc/settings.ipc.ts": {
     "mtime": 1781443652.957738,
@@ -130,9 +130,9 @@
     "semantic_hash": "fe94f536c4d51b9a6161b5e626f882a6"
   },
   "packages/main/src/storage/database.ts": {
-    "mtime": 1781458452.3130393,
-    "ast_hash": "a9e4b63ccd85c20e20609675e43794bc",
-    "semantic_hash": "a9e4b63ccd85c20e20609675e43794bc"
+    "mtime": 1781536503.4015875,
+    "ast_hash": "2ee6c2cf8a5b322aa0dca925fa78c836",
+    "semantic_hash": "2ee6c2cf8a5b322aa0dca925fa78c836"
   },
   "packages/main/src/storage/download.repository.ts": {
     "mtime": 1781457524.5587687,
@@ -155,9 +155,9 @@
     "semantic_hash": "b34b71148c1f616d4da2f8c43ef8267f"
   },
   "packages/preload/src/index.ts": {
-    "mtime": 1781523051.5781603,
-    "ast_hash": "9b90922c7c7af520ae806b385684e57a",
-    "semantic_hash": "9b90922c7c7af520ae806b385684e57a"
+    "mtime": 1781539528.0793068,
+    "ast_hash": "c4a255114cfa26aa69dfbfb6fae35af1",
+    "semantic_hash": "c4a255114cfa26aa69dfbfb6fae35af1"
   },
   "packages/preload/tsconfig.json": {
     "mtime": 1781435328.6630664,
@@ -170,9 +170,9 @@
     "semantic_hash": "6755b37be23c1a66cc92fd34aeee04c2"
   },
   "packages/renderer/src/App.tsx": {
-    "mtime": 1781522392.9287472,
-    "ast_hash": "f44693cd515a161e1bd770196e151343",
-    "semantic_hash": "f44693cd515a161e1bd770196e151343"
+    "mtime": 1781535547.1385586,
+    "ast_hash": "e5720c697976a4cc61cbe4e49f734530",
+    "semantic_hash": "e5720c697976a4cc61cbe4e49f734530"
   },
   "packages/renderer/src/components/downloads/DownloadItem.tsx": {
     "mtime": 1781513794.9334433,
@@ -200,9 +200,9 @@
     "semantic_hash": "c2c9765fa895f9094727abc9706e6166"
   },
   "packages/renderer/src/components/layout/MenuBar.tsx": {
-    "mtime": 1781523065.8733408,
-    "ast_hash": "09b8444e95096bbe1ee620f25663a62a",
-    "semantic_hash": "09b8444e95096bbe1ee620f25663a62a"
+    "mtime": 1781538378.9932232,
+    "ast_hash": "94991a32ea447bdcbbb234359a794b7e",
+    "semantic_hash": "94991a32ea447bdcbbb234359a794b7e"
   },
   "packages/renderer/src/components/layout/Sidebar.tsx": {
     "mtime": 1781463463.1462762,
@@ -255,24 +255,24 @@
     "semantic_hash": "b0f23265fe53b4fa26bf52f8245c23bb"
   },
   "packages/renderer/src/pages/SchedulerPage.tsx": {
-    "mtime": 1781437199.5306258,
-    "ast_hash": "40e9ec68ba33325250cb3c55f2985922",
-    "semantic_hash": "40e9ec68ba33325250cb3c55f2985922"
+    "mtime": 1781537335.883641,
+    "ast_hash": "d711f9f573f9c7878e1de23fbf743767",
+    "semantic_hash": "d711f9f573f9c7878e1de23fbf743767"
   },
   "packages/renderer/src/pages/SettingsPage.tsx": {
-    "mtime": 1781459036.2671506,
-    "ast_hash": "d63a7bd9a17a407b22df944f7ca3f609",
-    "semantic_hash": "d63a7bd9a17a407b22df944f7ca3f609"
+    "mtime": 1781539775.392178,
+    "ast_hash": "02552660928636312361e81a2cf7506c",
+    "semantic_hash": "02552660928636312361e81a2cf7506c"
   },
   "packages/renderer/src/preload.d.ts": {
-    "mtime": 1781523051.4801562,
-    "ast_hash": "6c038725abbfa2ac487ce768aa8ba4d7",
-    "semantic_hash": "6c038725abbfa2ac487ce768aa8ba4d7"
+    "mtime": 1781535412.2946105,
+    "ast_hash": "55e23f3a0b0fee3af1f53fa6b347d981",
+    "semantic_hash": "55e23f3a0b0fee3af1f53fa6b347d981"
   },
   "packages/renderer/src/stores/download-store.ts": {
-    "mtime": 1781462829.2605364,
-    "ast_hash": "7eb164886ee45761b1c6a9321a38105c",
-    "semantic_hash": "7eb164886ee45761b1c6a9321a38105c"
+    "mtime": 1781535785.9457016,
+    "ast_hash": "6f7c12e6e6ff5a28f4d9309a6816c94e",
+    "semantic_hash": "6f7c12e6e6ff5a28f4d9309a6816c94e"
   },
   "packages/renderer/src/stores/settings-store.ts": {
     "mtime": 1781436960.297702,
@@ -310,9 +310,9 @@
     "semantic_hash": "f668f22043b7a135e1dcc3db6883c9b0"
   },
   "packages/shared/src/index.ts": {
-    "mtime": 1781447286.6293006,
-    "ast_hash": "8dcd3a2a1b32f5068cc96325b9dd9068",
-    "semantic_hash": "8dcd3a2a1b32f5068cc96325b9dd9068"
+    "mtime": 1781536478.3150346,
+    "ast_hash": "db72ae9bdf8f68ac0fd024b6a5faeb6f",
+    "semantic_hash": "db72ae9bdf8f68ac0fd024b6a5faeb6f"
   },
   "packages/shared/src/types/automation.ts": {
     "mtime": 1781435246.0373683,
@@ -330,9 +330,9 @@
     "semantic_hash": "79e25678ab6b48d508ff9e4dc1d46e24"
   },
   "packages/shared/src/types/download.ts": {
-    "mtime": 1781516175.1870968,
-    "ast_hash": "4c9d774eedbed74a3617357b15096b3a",
-    "semantic_hash": "4c9d774eedbed74a3617357b15096b3a"
+    "mtime": 1781536478.3830867,
+    "ast_hash": "00937ad75bf9c78ff69abe586c511fb6",
+    "semantic_hash": "00937ad75bf9c78ff69abe586c511fb6"
   },
   "packages/shared/src/types/grabber.ts": {
     "mtime": 1781447265.9054198,
@@ -345,9 +345,9 @@
     "semantic_hash": "3a433bc0f6f9c3a388ab05a34a8f780f"
   },
   "packages/shared/src/types/ipc.ts": {
-    "mtime": 1781523051.4350195,
-    "ast_hash": "8395e3b81231027a5d6afd8b1b7a6069",
-    "semantic_hash": "8395e3b81231027a5d6afd8b1b7a6069"
+    "mtime": 1781539527.989757,
+    "ast_hash": "e638cdce429cc24a85b92bbdbd8930c6",
+    "semantic_hash": "e638cdce429cc24a85b92bbdbd8930c6"
   },
   "packages/shared/src/types/plugin.ts": {
     "mtime": 1781435246.0373683,
@@ -503,5 +503,45 @@
     "mtime": 1781522384.1356788,
     "ast_hash": "434de134a895b86a0f31a375b78db677",
     "semantic_hash": "434de134a895b86a0f31a375b78db677"
+  },
+  "packages/main/src/ipc/queue.ipc.ts": {
+    "mtime": 1781538365.4918404,
+    "ast_hash": "aa7a3e03ed8316cb410e451308423371",
+    "semantic_hash": "aa7a3e03ed8316cb410e451308423371"
+  },
+  "packages/main/src/queue/queue.manager.ts": {
+    "mtime": 1781537839.498061,
+    "ast_hash": "6498d0de46fb62d6f36081da951eff0d",
+    "semantic_hash": "6498d0de46fb62d6f36081da951eff0d"
+  },
+  "packages/main/src/queue/queue.repository.ts": {
+    "mtime": 1781536734.8423812,
+    "ast_hash": "2a51d82bf0628dcaf2753364b4499391",
+    "semantic_hash": "2a51d82bf0628dcaf2753364b4499391"
+  },
+  "packages/renderer/src/components/layout/FindDialog.tsx": {
+    "mtime": 1781535795.0029733,
+    "ast_hash": "b35b756bb30a68e518fa863c1d93f91f",
+    "semantic_hash": "b35b756bb30a68e518fa863c1d93f91f"
+  },
+  "packages/renderer/src/components/scheduler/HelpDialog.tsx": {
+    "mtime": 1781537556.0262733,
+    "ast_hash": "6d798352a95044e33c651b3a74cff0aa",
+    "semantic_hash": "6d798352a95044e33c651b3a74cff0aa"
+  },
+  "packages/renderer/src/components/scheduler/NewQueueDialog.tsx": {
+    "mtime": 1781537312.7555757,
+    "ast_hash": "b4b0e95453f0437fae30aa346f926753",
+    "semantic_hash": "b4b0e95453f0437fae30aa346f926753"
+  },
+  "packages/renderer/src/components/settings/DownloadPanelsDialog.tsx": {
+    "mtime": 1781540453.6688957,
+    "ast_hash": "f44fa4d99b9aff0eba4483fb8f13b1c5",
+    "semantic_hash": "f44fa4d99b9aff0eba4483fb8f13b1c5"
+  },
+  "packages/shared/src/types/queue.ts": {
+    "mtime": 1781536478.1891565,
+    "ast_hash": "f843e447af6f08d9880b8b1bf2af7512",
+    "semantic_hash": "f843e447af6f08d9880b8b1bf2af7512"
   }
 }
