@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { QueueSettings } from '@rdm/shared';
 import { useDownloadStore } from '../stores/download-store';
+import { NewQueueDialog } from '../components/scheduler/NewQueueDialog';
+import { HelpDialog } from '../components/scheduler/HelpDialog';
+import { formatFileSize } from '@rdm/shared';
 
 export function SchedulerPage() {
   const [queues, setQueues] = useState<QueueSettings[]>([]);
@@ -9,6 +12,18 @@ export function SchedulerPage() {
   
   // Local state for the form
   const [formData, setFormData] = useState<Partial<QueueSettings> | null>(null);
+  
+  // Dialog state
+  const [newQueueOpen, setNewQueueOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
+  
+  // Downloads
+  const downloadsMap = useDownloadStore(s => s.downloads);
+  const queueDownloads = useMemo(() => {
+    return Array.from(downloadsMap.values()).filter(dl => 
+      (dl.queueId || 'main') === selectedId
+    );
+  }, [downloadsMap, selectedId]);
 
   const loadQueues = useCallback(async () => {
     try {
@@ -43,9 +58,11 @@ export function SchedulerPage() {
     }
   };
 
-  const handleNewQueue = async () => {
-    const name = prompt('Enter new queue name:');
-    if (!name) return;
+  const handleNewQueueClick = () => {
+    setNewQueueOpen(true);
+  };
+
+  const handleCreateQueue = async (name: string) => {
     try {
       const q = await window.api.queue.create({
         name,
@@ -120,7 +137,7 @@ export function SchedulerPage() {
           </div>
         </div>
         <div className="p-3 border-t border-slate-700 flex gap-2">
-          <button onClick={handleNewQueue} className="flex-1 px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded text-xs text-slate-200 transition-colors">
+          <button onClick={handleNewQueueClick} className="flex-1 px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded text-xs text-slate-200 transition-colors">
             New queue
           </button>
           <button 
@@ -365,10 +382,53 @@ export function SchedulerPage() {
   };
 
   const renderFilesTab = () => {
-    // We would render the list of files assigned to `selectedId` here
     return (
-      <div className="p-6">
-        <p className="text-slate-400 text-sm">Files assigned to this queue will appear here.</p>
+      <div className="p-6 flex flex-col h-full">
+        <div className="flex items-center gap-2 mb-4 text-sm text-slate-300">
+          <span>Download</span>
+          <input 
+            type="number" 
+            min="1" max="32" 
+            defaultValue="4" 
+            className="bg-slate-800 border border-slate-700 rounded px-2 py-1 w-16 text-center focus:outline-none focus:border-brand-500" 
+          />
+          <span>files at the same time</span>
+        </div>
+        
+        <div className="flex-1 border border-slate-700 bg-slate-900 rounded overflow-hidden flex flex-col">
+          <div className="grid grid-cols-[1fr_100px_100px_100px] gap-2 p-2 border-b border-slate-700 bg-slate-800 text-xs font-medium text-slate-300">
+            <div>File Name</div>
+            <div>Size</div>
+            <div>Status</div>
+            <div>Time left</div>
+          </div>
+          <div className="flex-1 overflow-y-auto">
+            {queueDownloads.length === 0 ? (
+              <div className="p-4 text-center text-slate-500 text-sm">No files in this queue.</div>
+            ) : (
+              queueDownloads.map((dl) => (
+                <div key={dl.id} className="grid grid-cols-[1fr_100px_100px_100px] gap-2 p-2 border-b border-slate-800/50 hover:bg-white/5 text-sm text-slate-300 items-center">
+                  <div className="truncate" title={dl.filename}>{dl.filename}</div>
+                  <div>{formatFileSize(dl.fileSize)}</div>
+                  <div className="capitalize">{dl.status}</div>
+                  <div>{dl.status === 'downloading' && dl.speed > 0 && dl.fileSize > 0 ? formatFileSize((dl.fileSize - dl.downloaded) / dl.speed) + 's' : '-'}</div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+        
+        <div className="flex gap-2 mt-4">
+          <button className="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded transition-colors text-slate-300 flex items-center justify-center" title="Move Up">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          </button>
+          <button className="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded transition-colors text-slate-300 flex items-center justify-center" title="Move Down">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          </button>
+          <button className="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 hover:text-red-400 border border-slate-700 rounded transition-colors text-slate-300 flex items-center justify-center" title="Delete from Queue">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
       </div>
     );
   };
@@ -441,11 +501,21 @@ export function SchedulerPage() {
           <button className="px-6 py-1.5 bg-white/5 hover:bg-white/10 rounded text-sm text-slate-200 transition-colors border border-white/10">Stop</button>
         </div>
         <div className="flex gap-2">
-          <button className="px-6 py-1.5 bg-white/5 hover:bg-white/10 rounded text-sm text-slate-200 transition-colors border border-white/10">Help</button>
+          <button onClick={() => setHelpOpen(true)} className="px-6 py-1.5 bg-white/5 hover:bg-white/10 rounded text-sm text-slate-200 transition-colors border border-white/10">Help</button>
           <button onClick={handleApply} disabled={selectedId === 'limits'} className="px-6 py-1.5 bg-brand-600 hover:bg-brand-500 disabled:bg-brand-600/50 disabled:cursor-not-allowed rounded text-sm text-white transition-colors">Apply</button>
           <button onClick={() => window.location.hash = '#/'} className="px-6 py-1.5 bg-white/5 hover:bg-white/10 rounded text-sm text-slate-200 transition-colors border border-white/10">Close</button>
         </div>
       </div>
+      <NewQueueDialog 
+        open={newQueueOpen} 
+        onOpenChange={setNewQueueOpen} 
+        onSubmit={handleCreateQueue}
+        existingQueuesCount={queues.length}
+      />
+      <HelpDialog 
+        open={helpOpen}
+        onOpenChange={setHelpOpen}
+      />
     </div>
   );
 }
