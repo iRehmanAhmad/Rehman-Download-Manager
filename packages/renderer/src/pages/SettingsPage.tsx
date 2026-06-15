@@ -60,58 +60,146 @@ export function SettingsPage() {
   );
 }
 
-import { useTranslation } from 'react-i18next';
+import { DownloadPanelsDialog } from '../components/settings/DownloadPanelsDialog';
 
 function GeneralSettings() {
   const settings = useSettingsStore((s) => s.settings);
   const setValue = useSettingsStore((s) => s.setValue);
   const loading = useSettingsStore((s) => s.loading);
   const { i18n } = useTranslation();
+  
+  const [panelsDialogOpen, setPanelsDialogOpen] = useState(false);
 
   if (loading) {
     return <div className="text-sm text-slate-500">Loading settings...</div>;
   }
 
-  const handleLanguageChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const lang = e.target.value;
-    await setValue('language', lang);
-    i18n.changeLanguage(lang);
+  const defaultBrowsers = [
+    { name: 'Apple Safari', checked: true },
+    { name: 'Google Chrome', checked: true },
+    { name: 'Internet Explorer', checked: true },
+    { name: 'Microsoft Edge', checked: true },
+    { name: 'Microsoft Edge Legacy', checked: true },
+    { name: 'Mozilla Firefox', checked: true },
+    { name: 'Opera', checked: true },
+  ];
+  
+  const capturedBrowsers = settings.capturedBrowsers ? JSON.parse(settings.capturedBrowsers) : defaultBrowsers;
+  const setCapturedBrowsers = (browsers: any) => setValue('capturedBrowsers', JSON.stringify(browsers));
+
+  const toggleBrowser = (index: number) => {
+    const newBrowsers = [...capturedBrowsers];
+    newBrowsers[index].checked = !newBrowsers[index].checked;
+    setCapturedBrowsers(newBrowsers);
+  };
+
+  const handleAddBrowser = async () => {
+    const result = await window.api.system.showOpenDialog({
+      properties: ['openFile'],
+      filters: [{ name: 'Executables', extensions: ['exe'] }]
+    });
+    
+    if (result && result.length > 0) {
+      const filePath = result[0];
+      const fileName = filePath.split('\\').pop() || filePath.split('/').pop() || 'Unknown Browser';
+      const cleanName = fileName.replace('.exe', '').charAt(0).toUpperCase() + fileName.replace('.exe', '').slice(1);
+      
+      const newBrowsers = [...capturedBrowsers, { name: cleanName, checked: true }];
+      setCapturedBrowsers(newBrowsers);
+    }
   };
 
   return (
-    <div className="max-w-lg space-y-6">
-      <h2 className="text-base font-medium text-slate-200">General</h2>
+    <div className="max-w-2xl space-y-4 text-sm text-slate-200">
       
-      <div className="space-y-2">
-        <label className="text-sm text-slate-400 block">Language</label>
-        <select
-          value={settings.language || i18n.language || 'en'}
-          onChange={handleLanguageChange}
-          className="w-full bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-200"
-        >
-          <option value="en">English</option>
-          <option value="es">Español</option>
-        </select>
+      <div className="flex items-center justify-between border-b border-gray-600 pb-2">
+        <span className="font-medium text-[15px]">Browser/System Integration</span>
       </div>
 
-      <label className="flex items-center justify-between pt-4 border-t border-slate-800">
-        <span className="text-sm text-slate-400">Start with system</span>
-        <input
-          type="checkbox"
-          className="rounded bg-slate-800 border-slate-700"
-          checked={settings.autoStart === 'true'}
-          onChange={(e) => setValue('autoStart', String(e.target.checked))}
-        />
-      </label>
-      <label className="flex items-center justify-between">
-        <span className="text-sm text-slate-400">Minimize to tray</span>
-        <input
-          type="checkbox"
-          className="rounded bg-slate-800 border-slate-700"
-          checked={settings.minimizeToTray !== 'false'}
-          onChange={(e) => setValue('minimizeToTray', String(e.target.checked))}
-        />
-      </label>
+      <div className="flex items-center justify-center gap-4 py-2">
+        <span>Advanced browser integration is enabled</span>
+        <button className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 text-black rounded hover:bg-[#e0e0e0] transition-colors">
+          Restart
+        </button>
+      </div>
+
+      <div className="space-y-2">
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            className="w-4 h-4 rounded border-gray-400 accent-blue-600"
+            checked={settings.autoStart === 'true'}
+            onChange={(e) => setValue('autoStart', String(e.target.checked))}
+          />
+          <span>Launch Internet Download Manager on startup</span>
+        </label>
+        
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            className="w-4 h-4 rounded border-gray-400 accent-blue-600"
+            checked={settings.autoDownloadClipboard === 'true'}
+            onChange={(e) => setValue('autoDownloadClipboard', String(e.target.checked))}
+          />
+          <span>Automatically start downloading of URLs placed to clipboard</span>
+        </label>
+      </div>
+
+      <div className="border border-gray-500 rounded p-4 mt-6">
+        <div className="mb-2 -mt-7 bg-[#0f172a] px-1 w-fit text-slate-300">Capture downloads from the following browsers:</div>
+        <div className="border border-gray-500 bg-white h-48 overflow-y-auto p-1 text-black">
+          {capturedBrowsers.map((b: any, idx: number) => (
+            <label key={idx} className="flex items-center gap-2 p-0.5 cursor-pointer hover:bg-blue-50">
+              <input 
+                type="checkbox" 
+                checked={b.checked} 
+                onChange={() => toggleBrowser(idx)}
+                className="w-4 h-4 accent-blue-600"
+              />
+              <span>{b.name}</span>
+            </label>
+          ))}
+        </div>
+        <div className="flex justify-end mt-2">
+          <button 
+            onClick={handleAddBrowser}
+            className="px-4 py-1 bg-[#f0f0f0] border border-gray-400 text-black rounded hover:bg-[#e0e0e0] transition-colors"
+          >
+            Add browser...
+          </button>
+        </div>
+      </div>
+
+      <div className="space-y-3 mt-6">
+        <div className="flex items-center justify-between border-t border-gray-600 pt-3">
+          <span>Customize keys to prevent or force downloading with IDM</span>
+          <button className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 text-black rounded hover:bg-[#e0e0e0] transition-colors">
+            Keys...
+          </button>
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <span>Customize IDM menu items in context menu of browsers</span>
+          <button className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 text-black rounded hover:bg-[#e0e0e0] transition-colors">
+            Edit...
+          </button>
+        </div>
+        
+        <div className="flex items-center justify-between">
+          <span>Customize IDM Download panels in browsers</span>
+          <button 
+            onClick={() => setPanelsDialogOpen(true)}
+            className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 text-black rounded hover:bg-[#e0e0e0] transition-colors"
+          >
+            Edit...
+          </button>
+        </div>
+      </div>
+
+      <DownloadPanelsDialog 
+        open={panelsDialogOpen} 
+        onOpenChange={setPanelsDialogOpen} 
+      />
     </div>
   );
 }

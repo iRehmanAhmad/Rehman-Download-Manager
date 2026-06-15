@@ -69,6 +69,7 @@ export const IPC_CHANNELS = {
   APP_MAXIMIZE: 'app:maximize',
   APP_CLOSE: 'app:close',
   SYSTEM_SELECT_SAVE_PATH: 'system:select-save-path',
+  SYSTEM_SHOW_OPEN_DIALOG: 'system:show-open-dialog',
 } as const;
 
 export type IpcChannel = (typeof IPC_CHANNELS)[keyof typeof IPC_CHANNELS];

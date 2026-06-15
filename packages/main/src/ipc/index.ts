@@ -128,6 +128,13 @@ export function registerAllIpc(engine: DownloadEngine): void {
     return result.canceled ? null : result.filePath;
   });
 
+  ipcMain.handle(IPC_CHANNELS.SYSTEM_SHOW_OPEN_DIALOG, async (event, options: any) => {
+    const win = BrowserWindow.fromWebContents(event.sender);
+    if (!win) return [];
+    const result = await dialog.showOpenDialog(win, options);
+    return result.canceled ? [] : result.filePaths;
+  });
+
   app.on('before-quit', () => {
     try {
       getDownloadEngine().pauseAll();

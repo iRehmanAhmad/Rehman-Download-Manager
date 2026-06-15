@@ -182,6 +182,8 @@ const api = {
   system: {
     selectSavePath: (defaultPath?: string): Promise<string | null> =>
       ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_SELECT_SAVE_PATH, defaultPath),
+    showOpenDialog: (options: any): Promise<string[]> =>
+      ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_SHOW_OPEN_DIALOG, options),
   },
 };
 
