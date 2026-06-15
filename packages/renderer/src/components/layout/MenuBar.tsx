@@ -35,8 +35,14 @@ export function MenuBar() {
         { divider: true },
         { label: 'Show drop target', action: () => {} },
         { divider: true },
-        { label: 'Export...', action: () => {} },
-        { label: 'Import...', action: () => {} },
+        { label: 'Export', subItems: [
+          { label: 'To RDM export file', action: () => window.dispatchEvent(new CustomEvent('open-export-dialog', { detail: 'ef2' })) },
+          { label: 'To text file', action: () => window.dispatchEvent(new CustomEvent('open-export-dialog', { detail: 'txt' })) }
+        ]},
+        { label: 'Import', subItems: [
+          { label: 'From RDM export file', action: () => {} },
+          { label: 'From text file', action: () => {} }
+        ]},
         { divider: true },
         { label: 'Exit', action: () => window.api.app.close() },
       ],
@@ -122,6 +128,27 @@ export function MenuBar() {
               {menu.items.map((item, idx) => 
                 item.divider ? (
                   <div key={idx} className="h-px bg-slate-700 my-1 mx-2" />
+                ) : item.subItems ? (
+                  <div key={idx} className="relative group">
+                    <button className="w-full text-left px-4 py-1.5 hover:bg-brand-500/20 hover:text-brand-300 transition-colors flex justify-between items-center">
+                      <span>{item.label}</span>
+                      <span className="text-slate-500 text-[10px]">▶</span>
+                    </button>
+                    <div className="absolute top-0 left-[100%] py-1 w-48 bg-slate-800 border border-slate-700 shadow-xl rounded-md flex-col hidden group-hover:flex">
+                      {item.subItems.map((sub, sidx) => (
+                        <button
+                          key={sidx}
+                          onClick={() => {
+                            sub.action?.();
+                            setActiveMenu(null);
+                          }}
+                          className="text-left px-4 py-1.5 hover:bg-brand-500/20 hover:text-brand-300 transition-colors"
+                        >
+                          {sub.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 ) : (
                   <button
                     key={idx}
@@ -129,7 +156,7 @@ export function MenuBar() {
                       item.action?.();
                       setActiveMenu(null);
                     }}
-                    className="text-left px-4 py-1.5 hover:bg-brand-500/20 hover:text-brand-300 transition-colors"
+                    className="text-left px-4 py-1.5 hover:bg-brand-500/20 hover:text-brand-300 transition-colors w-full"
                   >
                     {item.label}
                   </button>

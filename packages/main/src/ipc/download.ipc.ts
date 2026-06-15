@@ -1,4 +1,4 @@
-import { ipcMain, BrowserWindow, app } from 'electron';
+import { ipcMain, BrowserWindow, app, dialog } from 'electron';
 import { IPC_CHANNELS, type Download, type DownloadOptions } from '@rdm/shared';
 import { v4 as uuid } from 'uuid';
 import { DownloadEngine } from '../download/engine';
@@ -289,6 +289,41 @@ const fetchInfo = (currentUrl: string, redirectCount = 0): Promise<{ supportsRan
     const { shell } = require('electron');
     shell.showItemInFolder(dl.filepath);
     return true;
+  });
+
+  ipcMain.handle(IPC_CHANNELS.DOWNLOAD_EXPORT, async (_event, options: { format: 'ef2' | 'txt', mode: 'queue' | 'selected' | 'all', selectedIds: string[] }): Promise<void> => {
+    const { format, mode, selectedIds } = options;
+    const eng = getDownloadEngine();
+    let downloads = eng.getAllDownloads();
+
+    if (mode === 'queue') {
+      downloads = downloads.filter(d => ['queued', 'paused', 'downloading'].includes(d.status));
+    } else if (mode === 'selected') {
+      downloads = downloads.filter(d => selectedIds.includes(d.id));
+    }
+
+    if (downloads.length === 0) return;
+
+    const { canceled, filePath } = await dialog.showSaveDialog({
+      title: 'Export download list',
+      defaultPath: format === 'ef2' ? 'export.ef2' : 'export.txt',
+      filters: format === 'ef2' 
+        ? [{ name: 'RDM Export Files', extensions: ['ef2'] }]
+        : [{ name: 'Text Files', extensions: ['txt'] }]
+    });
+
+    if (canceled || !filePath) return;
+
+    const fs = require('node:fs');
+    if (format === 'ef2') {
+      // Export as JSON string format for easy re-importing
+      const data = JSON.stringify(downloads, null, 2);
+      fs.writeFileSync(filePath, data, 'utf-8');
+    } else {
+      // Export as plain text (URLs only)
+      const data = downloads.map(d => d.url).join('\n');
+      fs.writeFileSync(filePath, data, 'utf-8');
+    }
   });
 
   ipcMain.handle(IPC_CHANNELS.QUEUE_START_ALL, (): boolean => {

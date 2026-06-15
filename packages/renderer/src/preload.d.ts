@@ -15,6 +15,7 @@ export interface RdmApi {
     setConnections(id: string, count: number): Promise<boolean>;
     openFile(id: string): Promise<boolean>;
     openFolder(id: string): Promise<boolean>;
+    export(options: { format: 'ef2' | 'txt', mode: 'queue' | 'selected' | 'all', selectedIds: string[] }): Promise<void>;
     onAdded(callback: (download: Download) => void): () => void;
     onProgress(callback: (download: Download) => void): () => void;
     onCompleted(callback: (download: Download) => void): () => void;
