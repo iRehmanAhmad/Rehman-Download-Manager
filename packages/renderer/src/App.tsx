@@ -15,6 +15,7 @@ import { GrabberPage } from './pages/GrabberPage';
 import { GlobalAddUrlDialog } from './components/downloads/GlobalAddUrlDialog';
 import { BatchDownloadDialog } from './components/downloads/BatchDownloadDialog';
 import { BatchDownloadListDialog } from './components/downloads/BatchDownloadListDialog';
+import { ImportLinksDialog } from './components/downloads/ImportLinksDialog';
 import { ExportDialog } from './components/downloads/ExportDialog';
 import { useSettingsStore } from './stores/settings-store';
 import { useDownloadStore } from './stores/download-store';
@@ -109,6 +110,7 @@ export function App() {
         <GlobalAddUrlDialog />
         <BatchDownloadDialog />
         <BatchDownloadListDialog />
+        <ImportLinksDialog />
         <ExportDialog />
       </div>
     </HashRouter>

@@ -54,7 +54,8 @@ export function MenuBar() {
             try {
               const text = await window.api.download.import('txt');
               if (text) {
-                window.dispatchEvent(new CustomEvent('open-batch-download-dialog', { detail: text }));
+                const urls = text.split('\n').map(l => l.trim()).filter(l => l.length > 0 && l.startsWith('http'));
+                window.dispatchEvent(new CustomEvent('open-import-links-dialog', { detail: { urls } }));
               }
             } catch (err) {
               console.error(err);
