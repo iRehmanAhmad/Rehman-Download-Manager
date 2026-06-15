@@ -1,6 +1,7 @@
 export * from './types/download';
 export * from './types/settings';
 export * from './types/schedule';
+export * from './types/queue';
 export * from './types/plugin';
 export * from './types/cloud';
 export * from './types/automation';

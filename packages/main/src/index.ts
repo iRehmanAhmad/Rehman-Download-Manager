@@ -7,6 +7,7 @@ import { DownloadEngine } from './download/engine';
 import { startBrowserBridge, stopBrowserBridge } from './browser-bridge';
 import { startClipboardMonitor, stopClipboardMonitor } from './clipboard';
 import { initNotifications } from './notifications';
+import { getQueueManager } from './queue/queue.manager';
 import { APP_NAME, SETTINGS_KEY, MAX_CONCURRENT_DOWNLOADS } from '@rdm/shared';
 
 const desktopPath = join(app.getPath('desktop'), 'rdm-crash-report.txt');
@@ -148,6 +149,7 @@ app.whenReady().then(async () => {
   initNotifications();
   if (getClipboardEnabled()) startClipboardMonitor();
   startBrowserBridge(engine);
+  getQueueManager().start();
   createWindow();
   createTray();
 

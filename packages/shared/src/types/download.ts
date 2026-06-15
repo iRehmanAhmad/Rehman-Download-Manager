@@ -33,6 +33,7 @@ export interface Download {
   status: DownloadStatus;
   priority: DownloadPriority;
   categoryId?: string;
+  queueId?: string;
   addedAt: number;
   startedAt?: number;
   completedAt?: number;
@@ -57,6 +58,7 @@ export interface DownloadOptions {
   filename?: string;
   filepath?: string;
   categoryId?: string;
+  queueId?: string;
   priority?: DownloadPriority;
   numConnections?: number;
   speedLimit?: number;

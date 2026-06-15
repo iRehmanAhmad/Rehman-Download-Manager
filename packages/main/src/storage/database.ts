@@ -131,6 +131,36 @@ INSERT OR IGNORE INTO settings (key, value) VALUES
     ('proxyUrl', ''),
     ('antivirusEnabled', 'false'),
     ('antivirusCmd', '');
+
+CREATE TABLE IF NOT EXISTS queues (
+    id                TEXT PRIMARY KEY,
+    name              TEXT NOT NULL,
+    type              TEXT NOT NULL,
+    scheduleType      TEXT NOT NULL DEFAULT 'one-time',
+    startOnStartup    INTEGER DEFAULT 0,
+    startAt           TEXT,
+    runOnceAt         TEXT,
+    runDaily          INTEGER DEFAULT 0,
+    daysOfWeek        TEXT DEFAULT '[]',
+    startEveryHours   INTEGER,
+    startEveryMinutes INTEGER,
+    stopAt            TEXT,
+    retries           INTEGER DEFAULT 10,
+    openFileWhenDone  TEXT,
+    hangUpModem       INTEGER DEFAULT 0,
+    exitWhenDone      INTEGER DEFAULT 0,
+    turnOffComputer   INTEGER DEFAULT 0,
+    turnOffAction     TEXT DEFAULT 'shutdown',
+    forceTerminate    INTEGER DEFAULT 0,
+    limitEnabled      INTEGER DEFAULT 0,
+    limitMB           INTEGER,
+    limitHours        INTEGER,
+    limitShowWarning  INTEGER DEFAULT 1
+);
+
+INSERT OR IGNORE INTO queues (id, name, type) VALUES
+    ('main', 'Main download queue', 'main'),
+    ('sync', 'Synchronization queue', 'sync');
 `;
 
 export async function initDatabase(): Promise<void> {
@@ -139,4 +169,10 @@ export async function initDatabase(): Promise<void> {
   db.exec('PRAGMA journal_mode = WAL;');
   db.exec('PRAGMA busy_timeout = 5000;');
   db.exec(SCHEMA);
+
+  try {
+    db.exec("ALTER TABLE downloads ADD COLUMN queue_id TEXT DEFAULT 'main'");
+  } catch (e) {
+    // Column might already exist
+  }
 }

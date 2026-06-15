@@ -66,6 +66,17 @@ const api = {
   },
 
   queue: {
+    getAll: (): Promise<import('@rdm/shared').QueueSettings[]> =>
+      ipcRenderer.invoke(IPC_CHANNELS.QUEUE_GET_ALL),
+    get: (id: string): Promise<import('@rdm/shared').QueueSettings | undefined> =>
+      ipcRenderer.invoke(IPC_CHANNELS.QUEUE_GET, id),
+    create: (queue: Omit<import('@rdm/shared').QueueSettings, 'id' | 'type'>): Promise<import('@rdm/shared').QueueSettings> =>
+      ipcRenderer.invoke(IPC_CHANNELS.QUEUE_CREATE, queue),
+    update: (queue: import('@rdm/shared').QueueSettings): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.QUEUE_UPDATE, queue),
+    delete: (id: string): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.QUEUE_DELETE, id),
+
     startAll: (): Promise<boolean> =>
       ipcRenderer.invoke(IPC_CHANNELS.QUEUE_START_ALL),
     pauseAll: (): Promise<boolean> =>

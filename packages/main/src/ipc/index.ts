@@ -3,6 +3,7 @@ import { IPC_CHANNELS, type ScheduleEntry, type PluginInstance, type GrabResult 
 import { registerDownloadIpc, setDownloadEngine, getDownloadEngine } from './download.ipc';
 import { registerSettingsIpc } from './settings.ipc';
 import { registerCategoryIpc } from './category.ipc';
+import { registerQueueHandlers } from './queue.ipc';
 import { DownloadEngine } from '../download/engine';
 import { registerScheduleIpc, loadSchedules } from '../scheduler';
 import { registerAutomationIpc } from '../automation';
@@ -61,6 +62,7 @@ export function registerAllIpc(engine: DownloadEngine): void {
   registerDownloadIpc();
   registerSettingsIpc();
   registerCategoryIpc();
+  registerQueueHandlers();
   registerPluginIpc();
   registerGrabberIpc();
 
