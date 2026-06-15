@@ -4,12 +4,15 @@ import { useSettingsStore } from '../stores/settings-store';
 
 const TABS = [
   { id: 'general', label: 'General', icon: Settings },
-  { id: 'appearance', label: 'Appearance', icon: Monitor },
+  { id: 'file-types', label: 'File types', icon: Folder },
+  { id: 'save-to', label: 'Save to', icon: Folder },
   { id: 'downloads', label: 'Downloads', icon: Download },
-  { id: 'network', label: 'Network', icon: Settings }, // Reusing Settings icon
-  { id: 'notifications', label: 'Notifications', icon: Bell },
-  { id: 'folders', label: 'Folders', icon: Folder },
-  { id: 'security', label: 'Security', icon: Shield },
+  { id: 'connection', label: 'Connection', icon: Settings },
+  { id: 'proxy', label: 'Proxy / Socks', icon: Shield },
+  { id: 'sites-logins', label: 'Sites Logins', icon: Shield },
+  { id: 'dial-up-vpn', label: 'Dial Up / VPN', icon: Settings },
+  { id: 'sounds', label: 'Sounds', icon: Bell },
+  { id: 'appearance', label: 'Appearance', icon: Monitor },
 ];
 
 export function SettingsPage() {
@@ -42,12 +45,15 @@ export function SettingsPage() {
         </div>
         <div className="flex-1 overflow-auto p-6">
           {tab === 'general' && <GeneralSettings />}
-          {tab === 'appearance' && <AppearanceSettings />}
+          {tab === 'file-types' && <div className="text-slate-400">File types settings coming soon...</div>}
+          {tab === 'save-to' && <FolderSettings />}
           {tab === 'downloads' && <DownloadSettings />}
-          {tab === 'network' && <NetworkSettings />}
-          {tab === 'notifications' && <NotificationSettings />}
-          {tab === 'folders' && <FolderSettings />}
-          {tab === 'security' && <SecuritySettings />}
+          {tab === 'connection' && <div className="text-slate-400">Connection settings coming soon...</div>}
+          {tab === 'proxy' && <NetworkSettings />}
+          {tab === 'sites-logins' && <SecuritySettings />}
+          {tab === 'dial-up-vpn' && <div className="text-slate-400">Dial Up / VPN settings coming soon...</div>}
+          {tab === 'sounds' && <NotificationSettings />}
+          {tab === 'appearance' && <AppearanceSettings />}
         </div>
       </div>
     </div>
