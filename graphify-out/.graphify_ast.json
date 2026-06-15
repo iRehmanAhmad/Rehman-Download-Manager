@@ -1,0 +1,2452 @@
+{
+  "nodes": [
+    {
+      "id": "automation_evaluator_evaluaterules",
+      "label": "evaluateRules",
+      "file_type": "code",
+      "source_file": "packages/main/src/automation/evaluator.ts",
+      "source_location": "L4",
+      "_origin": "ast"
+    },
+    {
+      "id": "automation_index_getrules",
+      "label": "getRules",
+      "file_type": "code",
+      "source_file": "packages/main/src/automation/index.ts",
+      "source_location": "L26",
+      "_origin": "ast"
+    },
+    {
+      "id": "automation_index_registerautomationipc",
+      "label": "registerAutomationIpc",
+      "file_type": "code",
+      "source_file": "packages/main/src/automation/index.ts",
+      "source_location": "L34",
+      "_origin": "ast"
+    },
+    {
+      "id": "browser_bridge_index_startbrowserbridge",
+      "label": "startBrowserBridge",
+      "file_type": "code",
+      "source_file": "packages/main/src/browser-bridge/index.ts",
+      "source_location": "L8",
+      "_origin": "ast"
+    },
+    {
+      "id": "browser_bridge_index_stopbrowserbridge",
+      "label": "stopBrowserBridge",
+      "file_type": "code",
+      "source_file": "packages/main/src/browser-bridge/index.ts",
+      "source_location": "L58",
+      "_origin": "ast"
+    },
+    {
+      "id": "clipboard_index_startclipboardmonitor",
+      "label": "startClipboardMonitor",
+      "file_type": "code",
+      "source_file": "packages/main/src/clipboard/index.ts",
+      "source_location": "L7",
+      "_origin": "ast"
+    },
+    {
+      "id": "clipboard_index_stopclipboardmonitor",
+      "label": "stopClipboardMonitor",
+      "file_type": "code",
+      "source_file": "packages/main/src/clipboard/index.ts",
+      "source_location": "L27",
+      "_origin": "ast"
+    },
+    {
+      "id": "clipboard_index_isclipboardmonitorrunning",
+      "label": "isClipboardMonitorRunning",
+      "file_type": "code",
+      "source_file": "packages/main/src/clipboard/index.ts",
+      "source_location": "L35",
+      "_origin": "ast"
+    },
+    {
+      "id": "download_engine_downloadengineevents",
+      "label": "DownloadEngineEvents",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L37",
+      "_origin": "ast"
+    },
+    {
+      "id": "download_engine_downloadengine",
+      "label": "DownloadEngine",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L44",
+      "_origin": "ast"
+    },
+    {
+      "id": "grabber_index_grabresult",
+      "label": "GrabResult",
+      "file_type": "code",
+      "source_file": "packages/main/src/grabber/index.ts",
+      "source_location": "L5",
+      "_origin": "ast"
+    },
+    {
+      "id": "grabber_index_detectvideos",
+      "label": "detectVideos",
+      "file_type": "code",
+      "source_file": "packages/main/src/grabber/index.ts",
+      "source_location": "L27",
+      "_origin": "ast"
+    },
+    {
+      "id": "grabber_index_crawlsite",
+      "label": "crawlSite",
+      "file_type": "code",
+      "source_file": "packages/main/src/grabber/index.ts",
+      "source_location": "L59",
+      "_origin": "ast"
+    },
+    {
+      "id": "ipc_category_ipc_registercategoryipc",
+      "label": "registerCategoryIpc",
+      "file_type": "code",
+      "source_file": "packages/main/src/ipc/category.ipc.ts",
+      "source_location": "L6",
+      "_origin": "ast"
+    },
+    {
+      "id": "ipc_download_ipc_setdownloadengine",
+      "label": "setDownloadEngine",
+      "file_type": "code",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L14",
+      "_origin": "ast"
+    },
+    {
+      "id": "ipc_download_ipc_getdownloadengine",
+      "label": "getDownloadEngine",
+      "file_type": "code",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L18",
+      "_origin": "ast"
+    },
+    {
+      "id": "ipc_download_ipc_registerdownloadipc",
+      "label": "registerDownloadIpc",
+      "file_type": "code",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L37",
+      "_origin": "ast"
+    },
+    {
+      "id": "ipc_index_registerallipc",
+      "label": "registerAllIpc",
+      "file_type": "code",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L58",
+      "_origin": "ast"
+    },
+    {
+      "id": "ipc_settings_ipc_registersettingsipc",
+      "label": "registerSettingsIpc",
+      "file_type": "code",
+      "source_file": "packages/main/src/ipc/settings.ipc.ts",
+      "source_location": "L36",
+      "_origin": "ast"
+    },
+    {
+      "id": "notifications_index_initnotifications",
+      "label": "initNotifications",
+      "file_type": "code",
+      "source_file": "packages/main/src/notifications/index.ts",
+      "source_location": "L8",
+      "_origin": "ast"
+    },
+    {
+      "id": "notifications_index_setnotificationsenabled",
+      "label": "setNotificationsEnabled",
+      "file_type": "code",
+      "source_file": "packages/main/src/notifications/index.ts",
+      "source_location": "L20",
+      "_origin": "ast"
+    },
+    {
+      "id": "notifications_index_notifydownloadcomplete",
+      "label": "notifyDownloadComplete",
+      "file_type": "code",
+      "source_file": "packages/main/src/notifications/index.ts",
+      "source_location": "L24",
+      "_origin": "ast"
+    },
+    {
+      "id": "notifications_index_notifydownloaderror",
+      "label": "notifyDownloadError",
+      "file_type": "code",
+      "source_file": "packages/main/src/notifications/index.ts",
+      "source_location": "L39",
+      "_origin": "ast"
+    },
+    {
+      "id": "notifications_index_notifyclipboardurl",
+      "label": "notifyClipboardUrl",
+      "file_type": "code",
+      "source_file": "packages/main/src/notifications/index.ts",
+      "source_location": "L52",
+      "_origin": "ast"
+    },
+    {
+      "id": "plugins_loader_getplugindir",
+      "label": "getPluginDir",
+      "file_type": "code",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L12",
+      "_origin": "ast"
+    },
+    {
+      "id": "plugins_loader_scanplugins",
+      "label": "scanPlugins",
+      "file_type": "code",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L20",
+      "_origin": "ast"
+    },
+    {
+      "id": "plugins_loader_loadplugin",
+      "label": "loadPlugin",
+      "file_type": "code",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L77",
+      "_origin": "ast"
+    },
+    {
+      "id": "plugins_loader_unloadplugin",
+      "label": "unloadPlugin",
+      "file_type": "code",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L103",
+      "_origin": "ast"
+    },
+    {
+      "id": "plugins_loader_enableplugin",
+      "label": "enablePlugin",
+      "file_type": "code",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L122",
+      "_origin": "ast"
+    },
+    {
+      "id": "plugins_loader_disableplugin",
+      "label": "disablePlugin",
+      "file_type": "code",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L133",
+      "_origin": "ast"
+    },
+    {
+      "id": "plugins_loader_installplugin",
+      "label": "installPlugin",
+      "file_type": "code",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L140",
+      "_origin": "ast"
+    },
+    {
+      "id": "plugins_loader_uninstallplugin",
+      "label": "uninstallPlugin",
+      "file_type": "code",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L182",
+      "_origin": "ast"
+    },
+    {
+      "id": "plugins_loader_getloadedplugins",
+      "label": "getLoadedPlugins",
+      "file_type": "code",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L197",
+      "_origin": "ast"
+    },
+    {
+      "id": "plugins_loader_getplugininstance",
+      "label": "getPluginInstance",
+      "file_type": "code",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L201",
+      "_origin": "ast"
+    },
+    {
+      "id": "plugins_loader_ispluginloaded",
+      "label": "isPluginLoaded",
+      "file_type": "code",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L209",
+      "_origin": "ast"
+    },
+    {
+      "id": "scheduler_cron_parsecron",
+      "label": "parseCron",
+      "file_type": "code",
+      "source_file": "packages/main/src/scheduler/cron.ts",
+      "source_location": "L72",
+      "_origin": "ast"
+    },
+    {
+      "id": "scheduler_cron_getnextrun",
+      "label": "getNextRun",
+      "file_type": "code",
+      "source_file": "packages/main/src/scheduler/cron.ts",
+      "source_location": "L80",
+      "_origin": "ast"
+    },
+    {
+      "id": "scheduler_cron_isvalidcron",
+      "label": "isValidCron",
+      "file_type": "code",
+      "source_file": "packages/main/src/scheduler/cron.ts",
+      "source_location": "L118",
+      "_origin": "ast"
+    },
+    {
+      "id": "scheduler_index_registerscheduleipc",
+      "label": "registerScheduleIpc",
+      "file_type": "code",
+      "source_file": "packages/main/src/scheduler/index.ts",
+      "source_location": "L53",
+      "_origin": "ast"
+    },
+    {
+      "id": "scheduler_index_loadschedules",
+      "label": "loadSchedules",
+      "file_type": "code",
+      "source_file": "packages/main/src/scheduler/index.ts",
+      "source_location": "L130",
+      "_origin": "ast"
+    },
+    {
+      "id": "storage_database_getdatabase",
+      "label": "getDatabase",
+      "file_type": "code",
+      "source_file": "packages/main/src/storage/database.ts",
+      "source_location": "L8",
+      "_origin": "ast"
+    },
+    {
+      "id": "storage_database_initdatabase",
+      "label": "initDatabase",
+      "file_type": "code",
+      "source_file": "packages/main/src/storage/database.ts",
+      "source_location": "L136",
+      "_origin": "ast"
+    },
+    {
+      "id": "storage_download_repository_downloadrepository",
+      "label": "DownloadRepository",
+      "file_type": "code",
+      "source_file": "packages/main/src/storage/download.repository.ts",
+      "source_location": "L4",
+      "_origin": "ast"
+    },
+    {
+      "id": "src_index_rdmapi",
+      "label": "RdmApi",
+      "file_type": "code",
+      "source_file": "packages/preload/src/index.ts",
+      "source_location": "L160",
+      "_origin": "ast"
+    },
+    {
+      "id": "src_app_app",
+      "label": "App",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L19",
+      "_origin": "ast"
+    },
+    {
+      "id": "downloads_downloadprogressdialog_downloadprogressdialog",
+      "label": "DownloadProgressDialog",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/downloads/DownloadProgressDialog.tsx",
+      "source_location": "L13",
+      "_origin": "ast"
+    },
+    {
+      "id": "layout_statusbar_statusbar",
+      "label": "StatusBar",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/layout/StatusBar.tsx",
+      "source_location": "L6",
+      "_origin": "ast"
+    },
+    {
+      "id": "layout_titlebar_titlebar",
+      "label": "TitleBar",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/layout/TitleBar.tsx",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "layout_toptoolbar_toptoolbar",
+      "label": "TopToolbar",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/layout/TopToolbar.tsx",
+      "source_location": "L15",
+      "_origin": "ast"
+    },
+    {
+      "id": "src_preload_d_rdmapi",
+      "label": "RdmApi",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "stores_ui_store_thememode",
+      "label": "ThemeMode",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/stores/ui-store.ts",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_automation_automationrule",
+      "label": "AutomationRule",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/automation.ts",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_automation_rulecondition",
+      "label": "RuleCondition",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/automation.ts",
+      "source_location": "L13",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_automation_ruleaction",
+      "label": "RuleAction",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/automation.ts",
+      "source_location": "L22",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_cloud_cloudprovidertype",
+      "label": "CloudProviderType",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/cloud.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_cloud_icloudprovider",
+      "label": "ICloudProvider",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/cloud.ts",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_cloud_cloudfile",
+      "label": "CloudFile",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/cloud.ts",
+      "source_location": "L21",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_cloud_cloudproviderconfig",
+      "label": "CloudProviderConfig",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/cloud.ts",
+      "source_location": "L31",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_download_downloadstatus",
+      "label": "DownloadStatus",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/download.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_download_downloadpriority",
+      "label": "DownloadPriority",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/download.ts",
+      "source_location": "L12",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_download_chunkinfo",
+      "label": "ChunkInfo",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/download.ts",
+      "source_location": "L14",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_download_download",
+      "label": "Download",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/download.ts",
+      "source_location": "L25",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_download_downloadoptions",
+      "label": "DownloadOptions",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/download.ts",
+      "source_location": "L55",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_download_queuestatus",
+      "label": "QueueStatus",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/download.ts",
+      "source_location": "L70",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_grabber_grabresult",
+      "label": "GrabResult",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/grabber.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_ipc_ipcchannel",
+      "label": "IpcChannel",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/ipc.ts",
+      "source_location": "L62",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_plugin_pluginpermission",
+      "label": "PluginPermission",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/plugin.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_plugin_pluginmanifest",
+      "label": "PluginManifest",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/plugin.ts",
+      "source_location": "L10",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_plugin_plugininstance",
+      "label": "PluginInstance",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/plugin.ts",
+      "source_location": "L22",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_plugin_pluginapi",
+      "label": "PluginAPI",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/plugin.ts",
+      "source_location": "L30",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_schedule_scheduleentry",
+      "label": "ScheduleEntry",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/schedule.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "types_settings_category",
+      "label": "Category",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/settings.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_filesize_formatfilesize",
+      "label": "formatFileSize",
+      "file_type": "code",
+      "source_file": "packages/shared/src/utils/filesize.ts",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_filesize_formatspeed",
+      "label": "formatSpeed",
+      "file_type": "code",
+      "source_file": "packages/shared/src/utils/filesize.ts",
+      "source_location": "L13",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_filesize_formatduration",
+      "label": "formatDuration",
+      "file_type": "code",
+      "source_file": "packages/shared/src/utils/filesize.ts",
+      "source_location": "L17",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_path_getappdatadir",
+      "label": "getAppDataDir",
+      "file_type": "code",
+      "source_file": "packages/shared/src/utils/path.ts",
+      "source_location": "L3",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_path_getdownloadsdir",
+      "label": "getDownloadsDir",
+      "file_type": "code",
+      "source_file": "packages/shared/src/utils/path.ts",
+      "source_location": "L8",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_path_getplugindir",
+      "label": "getPluginDir",
+      "file_type": "code",
+      "source_file": "packages/shared/src/utils/path.ts",
+      "source_location": "L12",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_path_ensuredir",
+      "label": "ensureDir",
+      "file_type": "code",
+      "source_file": "packages/shared/src/utils/path.ts",
+      "source_location": "L16",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_url_isvalidurl",
+      "label": "isValidUrl",
+      "file_type": "code",
+      "source_file": "packages/shared/src/utils/url.ts",
+      "source_location": "L1",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_url_extractfilename",
+      "label": "extractFilename",
+      "file_type": "code",
+      "source_file": "packages/shared/src/utils/url.ts",
+      "source_location": "L10",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_url_getdomain",
+      "label": "getDomain",
+      "file_type": "code",
+      "source_file": "packages/shared/src/utils/url.ts",
+      "source_location": "L25",
+      "_origin": "ast"
+    },
+    {
+      "id": "utils_url_getextension",
+      "label": "getExtension",
+      "file_type": "code",
+      "source_file": "packages/shared/src/utils/url.ts",
+      "source_location": "L33",
+      "_origin": "ast"
+    }
+  ],
+  "edges": [
+    {
+      "source": "src_index",
+      "target": "types_download",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "types_settings",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "types_schedule",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "types_plugin",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "types_cloud",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "types_automation",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "types_grabber",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "types_ipc",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "constants_defaults",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "constants_enums",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "utils_url",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "utils_filesize",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/index.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "automation_index",
+      "target": "automation_evaluator",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/automation/index.ts",
+      "source_location": "L84",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "ipc_download_ipc",
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L138",
+      "weight": 1.0
+    },
+    {
+      "source": "automation_evaluator",
+      "target": "types_download_downloadoptions",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/automation/evaluator.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "automation_evaluator",
+      "target": "types_automation_automationrule",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/automation/evaluator.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "automation_evaluator",
+      "target": "types_automation_rulecondition",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/automation/evaluator.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "automation_evaluator",
+      "target": "types_automation_ruleaction",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/automation/evaluator.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "automation_evaluator",
+      "target": "automation_index_getrules",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/automation/evaluator.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "automation_index",
+      "target": "types_automation_automationrule",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/automation/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "automation_index",
+      "target": "types_automation_rulecondition",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/automation/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "automation_index",
+      "target": "types_automation_ruleaction",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/automation/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "automation_index",
+      "target": "storage_database_getdatabase",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/automation/index.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "browser_bridge_index",
+      "target": "download_engine_downloadengine",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/browser-bridge/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "browser_bridge_index",
+      "target": "utils_url_extractfilename",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/browser-bridge/index.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "clipboard_index",
+      "target": "utils_url_isvalidurl",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/clipboard/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "download_engine",
+      "target": "types_download_download",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "download_engine",
+      "target": "types_download_chunkinfo",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "download_engine",
+      "target": "storage_download_repository_downloadrepository",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L17",
+      "weight": 1.0
+    },
+    {
+      "source": "download_engine",
+      "target": "storage_database_getdatabase",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "ipc_index_registerallipc",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/index.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "ipc_download_ipc_getdownloadengine",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/index.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "storage_database_initdatabase",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/index.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "storage_database_getdatabase",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/index.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "download_engine_downloadengine",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/index.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "browser_bridge_index_startbrowserbridge",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/index.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "browser_bridge_index_stopbrowserbridge",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/index.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "clipboard_index_startclipboardmonitor",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/index.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "clipboard_index_stopclipboardmonitor",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/index.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "notifications_index_initnotifications",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/index.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_category_ipc",
+      "target": "types_settings_category",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/category.ipc.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_category_ipc",
+      "target": "storage_database_getdatabase",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/category.ipc.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_download_ipc",
+      "target": "types_download_download",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_download_ipc",
+      "target": "types_download_downloadoptions",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_download_ipc",
+      "target": "download_engine_downloadengine",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_download_ipc",
+      "target": "utils_url_extractfilename",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_download_ipc",
+      "target": "utils_url_isvalidurl",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_download_ipc",
+      "target": "notifications_index_notifydownloadcomplete",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_download_ipc",
+      "target": "notifications_index_notifydownloaderror",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_download_ipc",
+      "target": "automation_evaluator_evaluaterules",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "types_schedule_scheduleentry",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "types_plugin_plugininstance",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "types_grabber_grabresult",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "ipc_download_ipc_registerdownloadipc",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "ipc_download_ipc_setdownloadengine",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "ipc_download_ipc_getdownloadengine",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "ipc_settings_ipc_registersettingsipc",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "ipc_category_ipc_registercategoryipc",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "download_engine_downloadengine",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "scheduler_index_registerscheduleipc",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "scheduler_index_loadschedules",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "automation_index_registerautomationipc",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "clipboard_index_startclipboardmonitor",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "clipboard_index_stopclipboardmonitor",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L9",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "notifications_index_setnotificationsenabled",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L10",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "grabber_index_detectvideos",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "grabber_index_crawlsite",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "plugins_loader_scanplugins",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "plugins_loader_enableplugin",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "plugins_loader_disableplugin",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "plugins_loader_installplugin",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index",
+      "target": "plugins_loader_uninstallplugin",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L12",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_settings_ipc",
+      "target": "storage_database_getdatabase",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/settings.ipc.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_settings_ipc",
+      "target": "clipboard_index_startclipboardmonitor",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/settings.ipc.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_settings_ipc",
+      "target": "clipboard_index_stopclipboardmonitor",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/settings.ipc.ts",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_settings_ipc",
+      "target": "notifications_index_setnotificationsenabled",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/settings.ipc.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "notifications_index",
+      "target": "storage_database_getdatabase",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/notifications/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "notifications_index",
+      "target": "types_download_download",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/notifications/index.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "plugins_loader",
+      "target": "types_plugin_pluginmanifest",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "plugins_loader",
+      "target": "types_plugin_plugininstance",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "plugins_loader",
+      "target": "types_plugin_pluginapi",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "plugins_loader",
+      "target": "storage_database_getdatabase",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "scheduler_cron",
+      "target": "types_schedule_scheduleentry",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/scheduler/cron.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "scheduler_index",
+      "target": "types_schedule_scheduleentry",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/scheduler/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "scheduler_index",
+      "target": "storage_database_getdatabase",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/scheduler/index.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "scheduler_index",
+      "target": "scheduler_cron_getnextrun",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/scheduler/index.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "scheduler_index",
+      "target": "scheduler_cron_isvalidcron",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/scheduler/index.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "storage_download_repository",
+      "target": "storage_database_getdatabase",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/storage/download.repository.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "storage_download_repository",
+      "target": "types_download_download",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/storage/download.repository.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "storage_download_repository",
+      "target": "types_download_chunkinfo",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/storage/download.repository.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "types_download_download",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/preload/src/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "types_download_downloadoptions",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/preload/src/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "types_settings_category",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/preload/src/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "types_download_queuestatus",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/preload/src/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "types_plugin_plugininstance",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/preload/src/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index",
+      "target": "types_grabber_grabresult",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/preload/src/index.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "src_app",
+      "target": "types_download_download",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "src_app",
+      "target": "layout_titlebar_titlebar",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "src_app",
+      "target": "layout_toptoolbar_toptoolbar",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "src_app",
+      "target": "layout_statusbar_statusbar",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "downloads_downloaditem",
+      "target": "types_download_download",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/DownloadItem.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "downloads_downloaditem",
+      "target": "utils_filesize_formatfilesize",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/DownloadItem.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "downloads_downloaditem",
+      "target": "downloads_downloadprogressdialog_downloadprogressdialog",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/DownloadItem.tsx",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "downloads_downloadlist",
+      "target": "types_download_download",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/DownloadList.tsx",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "downloads_downloadprogressdialog",
+      "target": "types_download_download",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/DownloadProgressDialog.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "downloads_downloadprogressdialog",
+      "target": "utils_filesize_formatfilesize",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/DownloadProgressDialog.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "downloads_downloadpropertiesdialog",
+      "target": "types_download_download",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/DownloadPropertiesDialog.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "downloads_downloadpropertiesdialog",
+      "target": "utils_filesize_formatfilesize",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/DownloadPropertiesDialog.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "downloads_globaladdurldialog",
+      "target": "utils_url_extractfilename",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/GlobalAddUrlDialog.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "downloads_globaladdurldialog",
+      "target": "types_download_downloadoptions",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/GlobalAddUrlDialog.tsx",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "layout_sidebar",
+      "target": "types_settings_category",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/layout/Sidebar.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "layout_statusbar",
+      "target": "utils_filesize_formatfilesize",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/layout/StatusBar.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "layout_statusbar",
+      "target": "types_download_queuestatus",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/layout/StatusBar.tsx",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "src_main",
+      "target": "src_app_app",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/main.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_automationpage",
+      "target": "types_automation_automationrule",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/pages/AutomationPage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_automationpage",
+      "target": "types_automation_rulecondition",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/pages/AutomationPage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_automationpage",
+      "target": "types_automation_ruleaction",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/pages/AutomationPage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_automationpage",
+      "target": "types_download_downloadpriority",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/pages/AutomationPage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_grabberpage",
+      "target": "types_grabber_grabresult",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/pages/GrabberPage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_pluginspage",
+      "target": "types_plugin_plugininstance",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/pages/PluginsPage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "pages_schedulerpage",
+      "target": "types_schedule_scheduleentry",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/pages/SchedulerPage.tsx",
+      "source_location": "L3",
+      "weight": 1.0
+    },
+    {
+      "source": "src_preload_d",
+      "target": "types_download_download",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_preload_d",
+      "target": "types_download_downloadoptions",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_preload_d",
+      "target": "types_settings_category",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_preload_d",
+      "target": "types_download_queuestatus",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_preload_d",
+      "target": "types_plugin_plugininstance",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "src_preload_d",
+      "target": "types_grabber_grabresult",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "stores_download_store",
+      "target": "types_download_download",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/stores/download-store.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "stores_settings_store",
+      "target": "types_settings_category",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/stores/settings-store.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "types_automation",
+      "target": "types_download_downloadpriority",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/types/automation.ts",
+      "source_location": "L1",
+      "weight": 1.0
+    },
+    {
+      "source": "utils_filesize_test",
+      "target": "utils_filesize_formatfilesize",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/utils/filesize.test.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "utils_filesize_test",
+      "target": "utils_filesize_formatduration",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/utils/filesize.test.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "utils_url_test",
+      "target": "utils_url_isvalidurl",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/utils/url.test.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "utils_url_test",
+      "target": "utils_url_extractfilename",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/utils/url.test.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "utils_url_test",
+      "target": "utils_url_getdomain",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/utils/url.test.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "utils_url_test",
+      "target": "utils_url_getextension",
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/utils/url.test.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "browser_bridge_index_handlebridgemessage",
+      "target": "utils_url_extractfilename",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/browser-bridge/index.ts",
+      "source_location": "L81",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index_loadenginesettings",
+      "target": "storage_database_getdatabase",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/index.ts",
+      "source_location": "L112",
+      "weight": 1.0
+    },
+    {
+      "source": "src_index_getclipboardenabled",
+      "target": "storage_database_getdatabase",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/index.ts",
+      "source_location": "L131",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index_registerpluginipc",
+      "target": "plugins_loader_scanplugins",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L22",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index_registerpluginipc",
+      "target": "plugins_loader_installplugin",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L26",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index_registerpluginipc",
+      "target": "plugins_loader_uninstallplugin",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L36",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index_registerpluginipc",
+      "target": "plugins_loader_enableplugin",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L40",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index_registerpluginipc",
+      "target": "plugins_loader_disableplugin",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L44",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index_registergrabberipc",
+      "target": "grabber_index_detectvideos",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L50",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_index_registergrabberipc",
+      "target": "grabber_index_crawlsite",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/index.ts",
+      "source_location": "L54",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_settings_ipc_ensuredefaults",
+      "target": "storage_database_getdatabase",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/settings.ipc.ts",
+      "source_location": "L19",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_settings_ipc_applysettingsideeffect",
+      "target": "clipboard_index_startclipboardmonitor",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/settings.ipc.ts",
+      "source_location": "L28",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_settings_ipc_applysettingsideeffect",
+      "target": "clipboard_index_stopclipboardmonitor",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/settings.ipc.ts",
+      "source_location": "L29",
+      "weight": 1.0
+    },
+    {
+      "source": "ipc_settings_ipc_applysettingsideeffect",
+      "target": "notifications_index_setnotificationsenabled",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/settings.ipc.ts",
+      "source_location": "L32",
+      "weight": 1.0
+    },
+    {
+      "source": "plugins_loader_getpluginstorage",
+      "target": "storage_database_getdatabase",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/plugins/loader.ts",
+      "source_location": "L216",
+      "weight": 1.0
+    },
+    {
+      "source": "scheduler_index_schedulenext",
+      "target": "scheduler_cron_getnextrun",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/scheduler/index.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "downloads_globaladdurldialog_handlecategorychange",
+      "target": "utils_url_extractfilename",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/GlobalAddUrlDialog.tsx",
+      "source_location": "L128",
+      "weight": 1.0
+    },
+    {
+      "source": "download_engine_downloadengineevents",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L38",
+      "weight": 1.0
+    },
+    {
+      "source": "download_engine_downloadengine_add",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L83",
+      "weight": 1.0
+    },
+    {
+      "source": "download_engine_downloadengine_getdownload",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L178",
+      "weight": 1.0
+    },
+    {
+      "source": "download_engine_downloadengine_getall",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L182",
+      "weight": 1.0
+    },
+    {
+      "source": "download_engine_downloadtask",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L255",
+      "weight": 1.0
+    },
+    {
+      "source": "download_engine_downloadtask_constructor",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L284",
+      "weight": 1.0
+    },
+    {
+      "source": "download_engine_downloadtask_snapshot",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L302",
+      "weight": 1.0
+    },
+    {
+      "source": "download_engine_downloadtask_downloadchunk",
+      "target": "types_download_chunkinfo",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L716",
+      "weight": 1.0
+    },
+    {
+      "source": "storage_download_repository_downloadrepository_savedownload",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/storage/download.repository.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "storage_download_repository_downloadrepository_loadalldownloads",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/storage/download.repository.ts",
+      "source_location": "L60",
+      "weight": 1.0
+    },
+    {
+      "source": "downloads_downloaditem_downloaditemprops",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/DownloadItem.tsx",
+      "source_location": "L11",
+      "weight": 1.0
+    },
+    {
+      "source": "downloads_downloadlist_downloadlistprops",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/DownloadList.tsx",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "downloads_downloadprogressdialog_downloadprogressdialogprops",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/DownloadProgressDialog.tsx",
+      "source_location": "L6",
+      "weight": 1.0
+    },
+    {
+      "source": "downloads_downloadpropertiesdialog_downloadpropertiesdialogprops",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/DownloadPropertiesDialog.tsx",
+      "source_location": "L8",
+      "weight": 1.0
+    },
+    {
+      "source": "src_preload_d_rdmapi",
+      "target": "types_download_downloadoptions",
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "src_preload_d_rdmapi",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "src_preload_d_rdmapi",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L4",
+      "weight": 1.0
+    },
+    {
+      "source": "src_preload_d_rdmapi",
+      "target": "types_download_queuestatus",
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L18",
+      "weight": 1.0
+    },
+    {
+      "source": "src_preload_d_rdmapi",
+      "target": "types_settings_category",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "src_preload_d_rdmapi",
+      "target": "types_settings_category",
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L31",
+      "weight": 1.0
+    },
+    {
+      "source": "src_preload_d_rdmapi",
+      "target": "types_plugin_plugininstance",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L58",
+      "weight": 1.0
+    },
+    {
+      "source": "src_preload_d_rdmapi",
+      "target": "types_grabber_grabresult",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L65",
+      "weight": 1.0
+    },
+    {
+      "source": "stores_download_store_downloadstate",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/stores/download-store.ts",
+      "source_location": "L5",
+      "weight": 1.0
+    },
+    {
+      "source": "stores_download_store_downloadstate",
+      "target": "types_download_download",
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/stores/download-store.ts",
+      "source_location": "L7",
+      "weight": 1.0
+    },
+    {
+      "source": "stores_settings_store_settingsstate",
+      "target": "types_settings_category",
+      "relation": "references",
+      "context": "field",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/stores/settings-store.ts",
+      "source_location": "L6",
+      "weight": 1.0
+    }
+  ],
+  "input_tokens": 0,
+  "output_tokens": 0
+}

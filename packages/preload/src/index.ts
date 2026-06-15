@@ -3,8 +3,12 @@ import { IPC_CHANNELS, type Download, type DownloadOptions, type Category, type 
 
 const api = {
   download: {
-    getFileInfo: (url: string): Promise<{ fileSize: number; supportsRange: boolean }> =>
+    getFileInfo: (url: string): Promise<{ fileSize: number; supportsRange: boolean; preId?: string }> =>
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_GET_FILE_INFO, url),
+    getFileInfoBasic: (url: string): Promise<{ fileSize: number; supportsRange: boolean; contentType: string }> =>
+      ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_GET_FILE_INFO_BASIC, url),
+    discardPre: (preId: string): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_DISCARD_PRE, preId),
     add: (options: DownloadOptions): Promise<Download> =>
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_ADD, options),
     getAll: (): Promise<Download[]> =>
@@ -29,6 +33,12 @@ const api = {
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_OPEN_FILE, id),
     openFolder: (id: string): Promise<boolean> =>
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_OPEN_FOLDER, id),
+    onAdded: (callback: (download: Download) => void) => {
+      const handler = (_event: Electron.IpcRendererEvent, download: Download) =>
+        callback(download);
+      ipcRenderer.on(IPC_CHANNELS.DOWNLOAD_ADDED, handler);
+      return () => ipcRenderer.removeListener(IPC_CHANNELS.DOWNLOAD_ADDED, handler);
+    },
     onProgress: (callback: (download: Download) => void) => {
       const handler = (_event: Electron.IpcRendererEvent, download: Download) =>
         callback(download);

@@ -18,11 +18,25 @@ export function MenuBar() {
 
   const menus = [
     {
-      id: 'tasks',
-      label: 'Tasks',
+      id: 'actions',
+      label: 'Actions',
       items: [
         { label: 'Add new download', action: () => window.dispatchEvent(new CustomEvent('open-add-url-dialog', { detail: '' })) },
-        { label: 'Add batch download', action: () => {} },
+        { label: 'Add batch download', action: () => window.dispatchEvent(new CustomEvent('open-batch-download-dialog', { detail: '' })) },
+        { label: 'Add batch download from clipboard', action: async () => {
+          try {
+            const text = await navigator.clipboard.readText();
+            window.dispatchEvent(new CustomEvent('open-batch-download-dialog', { detail: text }));
+          } catch (err) {
+            window.dispatchEvent(new CustomEvent('open-batch-download-dialog', { detail: '' }));
+          }
+        }},
+        { label: 'Run site grabber', action: () => window.location.hash = '#/grabber' },
+        { divider: true },
+        { label: 'Show drop target', action: () => {} },
+        { divider: true },
+        { label: 'Export...', action: () => {} },
+        { label: 'Import...', action: () => {} },
         { divider: true },
         { label: 'Exit', action: () => window.api.app.close() },
       ],
@@ -31,27 +45,46 @@ export function MenuBar() {
       id: 'file',
       label: 'File',
       items: [
-        { label: 'Import...', action: () => {} },
-        { label: 'Export...', action: () => {} },
+        { label: 'Pause Download', action: () => {} },
+        { label: 'Delete Download', action: () => {} },
+        { label: 'Resume Download', action: () => {} },
+        { label: 'Restart Download', action: () => {} },
       ],
     },
     {
       id: 'downloads',
       label: 'Downloads',
       items: [
-        { label: 'Pause All', action: () => window.api.queue.pauseAll() },
-        { label: 'Resume All', action: () => window.api.queue.startAll() },
+        { label: 'Pause All Downloads', action: () => window.api.queue.pauseAll() },
+        { label: 'Stop All Downloads', action: () => window.api.queue.pauseAll() },
         { divider: true },
-        { label: 'Scheduler', action: () => window.location.hash = '#/scheduler' },
-        { label: 'Options', action: () => window.location.hash = '#/settings' },
+        { label: 'Clear Completed Downloads', action: () => {} },
+        { divider: true },
+        { label: 'Search (Ctrl+F)', action: () => {} },
+        { label: 'Find Next (F3)', action: () => {} },
+        { divider: true },
+        { label: 'Job Scheduler', action: () => window.location.hash = '#/scheduler' },
+        { label: 'Start Queue...', action: () => window.api.queue.startAll() },
+        { label: 'Stop Queue...', action: () => window.api.queue.pauseAll() },
+        { divider: true },
+        { label: 'Bandwidth Limiter...', action: () => {} },
+        { divider: true },
+        { label: 'Settings', action: () => window.location.hash = '#/settings' },
       ],
     },
     {
       id: 'view',
       label: 'View',
       items: [
-        { label: 'Hide categories', action: () => {} },
-        { label: 'Language', action: () => window.location.hash = '#/settings' },
+        { label: 'Hide sidebar', action: () => {} },
+        { label: 'Sort files...', action: () => {} },
+        { label: 'Top Toolbar...', action: () => {} },
+        { label: 'System Tray Icon...', action: () => {} },
+        { label: 'Customize List Columns...', action: () => {} },
+        { label: 'Toggle Dark Mode', action: () => {} },
+        { label: 'Font Settings...', action: () => {} },
+        { divider: true },
+        { label: 'Language...', action: () => window.location.hash = '#/settings' },
       ],
     },
     {

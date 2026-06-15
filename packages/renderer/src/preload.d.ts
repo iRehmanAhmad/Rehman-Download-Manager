@@ -2,6 +2,8 @@ import type { Download, DownloadOptions, Category, QueueStatus, PluginInstance, 
 
 export interface RdmApi {
   download: {
+    getFileInfo(url: string): Promise<{ fileSize: number; supportsRange: boolean; preId?: string }>;
+    discardPre(preId: string): Promise<boolean>;
     add(options: DownloadOptions): Promise<Download>;
     getAll(): Promise<Download[]>;
     get(id: string): Promise<Download | undefined>;
@@ -11,6 +13,9 @@ export interface RdmApi {
     remove(id: string): Promise<boolean>;
     setSpeedLimit(id: string, limit: number): Promise<boolean>;
     setConnections(id: string, count: number): Promise<boolean>;
+    openFile(id: string): Promise<boolean>;
+    openFolder(id: string): Promise<boolean>;
+    onAdded(callback: (download: Download) => void): () => void;
     onProgress(callback: (download: Download) => void): () => void;
     onCompleted(callback: (download: Download) => void): () => void;
     onError(callback: (download: Download) => void): () => void;

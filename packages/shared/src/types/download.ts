@@ -65,6 +65,7 @@ export interface DownloadOptions {
   checksum?: string;
   paused?: boolean;
   metadata?: Record<string, unknown>;
+  preId?: string;
 }
 
 export interface QueueStatus {

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { extractFilename, type DownloadOptions } from '@rdm/shared';
 import { useDownloadStore } from '../../stores/download-store';
 import { useSettingsStore } from '../../stores/settings-store';
@@ -20,6 +20,8 @@ export function GlobalAddUrlDialog() {
   const [adding, setAdding] = useState(false);
   const [fileSize, setFileSize] = useState<number>(-1);
   const [fetchingSize, setFetchingSize] = useState(false);
+  const [preId, setPreId] = useState<string | null>(null);
+  const submittedRef = useRef(false);
 
   // Initialize category to "other" or first available
   // Initialize category to "other" or first available, and auto-detect based on URL
@@ -79,8 +81,9 @@ export function GlobalAddUrlDialog() {
     const timer = setTimeout(async () => {
       try {
         const info = await window.api.download.getFileInfo(url);
-        if (!cancelled && info && info.fileSize > 0) {
-          setFileSize(info.fileSize);
+        if (!cancelled && info) {
+          if (info.fileSize > 0) setFileSize(info.fileSize);
+          if (info.preId) setPreId(info.preId);
         }
       } catch (err) {
         // ignore
@@ -95,11 +98,20 @@ export function GlobalAddUrlDialog() {
     };
   }, [showDialog, url]);
 
+  useEffect(() => {
+    return () => {
+      if (preId && !submittedRef.current) {
+        window.api.download.discardPre(preId).catch(() => {});
+      }
+    };
+  }, [preId]);
+
   const formatSize = (bytes: number) => {
     if (bytes <= 0) return 'Unknown size';
     const mb = bytes / (1024 * 1024);
-    if (mb < 1024) return `${mb.toFixed(2)} MB`;
-    return `${(mb / 1024).toFixed(2)} GB`;
+    if (mb < 1) return `${(bytes / 1024).toFixed(1)} KB`;
+    if (mb > 1024) return `${(mb / 1024).toFixed(2)} GB`;
+    return `${mb.toFixed(1)} MB`;
   };
 
   const getEstTime = (bytes: number, speedMBps: number) => {
@@ -141,10 +153,10 @@ export function GlobalAddUrlDialog() {
 
   useEffect(() => {
     const handleOpenAddUrl = async (e: Event) => {
-      let initialUrl = '';
-      if (e instanceof CustomEvent && typeof e.detail === 'string' && e.detail.trim()) {
-        initialUrl = e.detail;
-      } else {
+      submittedRef.current = false;
+      const customEvent = e as CustomEvent<{ url?: string }>;
+      let initialUrl = customEvent.detail?.url;
+      if (!initialUrl) {
         try {
           const clipText = await window.api.clipboard.readText();
           if (clipText && (clipText.startsWith('http://') || clipText.startsWith('https://') || clipText.startsWith('ftp://'))) {
@@ -160,29 +172,8 @@ export function GlobalAddUrlDialog() {
     
     window.addEventListener('open-add-url-dialog', handleOpenAddUrl);
 
-    // Also open dialog instantly when clipboard monitor detects a new URL
-    const unsubUrlDetected = window.api?.clipboard?.onUrlDetected((detectedUrl) => {
-      setUrl(detectedUrl);
-      setShowDialog(true);
-    });
-
-    // When the window is focused, we can also manually check clipboard
-    const handleFocus = async () => {
-      if (showDialog) return;
-      try {
-        const clipText = await window.api.clipboard.readText();
-        if (clipText && (clipText.startsWith('http://') || clipText.startsWith('https://') || clipText.startsWith('ftp://'))) {
-           setUrl(clipText.trim());
-           setShowDialog(true);
-        }
-      } catch (err) {}
-    };
-    window.addEventListener('focus', handleFocus);
-
     return () => {
       window.removeEventListener('open-add-url-dialog', handleOpenAddUrl);
-      window.removeEventListener('focus', handleFocus);
-      if (unsubUrlDetected) unsubUrlDetected();
     };
   }, [showDialog]);
 
@@ -202,6 +193,7 @@ export function GlobalAddUrlDialog() {
           }
         }
 
+        submittedRef.current = true;
         const options: DownloadOptions = {
           url: url.trim(),
           filepath: filepath.trim() || undefined,
@@ -210,6 +202,7 @@ export function GlobalAddUrlDialog() {
           checksum: checksum.trim() || undefined,
           paused,
           metadata: { description: description.trim() },
+          ...(preId ? { preId } : {})
         };
         const dl = await window.api.download.add(options);
         addDownload(dl);
@@ -217,14 +210,16 @@ export function GlobalAddUrlDialog() {
         setFilepath('');
         setDescription('');
         setChecksum('');
+        setPreId(null);
         setShowDialog(false);
       } catch (err) {
         console.error('Failed to add download:', err);
+        submittedRef.current = false;
       } finally {
         setAdding(false);
       }
     },
-    [url, filepath, categoryId, connections, checksum, description, rememberPath, adding, addDownload, categories],
+    [url, filepath, categoryId, connections, checksum, description, rememberPath, adding, addDownload, categories, preId],
   );
 
   const handleClose = () => setShowDialog(false);

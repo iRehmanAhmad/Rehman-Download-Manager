@@ -1,0 +1,511 @@
+{
+  "communities": {
+    "0": [
+      "src_preload_d_rdmapi",
+      "types_download_downloadoptions",
+      "types_download_queuestatus",
+      "types_grabber_grabresult",
+      "types_plugin_plugininstance",
+      "types_settings_category"
+    ],
+    "1": [
+      "icons_icon",
+      "icons_icon_arrow",
+      "icons_icon_bg"
+    ],
+    "2": [
+      "readme_tech_stack",
+      "roadmap_tech_stack",
+      "taste_taste_tech_stack"
+    ],
+    "3": [
+      "chrome_popup_ui",
+      "firefox_popup_ui"
+    ],
+    "4": [
+      "download_engine_downloadengineevents",
+      "types_download_download"
+    ],
+    "5": [
+      "readme_project_structure",
+      "roadmap_architecture"
+    ],
+    "6": [
+      "readme_rdm",
+      "roadmap_rdm"
+    ],
+    "7": [
+      "automation_evaluator_evaluaterules"
+    ],
+    "8": [
+      "automation_index_getrules"
+    ],
+    "9": [
+      "automation_index_registerautomationipc"
+    ],
+    "10": [
+      "browser_bridge_index_startbrowserbridge"
+    ],
+    "11": [
+      "browser_bridge_index_stopbrowserbridge"
+    ],
+    "12": [
+      "clipboard_index_isclipboardmonitorrunning"
+    ],
+    "13": [
+      "clipboard_index_startclipboardmonitor"
+    ],
+    "14": [
+      "clipboard_index_stopclipboardmonitor"
+    ],
+    "15": [
+      "download_engine_downloadengine"
+    ],
+    "16": [
+      "downloads_downloadprogressdialog_downloadprogressdialog"
+    ],
+    "17": [
+      "electron_builder_config"
+    ],
+    "18": [
+      "grabber_index_crawlsite"
+    ],
+    "19": [
+      "grabber_index_detectvideos"
+    ],
+    "20": [
+      "grabber_index_grabresult"
+    ],
+    "21": [
+      "ipc_category_ipc_registercategoryipc"
+    ],
+    "22": [
+      "ipc_download_ipc_getdownloadengine"
+    ],
+    "23": [
+      "ipc_download_ipc_registerdownloadipc"
+    ],
+    "24": [
+      "ipc_download_ipc_setdownloadengine"
+    ],
+    "25": [
+      "ipc_index_registerallipc"
+    ],
+    "26": [
+      "ipc_settings_ipc_registersettingsipc"
+    ],
+    "27": [
+      "layout_statusbar_statusbar"
+    ],
+    "28": [
+      "layout_titlebar_titlebar"
+    ],
+    "29": [
+      "layout_toptoolbar_toptoolbar"
+    ],
+    "30": [
+      "notifications_index_initnotifications"
+    ],
+    "31": [
+      "notifications_index_notifyclipboardurl"
+    ],
+    "32": [
+      "notifications_index_notifydownloadcomplete"
+    ],
+    "33": [
+      "notifications_index_notifydownloaderror"
+    ],
+    "34": [
+      "notifications_index_setnotificationsenabled"
+    ],
+    "35": [
+      "plugins_loader_disableplugin"
+    ],
+    "36": [
+      "plugins_loader_enableplugin"
+    ],
+    "37": [
+      "plugins_loader_getloadedplugins"
+    ],
+    "38": [
+      "plugins_loader_getplugindir"
+    ],
+    "39": [
+      "plugins_loader_getplugininstance"
+    ],
+    "40": [
+      "plugins_loader_installplugin"
+    ],
+    "41": [
+      "plugins_loader_ispluginloaded"
+    ],
+    "42": [
+      "plugins_loader_loadplugin"
+    ],
+    "43": [
+      "plugins_loader_scanplugins"
+    ],
+    "44": [
+      "plugins_loader_uninstallplugin"
+    ],
+    "45": [
+      "plugins_loader_unloadplugin"
+    ],
+    "46": [
+      "pnpm_workspace_config"
+    ],
+    "47": [
+      "rdm_screenshot_text"
+    ],
+    "48": [
+      "renderer_index_html"
+    ],
+    "49": [
+      "roadmap_database_schema"
+    ],
+    "50": [
+      "roadmap_design_decisions"
+    ],
+    "51": [
+      "scheduler_cron_getnextrun"
+    ],
+    "52": [
+      "scheduler_cron_isvalidcron"
+    ],
+    "53": [
+      "scheduler_cron_parsecron"
+    ],
+    "54": [
+      "scheduler_index_loadschedules"
+    ],
+    "55": [
+      "scheduler_index_registerscheduleipc"
+    ],
+    "56": [
+      "src_app_app"
+    ],
+    "57": [
+      "src_index_rdmapi"
+    ],
+    "58": [
+      "storage_database_getdatabase"
+    ],
+    "59": [
+      "storage_database_initdatabase"
+    ],
+    "60": [
+      "storage_download_repository_downloadrepository"
+    ],
+    "61": [
+      "stores_ui_store_thememode"
+    ],
+    "62": [
+      "taste_taste_workflow"
+    ],
+    "63": [
+      "types_automation_automationrule"
+    ],
+    "64": [
+      "types_automation_ruleaction"
+    ],
+    "65": [
+      "types_automation_rulecondition"
+    ],
+    "66": [
+      "types_cloud_cloudfile"
+    ],
+    "67": [
+      "types_cloud_cloudproviderconfig"
+    ],
+    "68": [
+      "types_cloud_cloudprovidertype"
+    ],
+    "69": [
+      "types_cloud_icloudprovider"
+    ],
+    "70": [
+      "types_download_chunkinfo"
+    ],
+    "71": [
+      "types_download_downloadpriority"
+    ],
+    "72": [
+      "types_download_downloadstatus"
+    ],
+    "73": [
+      "types_ipc_ipcchannel"
+    ],
+    "74": [
+      "types_plugin_pluginapi"
+    ],
+    "75": [
+      "types_plugin_pluginmanifest"
+    ],
+    "76": [
+      "types_plugin_pluginpermission"
+    ],
+    "77": [
+      "types_schedule_scheduleentry"
+    ],
+    "78": [
+      "utils_filesize_formatduration"
+    ],
+    "79": [
+      "utils_filesize_formatfilesize"
+    ],
+    "80": [
+      "utils_filesize_formatspeed"
+    ],
+    "81": [
+      "utils_path_ensuredir"
+    ],
+    "82": [
+      "utils_path_getappdatadir"
+    ],
+    "83": [
+      "utils_path_getdownloadsdir"
+    ],
+    "84": [
+      "utils_path_getplugindir"
+    ],
+    "85": [
+      "utils_url_extractfilename"
+    ],
+    "86": [
+      "utils_url_getdomain"
+    ],
+    "87": [
+      "utils_url_getextension"
+    ],
+    "88": [
+      "utils_url_isvalidurl"
+    ]
+  },
+  "cohesion": {
+    "0": 0.3333333333333333,
+    "1": 0.6666666666666666,
+    "2": 0.6666666666666666,
+    "3": 1.0,
+    "4": 1.0,
+    "5": 1.0,
+    "6": 1.0,
+    "7": 1.0,
+    "8": 1.0,
+    "9": 1.0,
+    "10": 1.0,
+    "11": 1.0,
+    "12": 1.0,
+    "13": 1.0,
+    "14": 1.0,
+    "15": 1.0,
+    "16": 1.0,
+    "17": 1.0,
+    "18": 1.0,
+    "19": 1.0,
+    "20": 1.0,
+    "21": 1.0,
+    "22": 1.0,
+    "23": 1.0,
+    "24": 1.0,
+    "25": 1.0,
+    "26": 1.0,
+    "27": 1.0,
+    "28": 1.0,
+    "29": 1.0,
+    "30": 1.0,
+    "31": 1.0,
+    "32": 1.0,
+    "33": 1.0,
+    "34": 1.0,
+    "35": 1.0,
+    "36": 1.0,
+    "37": 1.0,
+    "38": 1.0,
+    "39": 1.0,
+    "40": 1.0,
+    "41": 1.0,
+    "42": 1.0,
+    "43": 1.0,
+    "44": 1.0,
+    "45": 1.0,
+    "46": 1.0,
+    "47": 1.0,
+    "48": 1.0,
+    "49": 1.0,
+    "50": 1.0,
+    "51": 1.0,
+    "52": 1.0,
+    "53": 1.0,
+    "54": 1.0,
+    "55": 1.0,
+    "56": 1.0,
+    "57": 1.0,
+    "58": 1.0,
+    "59": 1.0,
+    "60": 1.0,
+    "61": 1.0,
+    "62": 1.0,
+    "63": 1.0,
+    "64": 1.0,
+    "65": 1.0,
+    "66": 1.0,
+    "67": 1.0,
+    "68": 1.0,
+    "69": 1.0,
+    "70": 1.0,
+    "71": 1.0,
+    "72": 1.0,
+    "73": 1.0,
+    "74": 1.0,
+    "75": 1.0,
+    "76": 1.0,
+    "77": 1.0,
+    "78": 1.0,
+    "79": 1.0,
+    "80": 1.0,
+    "81": 1.0,
+    "82": 1.0,
+    "83": 1.0,
+    "84": 1.0,
+    "85": 1.0,
+    "86": 1.0,
+    "87": 1.0,
+    "88": 1.0
+  },
+  "gods": [
+    {
+      "id": "src_preload_d_rdmapi",
+      "label": "RdmApi",
+      "degree": 6
+    },
+    {
+      "id": "types_download_download",
+      "label": "Download",
+      "degree": 2
+    },
+    {
+      "id": "roadmap_tech_stack",
+      "label": "Roadmap Tech Stack",
+      "degree": 2
+    },
+    {
+      "id": "icons_icon",
+      "label": "App Icon",
+      "degree": 2
+    },
+    {
+      "id": "download_engine_downloadengineevents",
+      "label": "DownloadEngineEvents",
+      "degree": 1
+    },
+    {
+      "id": "types_download_downloadoptions",
+      "label": "DownloadOptions",
+      "degree": 1
+    },
+    {
+      "id": "types_download_queuestatus",
+      "label": "QueueStatus",
+      "degree": 1
+    },
+    {
+      "id": "types_grabber_grabresult",
+      "label": "GrabResult",
+      "degree": 1
+    },
+    {
+      "id": "types_plugin_plugininstance",
+      "label": "PluginInstance",
+      "degree": 1
+    },
+    {
+      "id": "types_settings_category",
+      "label": "Category",
+      "degree": 1
+    }
+  ],
+  "surprises": [
+    {
+      "source": "RDM Roadmap",
+      "target": "RDM",
+      "source_files": [
+        "ROADMAP.md",
+        "README.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "semantically_similar_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; semantically similar concepts with no structural link"
+    },
+    {
+      "source": "Roadmap Tech Stack",
+      "target": "Tech Stack",
+      "source_files": [
+        "ROADMAP.md",
+        "README.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "semantically_similar_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; semantically similar concepts with no structural link"
+    },
+    {
+      "source": "Architecture",
+      "target": "Project Structure",
+      "source_files": [
+        "ROADMAP.md",
+        "README.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "semantically_similar_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories; semantically similar concepts with no structural link"
+    },
+    {
+      "source": "Taste Tech Stack",
+      "target": "Roadmap Tech Stack",
+      "source_files": [
+        ".commandcode/taste/taste.md",
+        "ROADMAP.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "RdmApi",
+      "target": "Download",
+      "source_files": [
+        "packages/renderer/src/preload.d.ts",
+        "packages/shared/src/types/download.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "bridges separate communities; peripheral node `Download` unexpectedly reaches hub `RdmApi`"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `RdmApi` connect `Community 0` to `Community 4`?",
+      "why": "High betweenness centrality (0.004) - this node is a cross-community bridge."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `Download` connect `Community 4` to `Community 0`?",
+      "why": "High betweenness centrality (0.001) - this node is a cross-community bridge."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 2 inferred relationships involving `Roadmap Tech Stack` (e.g. with `Tech Stack` and `Taste Tech Stack`) actually correct?",
+      "why": "`Roadmap Tech Stack` has 2 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 2 inferred relationships involving `App Icon` (e.g. with `Download Arrow` and `Background Gradient`) actually correct?",
+      "why": "`App Icon` has 2 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `evaluateRules`, `getRules`, `registerAutomationIpc` to the rest of the system?",
+      "why": "98 weakly-connected nodes found - possible documentation gaps or missing edges."
+    }
+  ]
+}

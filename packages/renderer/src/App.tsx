@@ -13,6 +13,8 @@ import { AutomationPage } from './pages/AutomationPage';
 import { PluginsPage } from './pages/PluginsPage';
 import { GrabberPage } from './pages/GrabberPage';
 import { GlobalAddUrlDialog } from './components/downloads/GlobalAddUrlDialog';
+import { BatchDownloadDialog } from './components/downloads/BatchDownloadDialog';
+import { BatchDownloadListDialog } from './components/downloads/BatchDownloadListDialog';
 import { useSettingsStore } from './stores/settings-store';
 import { useDownloadStore } from './stores/download-store';
 
@@ -20,10 +22,26 @@ export function App() {
   const loadAll = useSettingsStore((s) => s.loadAll);
   const updateDownload = useDownloadStore((s) => s.updateDownload);
 
+  const addDownload = useDownloadStore((s) => s.addDownload);
+
   useEffect(() => {
     loadAll();
     
+    // Fetch initial downloads
+    if (typeof window.api.download.getAll === 'function') {
+      window.api.download.getAll().then((dls) => {
+        dls.forEach(dl => addDownload(dl));
+      }).catch(err => console.error('Failed to get all downloads:', err));
+    }
+    
     // Global listeners for download progress (so they update even if we navigate away from DownloadsPage)
+    let unsubAdded = () => {};
+    if (typeof window.api.download.onAdded === 'function') {
+      unsubAdded = window.api.download.onAdded((dl: Download) => {
+        addDownload(dl);
+      });
+    }
+    
     const unsubProgress = window.api.download.onProgress((dl: Download) => {
       updateDownload(dl.id, dl);
     });
@@ -35,11 +53,12 @@ export function App() {
     });
 
     return () => {
+      unsubAdded();
       unsubProgress();
       unsubCompleted();
       unsubError();
     };
-  }, [loadAll, updateDownload]);
+  }, [loadAll, updateDownload, addDownload]);
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -87,6 +106,8 @@ export function App() {
         </div>
         <StatusBar />
         <GlobalAddUrlDialog />
+        <BatchDownloadDialog />
+        <BatchDownloadListDialog />
       </div>
     </HashRouter>
   );

@@ -105,17 +105,7 @@ export function DownloadPropertiesDialog({ download, onClose, onOpen }: Download
                 className="flex-1 bg-white border border-slate-300 px-2 py-1 rounded text-slate-800 focus:outline-none selection:bg-brand-500 selection:text-white"
               />
             </div>
-
-            {/* Description */}
-            <div className="flex items-center gap-3">
-              <span className="text-slate-600 w-[88px]">Description:</span>
-              <input 
-                type="text" 
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                className="flex-1 bg-white border border-slate-300 px-2 py-1 rounded text-slate-800 focus:outline-none focus:border-brand-500"
-              />
-            </div>
+    
 
           </div>
 

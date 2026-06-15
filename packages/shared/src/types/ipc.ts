@@ -18,6 +18,8 @@ export const IPC_CHANNELS = {
   DOWNLOAD_STATUS_CHANGED: 'download:status-changed',
   DOWNLOAD_ADDED: 'download:added',
   DOWNLOAD_GET_FILE_INFO: 'download:get-file-info',
+  DOWNLOAD_GET_FILE_INFO_BASIC: 'download:get-file-info-basic',
+  DOWNLOAD_DISCARD_PRE: 'download:discard-pre',
   QUEUE_REORDER: 'queue:reorder',
   QUEUE_START_ALL: 'queue:start-all',
   QUEUE_PAUSE_ALL: 'queue:pause-all',

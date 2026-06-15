@@ -1,12 +1,14 @@
-import { ipcMain, BrowserWindow } from 'electron';
+import { ipcMain, BrowserWindow, app } from 'electron';
 import { IPC_CHANNELS, type Download, type DownloadOptions } from '@rdm/shared';
 import { v4 as uuid } from 'uuid';
 import { DownloadEngine } from '../download/engine';
 import { extractFilename, isValidUrl } from '@rdm/shared';
 import { notifyDownloadComplete, notifyDownloadError } from '../notifications';
 import { evaluateRules } from '../automation';
+import { getDatabase } from '../storage/database';
 import http from 'node:http';
 import https from 'node:https';
+import path from 'node:path';
 import { URL } from 'node:url';
 
 let engine: DownloadEngine | null = null;
@@ -56,16 +58,38 @@ export function registerDownloadIpc(): void {
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_ADD, (_event, rawOptions: DownloadOptions): Download => {
     const eng = getDownloadEngine();
-    const id = uuid();
+    const id = rawOptions.preId || uuid();
     const now = Date.now();
 
     const options = evaluateRules(rawOptions);
 
+    let finalFilepath = options.filepath;
+    const finalFilename = options.filename || extractFilename(options.url) || 'download';
+    
+    if (!finalFilepath) {
+      try {
+        const db = getDatabase();
+        const defaultSavePathRow = db.prepare("SELECT value FROM settings WHERE key = 'defaultSavePath'").get() as { value: string } | undefined;
+        let baseDir = defaultSavePathRow?.value || app.getPath('downloads');
+        
+        let subDir = '';
+        if (options.categoryId) {
+          const catRow = db.prepare('SELECT default_dir FROM categories WHERE id = ?').get(options.categoryId) as { default_dir: string } | undefined;
+          if (catRow?.default_dir) {
+            subDir = catRow.default_dir;
+          }
+        }
+        finalFilepath = path.join(baseDir, subDir, finalFilename);
+      } catch (e) {
+        finalFilepath = path.join(app.getPath('downloads'), finalFilename);
+      }
+    }
+
     const download: Download = {
       id,
       url: options.url,
-      filename: options.filename || extractFilename(options.url) || 'download',
-      filepath: options.filepath,
+      filename: finalFilename,
+      filepath: finalFilepath,
       tempDir: '',
       fileSize: -1,
       downloaded: 0,
@@ -88,65 +112,101 @@ export function registerDownloadIpc(): void {
     };
 
     eng.add(download);
+    sendToRenderer(IPC_CHANNELS.DOWNLOAD_ADDED, eng.getDownload(id) || download);
     emitQueueStatus();
-    return download;
+    return eng.getDownload(id) || download;
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_GET_ALL, (): Download[] => {
     return getDownloadEngine().getAll();
   });
 
-  ipcMain.handle(IPC_CHANNELS.DOWNLOAD_GET_FILE_INFO, async (_event, urlStr: string) => {
-    const fetchInfo = (currentUrl: string, redirectCount = 0): Promise<{ supportsRange: boolean; fileSize: number }> => {
-      return new Promise((resolve) => {
-        if (redirectCount > 5) return resolve({ supportsRange: false, fileSize: -1 });
-        try {
-          const parsedUrl = new URL(currentUrl);
-          const mod = parsedUrl.protocol === 'https:' ? https : http;
-          const req = mod.request(
-            {
-              hostname: parsedUrl.hostname,
-              port: parsedUrl.port,
-              path: parsedUrl.pathname + parsedUrl.search,
-              method: 'HEAD',
-              headers: {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-                'Accept': '*/*'
-              }
-            },
-            (res) => {
-              if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-                res.destroy();
-                let nextUrl = res.headers.location;
-                if (!nextUrl.startsWith('http')) {
-                  nextUrl = new URL(nextUrl, currentUrl).href;
-                }
-                return resolve(fetchInfo(nextUrl, redirectCount + 1));
-              }
-
-              const headers = res.headers;
-              const acceptRanges = String(headers['accept-ranges'] || '');
-              const supportsRange =
-                acceptRanges.includes('bytes') &&
-                headers['content-length'] != null;
-              let fileSize = parseInt(headers['content-length'] || '-1', 10);
-              if (isNaN(fileSize)) fileSize = -1;
-              res.destroy();
-              resolve({ supportsRange, fileSize });
+const fetchInfo = (currentUrl: string, redirectCount = 0): Promise<{ supportsRange: boolean; fileSize: number; contentType: string }> => {
+  return new Promise((resolve) => {
+    if (redirectCount > 5) return resolve({ supportsRange: false, fileSize: -1, contentType: '' });
+    try {
+      const parsedUrl = new URL(currentUrl);
+      const mod = parsedUrl.protocol === 'https:' ? https : http;
+      const req = mod.request(
+        {
+          hostname: parsedUrl.hostname,
+          port: parsedUrl.port,
+          path: parsedUrl.pathname + parsedUrl.search,
+          method: 'HEAD',
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': '*/*'
+          }
+        },
+        (res) => {
+          if (res.statusCode && res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+            res.destroy();
+            let nextUrl = res.headers.location;
+            if (!nextUrl.startsWith('http')) {
+              nextUrl = new URL(nextUrl, currentUrl).href;
             }
-          );
-          req.on('error', () => resolve({ supportsRange: false, fileSize: -1 }));
-          req.setTimeout(5000, () => {
-            req.destroy();
-            resolve({ supportsRange: false, fileSize: -1 });
-          });
-          req.end();
-        } catch (err) {
-          resolve({ supportsRange: false, fileSize: -1 });
+            return resolve(fetchInfo(nextUrl, redirectCount + 1));
+          }
+
+          const headers = res.headers;
+          const acceptRanges = String(headers['accept-ranges'] || '');
+          const supportsRange =
+            acceptRanges.includes('bytes') &&
+            headers['content-length'] != null;
+          let fileSize = parseInt(headers['content-length'] || '-1', 10);
+          if (isNaN(fileSize)) fileSize = -1;
+          const contentType = headers['content-type'] || '';
+          res.destroy();
+          resolve({ supportsRange, fileSize, contentType });
         }
+      );
+      req.on('error', () => resolve({ supportsRange: false, fileSize: -1, contentType: '' }));
+      req.setTimeout(5000, () => {
+        req.destroy();
+        resolve({ supportsRange: false, fileSize: -1, contentType: '' });
       });
-    };
-    return fetchInfo(urlStr);
+      req.end();
+    } catch (err) {
+      resolve({ supportsRange: false, fileSize: -1, contentType: '' });
+    }
+  });
+};
+
+  ipcMain.handle(IPC_CHANNELS.DOWNLOAD_GET_FILE_INFO_BASIC, async (_event, urlStr: string) => {
+    return await fetchInfo(urlStr);
+  });
+
+  ipcMain.handle(IPC_CHANNELS.DOWNLOAD_GET_FILE_INFO, async (_event, urlStr: string) => {
+    const info = await fetchInfo(urlStr);
+    let preId: string | undefined = undefined;
+    if (info.fileSize > 0) {
+      preId = `pre-${uuid()}`;
+      const dl: Download = {
+        id: preId,
+        url: urlStr,
+        filename: extractFilename(urlStr) || 'download',
+        filepath: '',
+        tempDir: '',
+        fileSize: info.fileSize,
+        downloaded: 0,
+        status: 'queued',
+        priority: 'normal',
+        addedAt: Date.now(),
+        retryCount: 0,
+        maxRetries: 3,
+        numConnections: 8,
+        chunks: [],
+        speed: 0,
+        progress: 0,
+        eta: 0,
+      };
+      getDownloadEngine().addPreDownload(dl);
+    }
+    return { ...info, preId };
+  });
+
+  ipcMain.handle(IPC_CHANNELS.DOWNLOAD_DISCARD_PRE, (_event, preId: string): boolean => {
+    return getDownloadEngine().discardPreDownload(preId);
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_GET, (_event, id: string): Download | undefined => {
@@ -177,25 +237,34 @@ export function registerDownloadIpc(): void {
     return ok;
   });
 
-  ipcMain.handle(IPC_CHANNELS.DOWNLOAD_MOVE, (_event, id: string, newPath: string): boolean => {
-    const dl = getDownloadEngine().getDownload(id);
-    if (!dl) return false;
+  ipcMain.handle(IPC_CHANNELS.DOWNLOAD_MOVE, async (_event, id: string, newPath: string): Promise<boolean> => {
+    const eng = getDownloadEngine();
+    const task = eng.getDownload(id);
+    if (!task) return false;
     
-    try {
-      if (dl.status === 'completed' && dl.filepath) {
-        const fs = require('fs');
-        if (fs.existsSync(dl.filepath)) {
-          fs.renameSync(dl.filepath, newPath);
+    // Move the file on disk
+    if (task.filepath && fs.existsSync(task.filepath)) {
+      try {
+        fs.renameSync(task.filepath, newPath);
+      } catch (err: any) {
+        if (err.code === 'EXDEV') {
+          try {
+            fs.copyFileSync(task.filepath, newPath);
+            fs.unlinkSync(task.filepath);
+          } catch (copyErr) {
+            console.error('Failed to move file across drives:', copyErr);
+            return false;
+          }
+        } else {
+          console.error('Failed to move file:', err);
+          return false;
         }
       }
-      
-      const ok = getDownloadEngine().updateFilePath(id, newPath);
-      if (ok) emitQueueStatus();
-      return ok;
-    } catch (e) {
-      console.error('Move error:', e);
-      return false;
     }
+    
+    const ok = eng.updateFilePath(id, newPath);
+    if (ok) emitQueueStatus();
+    return ok;
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_SET_SPEED_LIMIT, (_event, id: string, limit: number): boolean => {

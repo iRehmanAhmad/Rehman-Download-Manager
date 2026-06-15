@@ -80,12 +80,61 @@ export class DownloadEngine extends EventEmitter {
     }, 5000);
   }
 
+  addPreDownload(download: Download): void {
+    const task = new DownloadTask(download, this.tempDir, () => this.getGlobalBytesPerSecond());
+    this.tasks.set(download.id, task);
+    // Do not queue, do not save. Start immediately.
+    task.start().catch((err) => console.error('Pre-download error:', err));
+  }
+
+  discardPreDownload(preId: string): boolean {
+    const task = this.tasks.get(preId);
+    if (!task) return false;
+    task.cancel();
+    this.tasks.delete(preId);
+    return true;
+  }
+
   add(download: Download): void {
-    this.tasks.set(download.id, new DownloadTask(download, this.tempDir, () => this.getGlobalBytesPerSecond()));
-    if (download.status !== 'paused') {
-      this.queue.push(download.id);
+    let task = this.tasks.get(download.id);
+    if (task) {
+      // Promote pre-download
+      task.updateOptions(download);
+      if (download.status === 'paused' && task.status === 'downloading') {
+        task.pause();
+      }
+      
+      // Bind listeners now that it's promoted
+      task.removeAllListeners();
+      task.on('progress', (dl: Download) => this.emit('progress', dl));
+      task.on('completed', (dl: Download) => {
+        this.emit('completed', dl);
+        this.processQueue();
+      });
+      task.on('error', (dl: Download) => {
+        this.emit('error', dl);
+        this.processQueue();
+      });
+
+      if (!this.queue.includes(task.snapshot().id)) {
+        if (task.status !== 'paused') {
+          this.queue.push(task.snapshot().id);
+        }
+        if (task.status === 'downloading') {
+          this.activeCount++; // It is already running, so count it now
+        }
+      }
+    } else {
+      task = new DownloadTask(download, this.tempDir, () => this.getGlobalBytesPerSecond());
+      this.tasks.set(download.id, task);
+      if (task.status !== 'paused' && !this.queue.includes(task.snapshot().id)) {
+        this.queue.push(task.snapshot().id);
+      }
     }
-    DownloadRepository.saveDownload(download);
+    
+    // Explicitly emit progress to immediately update the UI with current state
+    this.emit('progress', task.snapshot());
+    DownloadRepository.saveDownload(task.snapshot());
     this.processQueue();
   }
 
@@ -235,6 +284,7 @@ export class DownloadEngine extends EventEmitter {
       if (!task) continue;
       if (task.status === 'cancelled' || task.status === 'completed') continue;
 
+      task.removeAllListeners();
       task.on('progress', (dl: Download) => this.emit('progress', dl));
       task.on('completed', (dl: Download) => {
         this.emit('completed', dl);
@@ -307,7 +357,17 @@ class DownloadTask extends EventEmitter {
     this.dl.filepath = filepath;
   }
 
+  updateOptions(opts: Partial<Download>) {
+    if (opts.filename) this.dl.filename = opts.filename;
+    if (opts.filepath !== undefined) this.dl.filepath = opts.filepath;
+    if (opts.categoryId !== undefined) this.dl.categoryId = opts.categoryId;
+    if (opts.numConnections) this.dl.numConnections = opts.numConnections;
+    if (opts.metadata) this.dl.metadata = opts.metadata;
+    if (opts.priority) this.dl.priority = opts.priority;
+  }
+
   async start(): Promise<void> {
+    if (this.dl.status === 'downloading' && this.activeChunks.size > 0) return;
     this.dl.status = 'downloading';
     this.dl.startedAt = Date.now();
 
@@ -936,10 +996,13 @@ class DownloadTask extends EventEmitter {
       }
     }
 
-    const finalPath = path.join(
+    const finalPath = this.dl.filepath || path.join(
       path.dirname(this.tempDir),
       this.dl.filename,
     );
+    try {
+      fs.mkdirSync(path.dirname(finalPath), { recursive: true });
+    } catch {}
     try {
       fs.renameSync(outputPath, finalPath);
     } catch {
