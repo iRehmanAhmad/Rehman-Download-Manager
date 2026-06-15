@@ -19,13 +19,30 @@ export function DownloadPanelsDialog({ open, onOpenChange }: DownloadPanelsDialo
   const showPanelProtected = settings.showPanelProtected === 'true';
 
   const defaultExtensions = [
+    { type: '3GP', size: '', enabled: true },
+    { type: 'AAC', size: '', enabled: true },
+    { type: 'ALAC', size: '', enabled: true },
+    { type: 'APE', size: '', enabled: true },
+    { type: 'AVI', size: '', enabled: true },
+    { type: 'FLAC', size: '', enabled: true },
     { type: 'FLV', size: '', enabled: true },
+    { type: 'M4A', size: '', enabled: true },
+    { type: 'M4V', size: '', enabled: true },
+    { type: 'MKV', size: '', enabled: true },
+    { type: 'MOV', size: '', enabled: true },
     { type: 'MP3', size: '50.00 KB', enabled: true },
     { type: 'MP4', size: '', enabled: true },
-    { type: 'M4A', size: '', enabled: true },
-    { type: 'MPG', size: '', enabled: true },
     { type: 'MPEG', size: '', enabled: true },
-    { type: 'AVI', size: '', enabled: true },
+    { type: 'MPG', size: '', enabled: true },
+    { type: 'OGG', size: '', enabled: true },
+    { type: 'OGV', size: '', enabled: true },
+    { type: 'RM', size: '', enabled: true },
+    { type: 'RMVB', size: '', enabled: true },
+    { type: 'TS', size: '', enabled: true },
+    { type: 'VOB', size: '', enabled: true },
+    { type: 'WAV', size: '', enabled: true },
+    { type: 'WEBM', size: '', enabled: true },
+    { type: 'WMA', size: '', enabled: true },
     { type: 'WMV', size: '', enabled: true }
   ];
   
