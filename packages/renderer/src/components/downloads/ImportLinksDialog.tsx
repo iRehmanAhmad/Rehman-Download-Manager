@@ -37,66 +37,76 @@ export function ImportLinksDialog() {
 
   useEffect(() => {
     const handleOpen = (e: Event) => {
-      const customEvent = e as CustomEvent<{ urls: string[] }>;
-      const { urls } = customEvent.detail;
+      const customEvent = e as CustomEvent<{ urls?: string[], prefilled?: ImportLink[] }>;
+      const { urls, prefilled } = customEvent.detail;
       
-      const newLinks = urls.map((url, i) => {
-        let filename = extractFilename(url) || `download-${i}`;
-        return {
-          id: i.toString(),
-          url,
-          filename,
-          type: 'Unknown',
-          size: -1,
-          selected: true,
-          loading: true,
-          linkText: '',
-        };
-      });
-
-      setLinks(newLinks);
-      setShowDialog(true);
+      let newLinks: ImportLink[] = [];
       
-      newLinks.forEach((link, idx) => {
-        setTimeout(async () => {
-          try {
-            let info;
-            if (typeof window.api.download.getFileInfoBasic === 'function') {
-              info = await window.api.download.getFileInfoBasic(link.url);
-            } else {
-              info = await window.api.download.getFileInfo(link.url);
-            }
-            
-            let friendlyType = 'Unknown File';
-            if (info.contentType) {
-              const mime = info.contentType.toLowerCase();
-              if (mime.includes('image/jpeg')) friendlyType = 'JPG File';
-              else if (mime.includes('image/png')) friendlyType = 'PNG File';
-              else if (mime.includes('image/gif')) friendlyType = 'GIF File';
-              else if (mime.includes('image/webp')) friendlyType = 'WEBP File';
-              else if (mime.includes('video/mp4')) friendlyType = 'MP4 File';
-              else if (mime.includes('video/webm')) friendlyType = 'WEBM File';
-              else if (mime.includes('video/x-matroska')) friendlyType = 'MKV File';
-              else if (mime.includes('application/pdf')) friendlyType = 'PDF Document';
-              else if (mime.includes('application/zip')) friendlyType = 'ZIP Archive';
-              else if (mime.includes('application/x-rar')) friendlyType = 'RAR Archive';
-              else if (mime.includes('text/html')) friendlyType = 'HTML Document';
-              else if (mime.includes('application/octet-stream')) friendlyType = 'Binary File';
-              else friendlyType = mime.split(';')[0];
-            }
+      if (prefilled) {
+        newLinks = prefilled;
+        setLinks(newLinks);
+        setShowDialog(true);
+        // Pre-filled links from .ef2 already have filenames and sizes, we just need to get friendly types if missing, 
+        // but to be fast we can just assume they are loaded.
+      } else if (urls) {
+        newLinks = urls.map((url, i) => {
+          let filename = extractFilename(url) || `download-${i}`;
+          return {
+            id: i.toString(),
+            url,
+            filename,
+            type: 'Unknown',
+            size: -1,
+            selected: true,
+            loading: true,
+            linkText: '',
+          };
+        });
 
-            setLinks(prev => prev.map(l => 
-              l.id === link.id 
-                ? { ...l, size: info.fileSize, type: friendlyType, loading: false }
-                : l
-            ));
-          } catch (err) {
-            setLinks(prev => prev.map(l => 
-              l.id === link.id ? { ...l, loading: false, type: 'Error' } : l
-            ));
-          }
-        }, idx * 20);
-      });
+        setLinks(newLinks);
+        setShowDialog(true);
+        
+        newLinks.forEach((link, idx) => {
+          setTimeout(async () => {
+            try {
+              let info;
+              if (typeof window.api.download.getFileInfoBasic === 'function') {
+                info = await window.api.download.getFileInfoBasic(link.url);
+              } else {
+                info = await window.api.download.getFileInfo(link.url);
+              }
+              
+              let friendlyType = 'Unknown File';
+              if (info.contentType) {
+                const mime = info.contentType.toLowerCase();
+                if (mime.includes('image/jpeg')) friendlyType = 'JPG File';
+                else if (mime.includes('image/png')) friendlyType = 'PNG File';
+                else if (mime.includes('image/gif')) friendlyType = 'GIF File';
+                else if (mime.includes('image/webp')) friendlyType = 'WEBP File';
+                else if (mime.includes('video/mp4')) friendlyType = 'MP4 File';
+                else if (mime.includes('video/webm')) friendlyType = 'WEBM File';
+                else if (mime.includes('video/x-matroska')) friendlyType = 'MKV File';
+                else if (mime.includes('application/pdf')) friendlyType = 'PDF Document';
+                else if (mime.includes('application/zip')) friendlyType = 'ZIP Archive';
+                else if (mime.includes('application/x-rar')) friendlyType = 'RAR Archive';
+                else if (mime.includes('text/html')) friendlyType = 'HTML Document';
+                else if (mime.includes('application/octet-stream')) friendlyType = 'Binary File';
+                else friendlyType = mime.split(';')[0];
+              }
+
+              setLinks(prev => prev.map(l => 
+                l.id === link.id 
+                  ? { ...l, size: info.fileSize, type: friendlyType, loading: false }
+                  : l
+              ));
+            } catch (err) {
+              setLinks(prev => prev.map(l => 
+                l.id === link.id ? { ...l, loading: false, type: 'Error' } : l
+              ));
+            }
+          }, idx * 20);
+        });
+      }
     };
 
     window.addEventListener('open-import-links-dialog', handleOpen);

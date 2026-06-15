@@ -44,8 +44,18 @@ export function MenuBar() {
             try {
               const text = await window.api.download.import('ef2');
               if (text && text !== 'success') {
-                const urls = text.split('\n').map(l => l.trim()).filter(l => l.length > 0 && l.startsWith('http'));
-                window.dispatchEvent(new CustomEvent('open-import-links-dialog', { detail: { urls } }));
+                const downloads = JSON.parse(text);
+                const prefilled = downloads.map((d: any, i: number) => ({
+                  id: i.toString(),
+                  url: d.url,
+                  filename: d.filename,
+                  type: 'Unknown',
+                  size: d.totalSize || -1,
+                  selected: true,
+                  loading: false, // Don't need to load if we have it!
+                  linkText: ''
+                }));
+                window.dispatchEvent(new CustomEvent('open-import-links-dialog', { detail: { prefilled } }));
               }
             } catch (err) {
               console.error(err);
