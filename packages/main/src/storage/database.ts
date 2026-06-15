@@ -136,5 +136,7 @@ INSERT OR IGNORE INTO settings (key, value) VALUES
 export async function initDatabase(): Promise<void> {
   const dbPath = join(app.getPath('userData'), DB_FILENAME);
   db = new DatabaseSync(dbPath);
+  db.exec('PRAGMA journal_mode = WAL;');
+  db.exec('PRAGMA busy_timeout = 5000;');
   db.exec(SCHEMA);
 }

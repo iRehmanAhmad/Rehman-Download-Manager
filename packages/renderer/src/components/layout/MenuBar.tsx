@@ -8,7 +8,8 @@ export function MenuBar() {
   const menuRef = useRef<HTMLDivElement>(null);
 
   const downloads = useDownloadStore(s => s.downloads);
-  const selectedIds = useDownloadStore(s => Array.from(s.selectedIds));
+  const selectedIdsSet = useDownloadStore(s => s.selectedIds);
+  const selectedIds = Array.from(selectedIdsSet);
 
   const canPause = selectedIds.length > 0 && selectedIds.some(id => {
     const d = downloads.get(id);
