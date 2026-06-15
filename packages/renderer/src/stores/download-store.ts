@@ -13,11 +13,16 @@ interface DownloadState {
   selectAll: () => void;
   clearSelection: () => void;
   clearCompletedDownloads: () => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
 }
 
 export const useDownloadStore = create<DownloadState>((set, get) => ({
   downloads: new Map(),
   selectedIds: new Set(),
+  searchQuery: '',
+
+  setSearchQuery: (query) => set({ searchQuery: query }),
 
   addDownload: (download) =>
     set((state) => {

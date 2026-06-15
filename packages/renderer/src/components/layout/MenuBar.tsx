@@ -9,7 +9,13 @@ export function MenuBar() {
 
   const downloads = useDownloadStore(s => s.downloads);
   const selectedIdsSet = useDownloadStore(s => s.selectedIds);
+  const searchQuery = useDownloadStore(s => s.searchQuery);
   const selectedIds = Array.from(selectedIdsSet);
+
+  const downloadsList = Array.from(downloads.values());
+  const canPauseAll = downloadsList.some(d => d.status === 'downloading' || d.status === 'queued');
+  const canClearCompleted = downloadsList.some(d => d.status === 'completed');
+  const canFindNext = searchQuery.trim().length > 0;
 
   const canPause = selectedIds.length > 0 && selectedIds.some(id => {
     const d = downloads.get(id);
@@ -107,16 +113,16 @@ export function MenuBar() {
       id: 'downloads',
       label: 'Downloads',
       items: [
-        { label: 'Pause All Downloads', action: () => window.api.queue.pauseAll() },
-        { label: 'Stop All Downloads', action: () => window.api.queue.pauseAll() },
+        { label: 'Pause All Downloads', disabled: !canPauseAll, action: () => window.api.queue.pauseAll() },
+        { label: 'Stop All Downloads', disabled: !canPauseAll, action: () => window.api.queue.pauseAll() },
         { divider: true },
-        { label: 'Clear Completed Downloads', action: async () => {
+        { label: 'Clear Completed Downloads', disabled: !canClearCompleted, action: async () => {
           await window.api.download.clearCompleted();
           useDownloadStore.getState().clearCompletedDownloads();
         }},
         { divider: true },
         { label: 'Search (Ctrl+F)', action: () => window.dispatchEvent(new CustomEvent('open-find-dialog')) },
-        { label: 'Find Next (F3)', action: () => window.dispatchEvent(new CustomEvent('find-next')) },
+        { label: 'Find Next (F3)', disabled: !canFindNext, action: () => window.dispatchEvent(new CustomEvent('find-next')) },
         { divider: true },
         { label: 'Job Scheduler', action: () => window.location.hash = '#/scheduler' },
         { label: 'Start Queue...', action: () => window.api.queue.startAll() },

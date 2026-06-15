@@ -4,12 +4,13 @@ import { useDownloadStore } from '../../stores/download-store';
 
 export function FindDialog() {
   const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   
   const downloadsMap = useDownloadStore(s => s.downloads);
   const toggleSelection = useDownloadStore(s => s.toggleSelection);
   const clearSelection = useDownloadStore(s => s.clearSelection);
+  const query = useDownloadStore(s => s.searchQuery);
+  const setQuery = useDownloadStore(s => s.setSearchQuery);
   
   const [currentMatchIndex, setCurrentMatchIndex] = useState(-1);
 
