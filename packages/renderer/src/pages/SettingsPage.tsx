@@ -1,6 +1,7 @@
 import { Settings, Monitor, Download, Bell, Folder, Shield } from 'lucide-react';
 import { useState, useCallback } from 'react';
 import { useSettingsStore } from '../stores/settings-store';
+import { useTranslation } from 'react-i18next';
 
 const TABS = [
   { id: 'general', label: 'General', icon: Settings },
