@@ -276,3 +276,16 @@ resources/
 ├── icons/                      (Phase 9 — empty)
 └── native-messaging/           (Phase 7 — empty)
 ```
+
+## 🚀 Phase 12+: Next-Generation Features (Future Ideas)
+
+To make RDM the ultimate IDM alternative, the following features have been proposed for future iterations:
+
+- **Built-in Media Converter (FFmpeg):** Automatically convert video to MP3 or specific MP4 formats immediately after downloading, or seamlessly merge high-quality video and audio streams into a single file.
+- **The Smart Unarchiver (Auto-Extract):** Automatically track multi-part `.rar` or `.zip` files, extract them to a designated folder as soon as the final part completes, and optionally delete the original archives.
+- **Built-in BitTorrent Support:** Download `.torrent` files and magnet links seamlessly alongside regular HTTP downloads within the same UI.
+- **Media Preview (Watch While Downloading):** Prioritize the first and last chunks of a video file so the user can begin streaming it in a built-in mini-player before the download finishes.
+- **Automatic Subtitle Fetcher:** Automatically calculate the hash of downloaded movies/shows and fetch matching `.srt` subtitles from OpenSubtitles.
+- **Social Media Mass-Grabber:** Paste a TikTok, Instagram, or YouTube playlist profile link to instantly load and download all videos simultaneously.
+- **VirusTotal Auto-Scanner:** Send the fingerprint of downloaded executables/archives to the VirusTotal API in the background to automatically flag malware.
+- **Debrid / Premium Link Unshackler:** Native integration with services like Real-Debrid to automatically intercept slow restricted links and convert them to high-speed premium links using a saved API key.
