@@ -11,3 +11,10 @@ Thumbs.db
 coverage/
 playwright-report/
 test-results/
+
+# Downloaded files
+Music/
+Music
+Videos/
+Documents/
+Downloads/
