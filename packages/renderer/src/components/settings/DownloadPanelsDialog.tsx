@@ -14,36 +14,82 @@ export function DownloadPanelsDialog({ open, onOpenChange }: DownloadPanelsDialo
   const setValue = useSettingsStore((s) => s.setValue);
 
   // Initialize defaults
-  const panelMode = settings.panelMode || 'full'; // 'full' or 'mini'
+  const panelMode = settings.panelMode || 'full';
   const dontCaptureWebPlayers = settings.dontCaptureWebPlayers === 'true';
   const showPanelProtected = settings.showPanelProtected === 'true';
 
   const defaultExtensions = [
-    { type: 'FLV', size: '' },
-    { type: 'MP3', size: '50.00 KB' },
-    { type: 'MP4', size: '' },
-    { type: 'M4A', size: '' },
-    { type: 'MPG', size: '' },
-    { type: 'MPEG', size: '' },
-    { type: 'AVI', size: '' },
-    { type: 'WMV', size: '' }
+    { type: 'FLV', size: '', enabled: true },
+    { type: 'MP3', size: '50.00 KB', enabled: true },
+    { type: 'MP4', size: '', enabled: true },
+    { type: 'M4A', size: '', enabled: true },
+    { type: 'MPG', size: '', enabled: true },
+    { type: 'MPEG', size: '', enabled: true },
+    { type: 'AVI', size: '', enabled: true },
+    { type: 'WMV', size: '', enabled: true }
   ];
-  const capturedExtensions = settings.capturedExtensions ? JSON.parse(settings.capturedExtensions) : defaultExtensions;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  
+  const capturedExtensions = settings.capturedExtensions 
+    ? JSON.parse(settings.capturedExtensions).map((e: any) => ({ ...e, enabled: e.enabled ?? true })) 
+    : defaultExtensions;
+    
   const setCapturedExtensions = (val: any) => setValue('capturedExtensions', JSON.stringify(val));
 
-  const linkPanelMode = settings.linkPanelMode || 'any'; // 'any', 'none', 'specific'
+  const handleCheckAll = () => setCapturedExtensions(capturedExtensions.map((e: any) => ({ ...e, enabled: true })));
+  const handleClearAll = () => setCapturedExtensions(capturedExtensions.map((e: any) => ({ ...e, enabled: false })));
+  const toggleExtension = (idx: number) => {
+    const newExts = [...capturedExtensions];
+    newExts[idx].enabled = !newExts[idx].enabled;
+    setCapturedExtensions(newExts);
+  };
+
+  const [addingExt, setAddingExt] = useState(false);
+  const [newExt, setNewExt] = useState('');
+  const handleAddExt = () => {
+    if (newExt.trim()) {
+      setCapturedExtensions([...capturedExtensions, { type: newExt.trim().toUpperCase(), size: '', enabled: true }]);
+      setNewExt('');
+      setAddingExt(false);
+    }
+  };
+
+  const [showExceptions, setShowExceptions] = useState(false);
+  const exceptionsText = settings.panelExceptions || '';
+  const setExceptionsText = (val: string) => setValue('panelExceptions', val);
+
+  const linkPanelMode = settings.linkPanelMode || 'any';
   const defaultSites = [
     'rapidshare.com', 'megaupload.com', 'depositfiles.com', 'filefactory.com',
     'mediafire.com', 'sendspace.com', 'uploading.com', 'uploaded.to'
   ];
   const specificSites = settings.specificSites ? JSON.parse(settings.specificSites) : defaultSites;
+  const setSpecificSites = (val: any) => setValue('specificSites', JSON.stringify(val));
+
+  const [addingSite, setAddingSite] = useState(false);
+  const [newSite, setNewSite] = useState('');
+  const handleAddSite = () => {
+    if (newSite.trim()) {
+      setSpecificSites([...specificSites, newSite.trim()]);
+      setNewSite('');
+      setAddingSite(false);
+    }
+  };
+
+  const [selectedSiteIdx, setSelectedSiteIdx] = useState<number | null>(null);
+  const handleDeleteSite = () => {
+    if (selectedSiteIdx !== null) {
+      const newSites = [...specificSites];
+      newSites.splice(selectedSiteIdx, 1);
+      setSpecificSites(newSites);
+      setSelectedSiteIdx(null);
+    }
+  };
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-        <Dialog.Content className="fixed left-[50%] top-[50%] z-50 flex flex-col w-full max-w-[600px] translate-x-[-50%] translate-y-[-50%] bg-[#f0f0f0] shadow-lg border border-gray-400 p-0 text-black font-sans text-sm h-[580px]">
+        <Dialog.Content className="fixed left-[50%] top-[50%] z-50 flex flex-col w-full max-w-[600px] translate-x-[-50%] translate-y-[-50%] bg-[#f0f0f0] shadow-lg border border-gray-400 p-0 text-black font-sans text-sm h-[600px]">
           
           <div className="flex items-center px-4 py-2 bg-white border-b border-gray-300 gap-2">
             <img src="/icons/icon.png" alt="" className="w-4 h-4 object-contain opacity-70" />
@@ -69,9 +115,9 @@ export function DownloadPanelsDialog({ open, onOpenChange }: DownloadPanelsDialo
             </button>
           </div>
 
-          <div className="flex-1 bg-white border-t-0 p-4 overflow-hidden flex flex-col">
+          <div className="flex-1 bg-white border-t-0 p-4 overflow-hidden flex flex-col relative">
             {activeTab === 'web-players' && (
-              <div className="flex flex-col h-full gap-4">
+              <div className="flex flex-col h-full gap-3">
                 <p>IDM can show its Download panel on a web-player in a browser when IDM detects a multimedia request from the web-player</p>
                 <hr className="border-gray-300" />
                 
@@ -90,7 +136,6 @@ export function DownloadPanelsDialog({ open, onOpenChange }: DownloadPanelsDialo
                       <span>Full mode</span>
                     </label>
                     
-                    {/* Fake Full Mode Button */}
                     <div className="flex items-center gap-2 ml-10">
                       <div className="flex items-center bg-gradient-to-b from-[#e1e9f4] to-[#b7cce4] border border-[#7a9bbd] rounded px-2 py-1 shadow-sm opacity-90">
                         <span className="text-green-600 mr-1 text-[10px]">▶</span>
@@ -116,7 +161,6 @@ export function DownloadPanelsDialog({ open, onOpenChange }: DownloadPanelsDialo
                       <span>Mini mode</span>
                     </label>
                     
-                    {/* Fake Mini Mode Button */}
                     <div className="flex items-center gap-2 ml-[225px]">
                       <div className="flex items-center bg-gradient-to-b from-[#e1e9f4] to-[#b7cce4] border border-[#7a9bbd] rounded px-1 py-0.5 shadow-sm opacity-90">
                         <span className="text-green-600 text-[10px]">▶</span>
@@ -130,41 +174,71 @@ export function DownloadPanelsDialog({ open, onOpenChange }: DownloadPanelsDialo
 
                 <div className="flex flex-col flex-1">
                   <div className="mb-2">Show IDM download panel for the following file types:</div>
-                  <div className="flex gap-4 h-[160px]">
-                    <div className="flex-1 border border-gray-400 bg-white overflow-y-auto">
-                      <table className="w-full text-left border-collapse">
-                        <thead className="bg-[#f0f0f0] border-b border-gray-300">
-                          <tr>
-                            <th className="font-normal px-2 py-1 w-2/5 border-r border-gray-300">File Type</th>
-                            <th className="font-normal px-2 py-1">Minimum size</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {capturedExtensions.map((ext: any, idx: number) => (
-                            <tr key={idx} className={idx % 2 === 0 ? '' : 'bg-blue-50'}>
-                              <td className="px-2 py-1 border-r border-gray-300 flex items-center gap-2">
-                                <div className="w-4 h-4 border border-blue-500 bg-blue-500 rounded-sm flex items-center justify-center">
-                                  <Check size={12} className="text-white" strokeWidth={3} />
-                                </div>
-                                {ext.type}
-                              </td>
-                              <td className="px-2 py-1">{ext.size}</td>
+                  
+                  {addingExt ? (
+                    <div className="flex items-center gap-2 mb-2 bg-blue-50 p-2 border border-blue-200 rounded">
+                      <input 
+                        type="text" 
+                        value={newExt} 
+                        onChange={(e) => setNewExt(e.target.value)} 
+                        placeholder="e.g. MKV" 
+                        className="border border-gray-400 px-2 py-1 rounded w-32 outline-none"
+                        autoFocus
+                        onKeyDown={(e) => { if (e.key === 'Enter') handleAddExt(); else if (e.key === 'Escape') setAddingExt(false); }}
+                      />
+                      <button onClick={handleAddExt} className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Save</button>
+                      <button onClick={() => setAddingExt(false)} className="px-3 py-1 bg-gray-200 border border-gray-400 rounded">Cancel</button>
+                    </div>
+                  ) : showExceptions ? (
+                    <div className="flex flex-col gap-2 mb-2 bg-yellow-50 p-2 border border-yellow-200 rounded h-[160px]">
+                      <div className="text-xs text-gray-700 font-semibold">Do not show download panel for these sites (one per line):</div>
+                      <textarea 
+                        value={exceptionsText}
+                        onChange={(e) => setExceptionsText(e.target.value)}
+                        className="flex-1 w-full border border-gray-400 p-1 text-xs outline-none"
+                        placeholder="example.com"
+                      />
+                      <div className="flex justify-end gap-2">
+                        <button onClick={() => setShowExceptions(false)} className="px-3 py-1 bg-gray-200 border border-gray-400 rounded hover:bg-gray-300">Close</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex gap-4 h-[160px]">
+                      <div className="flex-1 border border-gray-400 bg-white overflow-y-auto">
+                        <table className="w-full text-left border-collapse">
+                          <thead className="bg-[#f0f0f0] border-b border-gray-300">
+                            <tr>
+                              <th className="font-normal px-2 py-1 w-2/5 border-r border-gray-300">File Type</th>
+                              <th className="font-normal px-2 py-1">Minimum size</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                          </thead>
+                          <tbody>
+                            {capturedExtensions.map((ext: any, idx: number) => (
+                              <tr key={idx} className={idx % 2 === 0 ? '' : 'bg-blue-50'}>
+                                <td className="px-2 py-1 border-r border-gray-300 flex items-center gap-2 cursor-pointer" onClick={() => toggleExtension(idx)}>
+                                  <div className={`w-4 h-4 border flex items-center justify-center rounded-sm ${ext.enabled ? 'border-blue-500 bg-blue-500' : 'border-gray-400 bg-white'}`}>
+                                    {ext.enabled && <Check size={12} className="text-white" strokeWidth={3} />}
+                                  </div>
+                                  {ext.type}
+                                </td>
+                                <td className="px-2 py-1">{ext.size}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="flex flex-col gap-2 w-32">
+                        <button onClick={() => setAddingExt(true)} className="px-4 py-1 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors">Add</button>
+                        <button className="px-4 py-1 bg-[#f0f0f0] border border-gray-300 text-gray-400 rounded cursor-not-allowed">Minimum size</button>
+                        <button onClick={handleCheckAll} className="px-4 py-1 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors mt-2">Check All</button>
+                        <button onClick={handleClearAll} className="px-4 py-1 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors">Clear All</button>
+                        <button onClick={() => setShowExceptions(true)} className="px-4 py-1 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors mt-2">Exceptions</button>
+                      </div>
                     </div>
-                    <div className="flex flex-col gap-2 w-32">
-                      <button className="px-4 py-1 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors">Add</button>
-                      <button className="px-4 py-1 bg-[#f0f0f0] border border-gray-300 text-gray-400 rounded cursor-not-allowed">Minimum size</button>
-                      <button className="px-4 py-1 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors mt-2">Check All</button>
-                      <button className="px-4 py-1 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors">Clear All</button>
-                      <button className="px-4 py-1 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors mt-2">Exceptions</button>
-                    </div>
-                  </div>
+                  )}
                 </div>
 
-                <div className="text-xs text-gray-600 mt-2">
+                <div className="text-xs text-gray-600 mt-2 break-words whitespace-normal leading-snug">
                   Note: If you uncheck a file type on the list above and if the file type is in the list on "Options-&gt;File Types" tab, downloads of this file type are captured by IDM automatically and won't be played in the web-player. If you want to prevent it, check the box below:
                 </div>
                 
@@ -283,18 +357,39 @@ export function DownloadPanelsDialog({ open, onOpenChange }: DownloadPanelsDialo
                   </label>
                 </div>
 
-                <div className="flex gap-4 h-[160px] pl-6 mt-2">
-                  <div className="flex-1 border border-gray-400 bg-white overflow-y-auto p-2">
-                    {specificSites.map((site: string, idx: number) => (
-                      <div key={idx} className="py-0.5">{site}</div>
-                    ))}
+                {addingSite ? (
+                  <div className="flex items-center gap-2 mt-2 bg-blue-50 p-2 border border-blue-200 rounded mx-6">
+                    <input 
+                      type="text" 
+                      value={newSite} 
+                      onChange={(e) => setNewSite(e.target.value)} 
+                      placeholder="e.g. example.com" 
+                      className="border border-gray-400 px-2 py-1 rounded flex-1 outline-none"
+                      autoFocus
+                      onKeyDown={(e) => { if (e.key === 'Enter') handleAddSite(); else if (e.key === 'Escape') setAddingSite(false); }}
+                    />
+                    <button onClick={handleAddSite} className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Save</button>
+                    <button onClick={() => setAddingSite(false)} className="px-3 py-1 bg-gray-200 border border-gray-400 rounded">Cancel</button>
                   </div>
-                  <div className="flex flex-col gap-2 w-32">
-                    <button className="px-4 py-1 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors">Add</button>
-                    <button className="px-4 py-1 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors">Delete</button>
+                ) : (
+                  <div className="flex gap-4 h-[160px] pl-6 mt-2">
+                    <div className="flex-1 border border-gray-400 bg-white overflow-y-auto p-1">
+                      {specificSites.map((site: string, idx: number) => (
+                        <div 
+                          key={idx} 
+                          className={`py-0.5 px-2 cursor-pointer ${selectedSiteIdx === idx ? 'bg-blue-600 text-white' : 'hover:bg-blue-50'}`}
+                          onClick={() => setSelectedSiteIdx(idx)}
+                        >
+                          {site}
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex flex-col gap-2 w-32">
+                      <button onClick={() => setAddingSite(true)} className="px-4 py-1 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors">Add</button>
+                      <button onClick={handleDeleteSite} className={`px-4 py-1 border rounded transition-colors ${selectedSiteIdx !== null ? 'bg-[#e1e1e1] border-gray-400 hover:bg-[#d1d1d1]' : 'bg-[#f0f0f0] border-gray-300 text-gray-400 cursor-not-allowed'}`}>Delete</button>
+                    </div>
                   </div>
-                </div>
-
+                )}
               </div>
             )}
           </div>
