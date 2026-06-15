@@ -42,9 +42,10 @@ export function MenuBar() {
         { label: 'Import', subItems: [
           { label: 'From RDM export file', action: async () => {
             try {
-              const res = await window.api.download.import('ef2');
-              if (res === 'success') {
-                console.log('Imported successfully');
+              const text = await window.api.download.import('ef2');
+              if (text && text !== 'success') {
+                const urls = text.split('\n').map(l => l.trim()).filter(l => l.length > 0 && l.startsWith('http'));
+                window.dispatchEvent(new CustomEvent('open-import-links-dialog', { detail: { urls } }));
               }
             } catch (err) {
               console.error(err);

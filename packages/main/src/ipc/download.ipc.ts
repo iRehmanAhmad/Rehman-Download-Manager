@@ -345,21 +345,10 @@ const fetchInfo = (currentUrl: string, redirectCount = 0): Promise<{ supportsRan
     } else {
       try {
         const downloads: Download[] = JSON.parse(content);
-        const eng = getDownloadEngine();
-        for (const dl of downloads) {
-          const newDl = {
-            ...dl,
-            id: uuid(), // Generate new ID to avoid collisions
-            downloaded: 0,
-            status: 'queued',
-            addedAt: Date.now(),
-            retryCount: 0,
-            error: undefined
-          } as Download;
-          eng.add(newDl);
-        }
-        emitQueueStatus();
-        return 'success';
+        // Instead of silently importing, return a newline-separated string of URLs
+        // so the frontend can open the Import Links dialog just like a txt file!
+        const urls = downloads.map(d => d.url).join('\n');
+        return urls;
       } catch (err) {
         console.error('Failed to parse ef2 file:', err);
         throw new Error('Invalid EF2 file format');
