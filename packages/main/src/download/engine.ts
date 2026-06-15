@@ -63,10 +63,11 @@ export class DownloadEngine extends EventEmitter {
   private loadFromDB(): void {
     const dls = DownloadRepository.loadAllDownloads();
     for (const dl of dls) {
-      this.tasks.set(dl.id, new DownloadTask(dl, this.tempDir, () => this.getGlobalBytesPerSecond()));
-      if (dl.status === 'queued') {
-        this.queue.push(dl.id);
+      if (dl.status === 'downloading') {
+        dl.status = 'queued';
+        DownloadRepository.saveDownload(dl);
       }
+      this.tasks.set(dl.id, new DownloadTask(dl, this.tempDir, () => this.getGlobalBytesPerSecond()));
     }
   }
 
@@ -127,8 +128,10 @@ export class DownloadEngine extends EventEmitter {
     } else {
       task = new DownloadTask(download, this.tempDir, () => this.getGlobalBytesPerSecond());
       this.tasks.set(download.id, task);
-      if (task.status !== 'paused' && !this.queue.includes(task.snapshot().id)) {
+      if (task.status === 'downloading' && !this.queue.includes(task.snapshot().id)) {
         this.queue.push(task.snapshot().id);
+        // We need to call processQueue to start it if there is room
+        this.processQueue();
       }
     }
     

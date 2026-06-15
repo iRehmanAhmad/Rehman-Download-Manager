@@ -16,6 +16,16 @@ class QueueManager {
     
     // Run immediately on start
     this.checkSchedules();
+
+    // Handle queues with startOnStartup
+    const repo = getQueueRepository();
+    const queues = repo.getAll();
+    for (const q of queues) {
+      if (q.id === 'limits') continue;
+      if (q.startOnStartup) {
+        this.startQueue(q.id);
+      }
+    }
   }
 
   public stop() {
