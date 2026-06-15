@@ -5,7 +5,14 @@ import { useDownloadStore } from '../../stores/download-store';
 export function MenuBar() {
   const { t } = useTranslation();
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [queues, setQueues] = useState<import('@rdm/shared').QueueSettings[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (activeMenu === 'downloads') {
+      window.api.queue.getAll().then(setQueues).catch(console.error);
+    }
+  }, [activeMenu]);
 
   const downloads = useDownloadStore(s => s.downloads);
   const selectedIdsSet = useDownloadStore(s => s.selectedIds);
@@ -125,8 +132,14 @@ export function MenuBar() {
         { label: 'Find Next (F3)', disabled: !canFindNext, action: () => window.dispatchEvent(new CustomEvent('find-next')) },
         { divider: true },
         { label: 'Job Scheduler', action: () => window.location.hash = '#/scheduler' },
-        { label: 'Start Queue...', action: () => window.api.queue.startAll() },
-        { label: 'Stop Queue...', action: () => window.api.queue.pauseAll() },
+        { label: 'Start queue', subItems: queues.map(q => ({
+          label: `Start ${q.name}`,
+          action: () => window.api.queue.start(q.id)
+        }))},
+        { label: 'Stop queue', subItems: queues.map(q => ({
+          label: `Stop ${q.name}`,
+          action: () => window.api.queue.stop(q.id)
+        }))},
         { divider: true },
         { label: 'Bandwidth Limiter...', action: () => {} },
         { divider: true },

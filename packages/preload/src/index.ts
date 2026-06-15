@@ -76,7 +76,10 @@ const api = {
       ipcRenderer.invoke(IPC_CHANNELS.QUEUE_UPDATE, queue),
     delete: (id: string): Promise<boolean> =>
       ipcRenderer.invoke(IPC_CHANNELS.QUEUE_DELETE, id),
-
+    start: (id: string): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.QUEUE_START, id),
+    stop: (id: string): Promise<boolean> =>
+      ipcRenderer.invoke(IPC_CHANNELS.QUEUE_STOP, id),
     startAll: (): Promise<boolean> =>
       ipcRenderer.invoke(IPC_CHANNELS.QUEUE_START_ALL),
     pauseAll: (): Promise<boolean> =>

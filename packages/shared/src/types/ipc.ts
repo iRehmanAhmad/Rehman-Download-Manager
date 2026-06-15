@@ -34,6 +34,8 @@ export const IPC_CHANNELS = {
   QUEUE_CREATE: 'queue:create',
   QUEUE_UPDATE: 'queue:update',
   QUEUE_DELETE: 'queue:delete',
+  QUEUE_START: 'queue:start',
+  QUEUE_STOP: 'queue:stop',
   SETTINGS_GET: 'settings:get',
   SETTINGS_SET: 'settings:set',
   SETTINGS_GET_ALL: 'settings:get-all',

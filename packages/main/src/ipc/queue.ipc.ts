@@ -24,4 +24,16 @@ export function registerQueueHandlers(): void {
   ipcMain.handle(IPC_CHANNELS.QUEUE_DELETE, (_event, id: string): boolean => {
     return repo.delete(id);
   });
+
+  ipcMain.handle(IPC_CHANNELS.QUEUE_START, (_event, id: string): boolean => {
+    const { getQueueManager } = require('../queue/queue.manager');
+    getQueueManager().startQueue(id);
+    return true;
+  });
+
+  ipcMain.handle(IPC_CHANNELS.QUEUE_STOP, (_event, id: string): boolean => {
+    const { getQueueManager } = require('../queue/queue.manager');
+    getQueueManager().stopQueue(id);
+    return true;
+  });
 }
