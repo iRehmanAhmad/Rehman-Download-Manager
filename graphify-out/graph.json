@@ -9,9 +9,9 @@
       "source_file": "packages/main/src/automation/evaluator.ts",
       "source_location": "L4",
       "_origin": "ast",
-      "id": "automation_evaluator_evaluaterules",
-      "community": 7,
-      "norm_label": "evaluaterules"
+      "community": 13,
+      "norm_label": "evaluaterules",
+      "id": "automation_evaluator_evaluaterules"
     },
     {
       "label": "getRules",
@@ -19,9 +19,9 @@
       "source_file": "packages/main/src/automation/index.ts",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "automation_index_getrules",
-      "community": 8,
-      "norm_label": "getrules"
+      "community": 14,
+      "norm_label": "getrules",
+      "id": "automation_index_getrules"
     },
     {
       "label": "registerAutomationIpc",
@@ -29,9 +29,9 @@
       "source_file": "packages/main/src/automation/index.ts",
       "source_location": "L34",
       "_origin": "ast",
-      "id": "automation_index_registerautomationipc",
-      "community": 9,
-      "norm_label": "registerautomationipc"
+      "community": 15,
+      "norm_label": "registerautomationipc",
+      "id": "automation_index_registerautomationipc"
     },
     {
       "label": "startBrowserBridge",
@@ -39,9 +39,9 @@
       "source_file": "packages/main/src/browser-bridge/index.ts",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "browser_bridge_index_startbrowserbridge",
-      "community": 10,
-      "norm_label": "startbrowserbridge"
+      "community": 16,
+      "norm_label": "startbrowserbridge",
+      "id": "browser_bridge_index_startbrowserbridge"
     },
     {
       "label": "stopBrowserBridge",
@@ -49,9 +49,9 @@
       "source_file": "packages/main/src/browser-bridge/index.ts",
       "source_location": "L58",
       "_origin": "ast",
-      "id": "browser_bridge_index_stopbrowserbridge",
-      "community": 11,
-      "norm_label": "stopbrowserbridge"
+      "community": 17,
+      "norm_label": "stopbrowserbridge",
+      "id": "browser_bridge_index_stopbrowserbridge"
     },
     {
       "label": "startClipboardMonitor",
@@ -59,9 +59,9 @@
       "source_file": "packages/main/src/clipboard/index.ts",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "clipboard_index_startclipboardmonitor",
-      "community": 13,
-      "norm_label": "startclipboardmonitor"
+      "community": 19,
+      "norm_label": "startclipboardmonitor",
+      "id": "clipboard_index_startclipboardmonitor"
     },
     {
       "label": "stopClipboardMonitor",
@@ -69,9 +69,9 @@
       "source_file": "packages/main/src/clipboard/index.ts",
       "source_location": "L27",
       "_origin": "ast",
-      "id": "clipboard_index_stopclipboardmonitor",
-      "community": 14,
-      "norm_label": "stopclipboardmonitor"
+      "community": 20,
+      "norm_label": "stopclipboardmonitor",
+      "id": "clipboard_index_stopclipboardmonitor"
     },
     {
       "label": "isClipboardMonitorRunning",
@@ -79,9 +79,9 @@
       "source_file": "packages/main/src/clipboard/index.ts",
       "source_location": "L35",
       "_origin": "ast",
-      "id": "clipboard_index_isclipboardmonitorrunning",
-      "community": 12,
-      "norm_label": "isclipboardmonitorrunning"
+      "community": 18,
+      "norm_label": "isclipboardmonitorrunning",
+      "id": "clipboard_index_isclipboardmonitorrunning"
     },
     {
       "label": "DownloadEngineEvents",
@@ -89,9 +89,9 @@
       "source_file": "packages/main/src/download/engine.ts",
       "source_location": "L37",
       "_origin": "ast",
-      "id": "download_engine_downloadengineevents",
-      "community": 4,
-      "norm_label": "downloadengineevents"
+      "community": 3,
+      "norm_label": "downloadengineevents",
+      "id": "download_engine_downloadengineevents"
     },
     {
       "label": "DownloadEngine",
@@ -99,9 +99,9 @@
       "source_file": "packages/main/src/download/engine.ts",
       "source_location": "L44",
       "_origin": "ast",
-      "id": "download_engine_downloadengine",
-      "community": 15,
-      "norm_label": "downloadengine"
+      "community": 0,
+      "norm_label": "downloadengine",
+      "id": "download_engine_downloadengine"
     },
     {
       "label": "GrabResult",
@@ -109,9 +109,9 @@
       "source_file": "packages/main/src/grabber/index.ts",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "grabber_index_grabresult",
-      "community": 20,
-      "norm_label": "grabresult"
+      "community": 25,
+      "norm_label": "grabresult",
+      "id": "grabber_index_grabresult"
     },
     {
       "label": "detectVideos",
@@ -119,9 +119,9 @@
       "source_file": "packages/main/src/grabber/index.ts",
       "source_location": "L27",
       "_origin": "ast",
-      "id": "grabber_index_detectvideos",
-      "community": 19,
-      "norm_label": "detectvideos"
+      "community": 24,
+      "norm_label": "detectvideos",
+      "id": "grabber_index_detectvideos"
     },
     {
       "label": "crawlSite",
@@ -129,9 +129,9 @@
       "source_file": "packages/main/src/grabber/index.ts",
       "source_location": "L59",
       "_origin": "ast",
-      "id": "grabber_index_crawlsite",
-      "community": 18,
-      "norm_label": "crawlsite"
+      "community": 23,
+      "norm_label": "crawlsite",
+      "id": "grabber_index_crawlsite"
     },
     {
       "label": "registerCategoryIpc",
@@ -139,9 +139,9 @@
       "source_file": "packages/main/src/ipc/category.ipc.ts",
       "source_location": "L6",
       "_origin": "ast",
-      "id": "ipc_category_ipc_registercategoryipc",
-      "community": 21,
-      "norm_label": "registercategoryipc"
+      "community": 26,
+      "norm_label": "registercategoryipc",
+      "id": "ipc_category_ipc_registercategoryipc"
     },
     {
       "label": "setDownloadEngine",
@@ -149,9 +149,9 @@
       "source_file": "packages/main/src/ipc/download.ipc.ts",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "ipc_download_ipc_setdownloadengine",
-      "community": 24,
-      "norm_label": "setdownloadengine"
+      "community": 2,
+      "norm_label": "setdownloadengine",
+      "id": "ipc_download_ipc_setdownloadengine"
     },
     {
       "label": "getDownloadEngine",
@@ -159,9 +159,9 @@
       "source_file": "packages/main/src/ipc/download.ipc.ts",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "ipc_download_ipc_getdownloadengine",
-      "community": 22,
-      "norm_label": "getdownloadengine"
+      "community": 2,
+      "norm_label": "getdownloadengine",
+      "id": "ipc_download_ipc_getdownloadengine"
     },
     {
       "label": "registerDownloadIpc",
@@ -169,9 +169,9 @@
       "source_file": "packages/main/src/ipc/download.ipc.ts",
       "source_location": "L37",
       "_origin": "ast",
-      "id": "ipc_download_ipc_registerdownloadipc",
-      "community": 23,
-      "norm_label": "registerdownloadipc"
+      "community": 2,
+      "norm_label": "registerdownloadipc",
+      "id": "ipc_download_ipc_registerdownloadipc"
     },
     {
       "label": "registerAllIpc",
@@ -179,9 +179,9 @@
       "source_file": "packages/main/src/ipc/index.ts",
       "source_location": "L58",
       "_origin": "ast",
-      "id": "ipc_index_registerallipc",
-      "community": 25,
-      "norm_label": "registerallipc"
+      "community": 27,
+      "norm_label": "registerallipc",
+      "id": "ipc_index_registerallipc"
     },
     {
       "label": "registerSettingsIpc",
@@ -189,9 +189,9 @@
       "source_file": "packages/main/src/ipc/settings.ipc.ts",
       "source_location": "L36",
       "_origin": "ast",
-      "id": "ipc_settings_ipc_registersettingsipc",
-      "community": 26,
-      "norm_label": "registersettingsipc"
+      "community": 28,
+      "norm_label": "registersettingsipc",
+      "id": "ipc_settings_ipc_registersettingsipc"
     },
     {
       "label": "initNotifications",
@@ -199,9 +199,9 @@
       "source_file": "packages/main/src/notifications/index.ts",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "notifications_index_initnotifications",
-      "community": 30,
-      "norm_label": "initnotifications"
+      "community": 29,
+      "norm_label": "initnotifications",
+      "id": "notifications_index_initnotifications"
     },
     {
       "label": "setNotificationsEnabled",
@@ -209,9 +209,9 @@
       "source_file": "packages/main/src/notifications/index.ts",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "notifications_index_setnotificationsenabled",
-      "community": 34,
-      "norm_label": "setnotificationsenabled"
+      "community": 31,
+      "norm_label": "setnotificationsenabled",
+      "id": "notifications_index_setnotificationsenabled"
     },
     {
       "label": "notifyDownloadComplete",
@@ -219,9 +219,9 @@
       "source_file": "packages/main/src/notifications/index.ts",
       "source_location": "L24",
       "_origin": "ast",
-      "id": "notifications_index_notifydownloadcomplete",
-      "community": 32,
-      "norm_label": "notifydownloadcomplete"
+      "community": 2,
+      "norm_label": "notifydownloadcomplete",
+      "id": "notifications_index_notifydownloadcomplete"
     },
     {
       "label": "notifyDownloadError",
@@ -229,9 +229,9 @@
       "source_file": "packages/main/src/notifications/index.ts",
       "source_location": "L39",
       "_origin": "ast",
-      "id": "notifications_index_notifydownloaderror",
-      "community": 33,
-      "norm_label": "notifydownloaderror"
+      "community": 2,
+      "norm_label": "notifydownloaderror",
+      "id": "notifications_index_notifydownloaderror"
     },
     {
       "label": "notifyClipboardUrl",
@@ -239,9 +239,9 @@
       "source_file": "packages/main/src/notifications/index.ts",
       "source_location": "L52",
       "_origin": "ast",
-      "id": "notifications_index_notifyclipboardurl",
-      "community": 31,
-      "norm_label": "notifyclipboardurl"
+      "community": 30,
+      "norm_label": "notifyclipboardurl",
+      "id": "notifications_index_notifyclipboardurl"
     },
     {
       "label": "getPluginDir",
@@ -249,9 +249,9 @@
       "source_file": "packages/main/src/plugins/loader.ts",
       "source_location": "L12",
       "_origin": "ast",
-      "id": "plugins_loader_getplugindir",
-      "community": 38,
-      "norm_label": "getplugindir"
+      "community": 35,
+      "norm_label": "getplugindir",
+      "id": "plugins_loader_getplugindir"
     },
     {
       "label": "scanPlugins",
@@ -259,9 +259,9 @@
       "source_file": "packages/main/src/plugins/loader.ts",
       "source_location": "L20",
       "_origin": "ast",
-      "id": "plugins_loader_scanplugins",
-      "community": 43,
-      "norm_label": "scanplugins"
+      "community": 40,
+      "norm_label": "scanplugins",
+      "id": "plugins_loader_scanplugins"
     },
     {
       "label": "loadPlugin",
@@ -269,9 +269,9 @@
       "source_file": "packages/main/src/plugins/loader.ts",
       "source_location": "L77",
       "_origin": "ast",
-      "id": "plugins_loader_loadplugin",
-      "community": 42,
-      "norm_label": "loadplugin"
+      "community": 39,
+      "norm_label": "loadplugin",
+      "id": "plugins_loader_loadplugin"
     },
     {
       "label": "unloadPlugin",
@@ -279,9 +279,9 @@
       "source_file": "packages/main/src/plugins/loader.ts",
       "source_location": "L103",
       "_origin": "ast",
-      "id": "plugins_loader_unloadplugin",
-      "community": 45,
-      "norm_label": "unloadplugin"
+      "community": 42,
+      "norm_label": "unloadplugin",
+      "id": "plugins_loader_unloadplugin"
     },
     {
       "label": "enablePlugin",
@@ -289,9 +289,9 @@
       "source_file": "packages/main/src/plugins/loader.ts",
       "source_location": "L122",
       "_origin": "ast",
-      "id": "plugins_loader_enableplugin",
-      "community": 36,
-      "norm_label": "enableplugin"
+      "community": 33,
+      "norm_label": "enableplugin",
+      "id": "plugins_loader_enableplugin"
     },
     {
       "label": "disablePlugin",
@@ -299,9 +299,9 @@
       "source_file": "packages/main/src/plugins/loader.ts",
       "source_location": "L133",
       "_origin": "ast",
-      "id": "plugins_loader_disableplugin",
-      "community": 35,
-      "norm_label": "disableplugin"
+      "community": 32,
+      "norm_label": "disableplugin",
+      "id": "plugins_loader_disableplugin"
     },
     {
       "label": "installPlugin",
@@ -309,9 +309,9 @@
       "source_file": "packages/main/src/plugins/loader.ts",
       "source_location": "L140",
       "_origin": "ast",
-      "id": "plugins_loader_installplugin",
-      "community": 40,
-      "norm_label": "installplugin"
+      "community": 37,
+      "norm_label": "installplugin",
+      "id": "plugins_loader_installplugin"
     },
     {
       "label": "uninstallPlugin",
@@ -319,9 +319,9 @@
       "source_file": "packages/main/src/plugins/loader.ts",
       "source_location": "L182",
       "_origin": "ast",
-      "id": "plugins_loader_uninstallplugin",
-      "community": 44,
-      "norm_label": "uninstallplugin"
+      "community": 41,
+      "norm_label": "uninstallplugin",
+      "id": "plugins_loader_uninstallplugin"
     },
     {
       "label": "getLoadedPlugins",
@@ -329,9 +329,9 @@
       "source_file": "packages/main/src/plugins/loader.ts",
       "source_location": "L197",
       "_origin": "ast",
-      "id": "plugins_loader_getloadedplugins",
-      "community": 37,
-      "norm_label": "getloadedplugins"
+      "community": 34,
+      "norm_label": "getloadedplugins",
+      "id": "plugins_loader_getloadedplugins"
     },
     {
       "label": "getPluginInstance",
@@ -339,9 +339,9 @@
       "source_file": "packages/main/src/plugins/loader.ts",
       "source_location": "L201",
       "_origin": "ast",
-      "id": "plugins_loader_getplugininstance",
-      "community": 39,
-      "norm_label": "getplugininstance"
+      "community": 36,
+      "norm_label": "getplugininstance",
+      "id": "plugins_loader_getplugininstance"
     },
     {
       "label": "isPluginLoaded",
@@ -349,9 +349,9 @@
       "source_file": "packages/main/src/plugins/loader.ts",
       "source_location": "L209",
       "_origin": "ast",
-      "id": "plugins_loader_ispluginloaded",
-      "community": 41,
-      "norm_label": "ispluginloaded"
+      "community": 38,
+      "norm_label": "ispluginloaded",
+      "id": "plugins_loader_ispluginloaded"
     },
     {
       "label": "parseCron",
@@ -359,9 +359,9 @@
       "source_file": "packages/main/src/scheduler/cron.ts",
       "source_location": "L72",
       "_origin": "ast",
-      "id": "scheduler_cron_parsecron",
-      "community": 53,
-      "norm_label": "parsecron"
+      "community": 50,
+      "norm_label": "parsecron",
+      "id": "scheduler_cron_parsecron"
     },
     {
       "label": "getNextRun",
@@ -369,9 +369,9 @@
       "source_file": "packages/main/src/scheduler/cron.ts",
       "source_location": "L80",
       "_origin": "ast",
-      "id": "scheduler_cron_getnextrun",
-      "community": 51,
-      "norm_label": "getnextrun"
+      "community": 48,
+      "norm_label": "getnextrun",
+      "id": "scheduler_cron_getnextrun"
     },
     {
       "label": "isValidCron",
@@ -379,9 +379,9 @@
       "source_file": "packages/main/src/scheduler/cron.ts",
       "source_location": "L118",
       "_origin": "ast",
-      "id": "scheduler_cron_isvalidcron",
-      "community": 52,
-      "norm_label": "isvalidcron"
+      "community": 49,
+      "norm_label": "isvalidcron",
+      "id": "scheduler_cron_isvalidcron"
     },
     {
       "label": "registerScheduleIpc",
@@ -389,9 +389,9 @@
       "source_file": "packages/main/src/scheduler/index.ts",
       "source_location": "L53",
       "_origin": "ast",
-      "id": "scheduler_index_registerscheduleipc",
-      "community": 55,
-      "norm_label": "registerscheduleipc"
+      "community": 52,
+      "norm_label": "registerscheduleipc",
+      "id": "scheduler_index_registerscheduleipc"
     },
     {
       "label": "loadSchedules",
@@ -399,9 +399,9 @@
       "source_file": "packages/main/src/scheduler/index.ts",
       "source_location": "L130",
       "_origin": "ast",
-      "id": "scheduler_index_loadschedules",
-      "community": 54,
-      "norm_label": "loadschedules"
+      "community": 51,
+      "norm_label": "loadschedules",
+      "id": "scheduler_index_loadschedules"
     },
     {
       "label": "getDatabase",
@@ -409,9 +409,9 @@
       "source_file": "packages/main/src/storage/database.ts",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "storage_database_getdatabase",
-      "community": 58,
-      "norm_label": "getdatabase"
+      "community": 2,
+      "norm_label": "getdatabase",
+      "id": "storage_database_getdatabase"
     },
     {
       "label": "initDatabase",
@@ -419,9 +419,9 @@
       "source_file": "packages/main/src/storage/database.ts",
       "source_location": "L136",
       "_origin": "ast",
-      "id": "storage_database_initdatabase",
-      "community": 59,
-      "norm_label": "initdatabase"
+      "community": 53,
+      "norm_label": "initdatabase",
+      "id": "storage_database_initdatabase"
     },
     {
       "label": "DownloadRepository",
@@ -429,9 +429,9 @@
       "source_file": "packages/main/src/storage/download.repository.ts",
       "source_location": "L4",
       "_origin": "ast",
-      "id": "storage_download_repository_downloadrepository",
-      "community": 60,
-      "norm_label": "downloadrepository"
+      "community": 2,
+      "norm_label": "downloadrepository",
+      "id": "storage_download_repository_downloadrepository"
     },
     {
       "label": "RdmApi",
@@ -439,9 +439,9 @@
       "source_file": "packages/preload/src/index.ts",
       "source_location": "L160",
       "_origin": "ast",
-      "id": "src_index_rdmapi",
-      "community": 57,
-      "norm_label": "rdmapi"
+      "community": 8,
+      "norm_label": "rdmapi",
+      "id": "src_index_rdmapi"
     },
     {
       "label": "App",
@@ -449,9 +449,9 @@
       "source_file": "packages/renderer/src/App.tsx",
       "source_location": "L19",
       "_origin": "ast",
-      "id": "src_app_app",
-      "community": 56,
-      "norm_label": "app"
+      "community": 4,
+      "norm_label": "app",
+      "id": "src_app_app"
     },
     {
       "label": "DownloadProgressDialog",
@@ -459,9 +459,9 @@
       "source_file": "packages/renderer/src/components/downloads/DownloadProgressDialog.tsx",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "downloads_downloadprogressdialog_downloadprogressdialog",
-      "community": 16,
-      "norm_label": "downloadprogressdialog"
+      "community": 21,
+      "norm_label": "downloadprogressdialog",
+      "id": "downloads_downloadprogressdialog_downloadprogressdialog"
     },
     {
       "label": "StatusBar",
@@ -469,9 +469,9 @@
       "source_file": "packages/renderer/src/components/layout/StatusBar.tsx",
       "source_location": "L6",
       "_origin": "ast",
-      "id": "layout_statusbar_statusbar",
-      "community": 27,
-      "norm_label": "statusbar"
+      "community": 4,
+      "norm_label": "statusbar",
+      "id": "layout_statusbar_statusbar"
     },
     {
       "label": "TitleBar",
@@ -479,9 +479,9 @@
       "source_file": "packages/renderer/src/components/layout/TitleBar.tsx",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "layout_titlebar_titlebar",
-      "community": 28,
-      "norm_label": "titlebar"
+      "community": 4,
+      "norm_label": "titlebar",
+      "id": "layout_titlebar_titlebar"
     },
     {
       "label": "TopToolbar",
@@ -489,9 +489,9 @@
       "source_file": "packages/renderer/src/components/layout/TopToolbar.tsx",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "layout_toptoolbar_toptoolbar",
-      "community": 29,
-      "norm_label": "toptoolbar"
+      "community": 4,
+      "norm_label": "toptoolbar",
+      "id": "layout_toptoolbar_toptoolbar"
     },
     {
       "label": "RdmApi",
@@ -499,9 +499,9 @@
       "source_file": "packages/renderer/src/preload.d.ts",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "src_preload_d_rdmapi",
-      "community": 0,
-      "norm_label": "rdmapi"
+      "community": 3,
+      "norm_label": "rdmapi",
+      "id": "src_preload_d_rdmapi"
     },
     {
       "label": "ThemeMode",
@@ -509,9 +509,9 @@
       "source_file": "packages/renderer/src/stores/ui-store.ts",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "stores_ui_store_thememode",
-      "community": 61,
-      "norm_label": "thememode"
+      "community": 54,
+      "norm_label": "thememode",
+      "id": "stores_ui_store_thememode"
     },
     {
       "label": "AutomationRule",
@@ -519,9 +519,9 @@
       "source_file": "packages/shared/src/types/automation.ts",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "types_automation_automationrule",
-      "community": 63,
-      "norm_label": "automationrule"
+      "community": 56,
+      "norm_label": "automationrule",
+      "id": "types_automation_automationrule"
     },
     {
       "label": "RuleCondition",
@@ -529,9 +529,9 @@
       "source_file": "packages/shared/src/types/automation.ts",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "types_automation_rulecondition",
-      "community": 65,
-      "norm_label": "rulecondition"
+      "community": 58,
+      "norm_label": "rulecondition",
+      "id": "types_automation_rulecondition"
     },
     {
       "label": "RuleAction",
@@ -539,9 +539,9 @@
       "source_file": "packages/shared/src/types/automation.ts",
       "source_location": "L22",
       "_origin": "ast",
-      "id": "types_automation_ruleaction",
-      "community": 64,
-      "norm_label": "ruleaction"
+      "community": 57,
+      "norm_label": "ruleaction",
+      "id": "types_automation_ruleaction"
     },
     {
       "label": "CloudProviderType",
@@ -549,9 +549,9 @@
       "source_file": "packages/shared/src/types/cloud.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "types_cloud_cloudprovidertype",
-      "community": 68,
-      "norm_label": "cloudprovidertype"
+      "community": 61,
+      "norm_label": "cloudprovidertype",
+      "id": "types_cloud_cloudprovidertype"
     },
     {
       "label": "ICloudProvider",
@@ -559,9 +559,9 @@
       "source_file": "packages/shared/src/types/cloud.ts",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "types_cloud_icloudprovider",
-      "community": 69,
-      "norm_label": "icloudprovider"
+      "community": 62,
+      "norm_label": "icloudprovider",
+      "id": "types_cloud_icloudprovider"
     },
     {
       "label": "CloudFile",
@@ -569,9 +569,9 @@
       "source_file": "packages/shared/src/types/cloud.ts",
       "source_location": "L21",
       "_origin": "ast",
-      "id": "types_cloud_cloudfile",
-      "community": 66,
-      "norm_label": "cloudfile"
+      "community": 59,
+      "norm_label": "cloudfile",
+      "id": "types_cloud_cloudfile"
     },
     {
       "label": "CloudProviderConfig",
@@ -579,9 +579,9 @@
       "source_file": "packages/shared/src/types/cloud.ts",
       "source_location": "L31",
       "_origin": "ast",
-      "id": "types_cloud_cloudproviderconfig",
-      "community": 67,
-      "norm_label": "cloudproviderconfig"
+      "community": 60,
+      "norm_label": "cloudproviderconfig",
+      "id": "types_cloud_cloudproviderconfig"
     },
     {
       "label": "DownloadStatus",
@@ -589,9 +589,9 @@
       "source_file": "packages/shared/src/types/download.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "types_download_downloadstatus",
-      "community": 72,
-      "norm_label": "downloadstatus"
+      "community": 3,
+      "norm_label": "downloadstatus",
+      "id": "types_download_downloadstatus"
     },
     {
       "label": "DownloadPriority",
@@ -599,9 +599,9 @@
       "source_file": "packages/shared/src/types/download.ts",
       "source_location": "L12",
       "_origin": "ast",
-      "id": "types_download_downloadpriority",
-      "community": 71,
-      "norm_label": "downloadpriority"
+      "community": 3,
+      "norm_label": "downloadpriority",
+      "id": "types_download_downloadpriority"
     },
     {
       "label": "ChunkInfo",
@@ -609,9 +609,9 @@
       "source_file": "packages/shared/src/types/download.ts",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "types_download_chunkinfo",
-      "community": 70,
-      "norm_label": "chunkinfo"
+      "community": 3,
+      "norm_label": "chunkinfo",
+      "id": "types_download_chunkinfo"
     },
     {
       "label": "Download",
@@ -619,9 +619,9 @@
       "source_file": "packages/shared/src/types/download.ts",
       "source_location": "L25",
       "_origin": "ast",
-      "id": "types_download_download",
-      "community": 4,
-      "norm_label": "download"
+      "community": 3,
+      "norm_label": "download",
+      "id": "types_download_download"
     },
     {
       "label": "DownloadOptions",
@@ -629,9 +629,9 @@
       "source_file": "packages/shared/src/types/download.ts",
       "source_location": "L55",
       "_origin": "ast",
-      "id": "types_download_downloadoptions",
-      "community": 0,
-      "norm_label": "downloadoptions"
+      "community": 3,
+      "norm_label": "downloadoptions",
+      "id": "types_download_downloadoptions"
     },
     {
       "label": "QueueStatus",
@@ -639,9 +639,9 @@
       "source_file": "packages/shared/src/types/download.ts",
       "source_location": "L70",
       "_origin": "ast",
-      "id": "types_download_queuestatus",
-      "community": 0,
-      "norm_label": "queuestatus"
+      "community": 3,
+      "norm_label": "queuestatus",
+      "id": "types_download_queuestatus"
     },
     {
       "label": "GrabResult",
@@ -649,9 +649,9 @@
       "source_file": "packages/shared/src/types/grabber.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "types_grabber_grabresult",
-      "community": 0,
-      "norm_label": "grabresult"
+      "community": 3,
+      "norm_label": "grabresult",
+      "id": "types_grabber_grabresult"
     },
     {
       "label": "IpcChannel",
@@ -659,9 +659,9 @@
       "source_file": "packages/shared/src/types/ipc.ts",
       "source_location": "L62",
       "_origin": "ast",
-      "id": "types_ipc_ipcchannel",
-      "community": 73,
-      "norm_label": "ipcchannel"
+      "community": 9,
+      "norm_label": "ipcchannel",
+      "id": "types_ipc_ipcchannel"
     },
     {
       "label": "PluginPermission",
@@ -669,9 +669,9 @@
       "source_file": "packages/shared/src/types/plugin.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "types_plugin_pluginpermission",
-      "community": 76,
-      "norm_label": "pluginpermission"
+      "community": 65,
+      "norm_label": "pluginpermission",
+      "id": "types_plugin_pluginpermission"
     },
     {
       "label": "PluginManifest",
@@ -679,9 +679,9 @@
       "source_file": "packages/shared/src/types/plugin.ts",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "types_plugin_pluginmanifest",
-      "community": 75,
-      "norm_label": "pluginmanifest"
+      "community": 64,
+      "norm_label": "pluginmanifest",
+      "id": "types_plugin_pluginmanifest"
     },
     {
       "label": "PluginInstance",
@@ -689,9 +689,9 @@
       "source_file": "packages/shared/src/types/plugin.ts",
       "source_location": "L22",
       "_origin": "ast",
-      "id": "types_plugin_plugininstance",
-      "community": 0,
-      "norm_label": "plugininstance"
+      "community": 3,
+      "norm_label": "plugininstance",
+      "id": "types_plugin_plugininstance"
     },
     {
       "label": "PluginAPI",
@@ -699,9 +699,9 @@
       "source_file": "packages/shared/src/types/plugin.ts",
       "source_location": "L30",
       "_origin": "ast",
-      "id": "types_plugin_pluginapi",
-      "community": 74,
-      "norm_label": "pluginapi"
+      "community": 63,
+      "norm_label": "pluginapi",
+      "id": "types_plugin_pluginapi"
     },
     {
       "label": "ScheduleEntry",
@@ -709,9 +709,9 @@
       "source_file": "packages/shared/src/types/schedule.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "types_schedule_scheduleentry",
-      "community": 77,
-      "norm_label": "scheduleentry"
+      "community": 66,
+      "norm_label": "scheduleentry",
+      "id": "types_schedule_scheduleentry"
     },
     {
       "label": "Category",
@@ -719,9 +719,9 @@
       "source_file": "packages/shared/src/types/settings.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "types_settings_category",
-      "community": 0,
-      "norm_label": "category"
+      "community": 3,
+      "norm_label": "category",
+      "id": "types_settings_category"
     },
     {
       "label": "formatFileSize",
@@ -729,9 +729,9 @@
       "source_file": "packages/shared/src/utils/filesize.ts",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "utils_filesize_formatfilesize",
-      "community": 79,
-      "norm_label": "formatfilesize"
+      "community": 68,
+      "norm_label": "formatfilesize",
+      "id": "utils_filesize_formatfilesize"
     },
     {
       "label": "formatSpeed",
@@ -739,9 +739,9 @@
       "source_file": "packages/shared/src/utils/filesize.ts",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "utils_filesize_formatspeed",
-      "community": 80,
-      "norm_label": "formatspeed"
+      "community": 69,
+      "norm_label": "formatspeed",
+      "id": "utils_filesize_formatspeed"
     },
     {
       "label": "formatDuration",
@@ -749,9 +749,9 @@
       "source_file": "packages/shared/src/utils/filesize.ts",
       "source_location": "L17",
       "_origin": "ast",
-      "id": "utils_filesize_formatduration",
-      "community": 78,
-      "norm_label": "formatduration"
+      "community": 67,
+      "norm_label": "formatduration",
+      "id": "utils_filesize_formatduration"
     },
     {
       "label": "getAppDataDir",
@@ -759,9 +759,9 @@
       "source_file": "packages/shared/src/utils/path.ts",
       "source_location": "L3",
       "_origin": "ast",
-      "id": "utils_path_getappdatadir",
-      "community": 82,
-      "norm_label": "getappdatadir"
+      "community": 71,
+      "norm_label": "getappdatadir",
+      "id": "utils_path_getappdatadir"
     },
     {
       "label": "getDownloadsDir",
@@ -769,9 +769,9 @@
       "source_file": "packages/shared/src/utils/path.ts",
       "source_location": "L8",
       "_origin": "ast",
-      "id": "utils_path_getdownloadsdir",
-      "community": 83,
-      "norm_label": "getdownloadsdir"
+      "community": 72,
+      "norm_label": "getdownloadsdir",
+      "id": "utils_path_getdownloadsdir"
     },
     {
       "label": "getPluginDir",
@@ -779,9 +779,9 @@
       "source_file": "packages/shared/src/utils/path.ts",
       "source_location": "L12",
       "_origin": "ast",
-      "id": "utils_path_getplugindir",
-      "community": 84,
-      "norm_label": "getplugindir"
+      "community": 73,
+      "norm_label": "getplugindir",
+      "id": "utils_path_getplugindir"
     },
     {
       "label": "ensureDir",
@@ -789,9 +789,9 @@
       "source_file": "packages/shared/src/utils/path.ts",
       "source_location": "L16",
       "_origin": "ast",
-      "id": "utils_path_ensuredir",
-      "community": 81,
-      "norm_label": "ensuredir"
+      "community": 70,
+      "norm_label": "ensuredir",
+      "id": "utils_path_ensuredir"
     },
     {
       "label": "isValidUrl",
@@ -799,9 +799,9 @@
       "source_file": "packages/shared/src/utils/url.ts",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "utils_url_isvalidurl",
-      "community": 88,
-      "norm_label": "isvalidurl"
+      "community": 77,
+      "norm_label": "isvalidurl",
+      "id": "utils_url_isvalidurl"
     },
     {
       "label": "extractFilename",
@@ -809,9 +809,9 @@
       "source_file": "packages/shared/src/utils/url.ts",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "utils_url_extractfilename",
-      "community": 85,
-      "norm_label": "extractfilename"
+      "community": 74,
+      "norm_label": "extractfilename",
+      "id": "utils_url_extractfilename"
     },
     {
       "label": "getDomain",
@@ -819,9 +819,9 @@
       "source_file": "packages/shared/src/utils/url.ts",
       "source_location": "L25",
       "_origin": "ast",
-      "id": "utils_url_getdomain",
-      "community": 86,
-      "norm_label": "getdomain"
+      "community": 75,
+      "norm_label": "getdomain",
+      "id": "utils_url_getdomain"
     },
     {
       "label": "getExtension",
@@ -829,9 +829,9 @@
       "source_file": "packages/shared/src/utils/url.ts",
       "source_location": "L33",
       "_origin": "ast",
-      "id": "utils_url_getextension",
-      "community": 87,
-      "norm_label": "getextension"
+      "community": 76,
+      "norm_label": "getextension",
+      "id": "utils_url_getextension"
     },
     {
       "label": "Taste Tech Stack",
@@ -842,9 +842,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "taste_taste_tech_stack",
-      "community": 2,
-      "norm_label": "taste tech stack"
+      "community": 7,
+      "norm_label": "taste tech stack",
+      "id": "taste_taste_tech_stack"
     },
     {
       "label": "Taste Workflow",
@@ -855,9 +855,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "taste_taste_workflow",
-      "community": 62,
-      "norm_label": "taste workflow"
+      "community": 55,
+      "norm_label": "taste workflow",
+      "id": "taste_taste_workflow"
     },
     {
       "label": "RDM",
@@ -868,9 +868,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_rdm",
-      "community": 6,
-      "norm_label": "rdm"
+      "community": 12,
+      "norm_label": "rdm",
+      "id": "readme_rdm"
     },
     {
       "label": "Tech Stack",
@@ -881,9 +881,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_tech_stack",
-      "community": 2,
-      "norm_label": "tech stack"
+      "community": 7,
+      "norm_label": "tech stack",
+      "id": "readme_tech_stack"
     },
     {
       "label": "Project Structure",
@@ -894,9 +894,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "readme_project_structure",
-      "community": 5,
-      "norm_label": "project structure"
+      "community": 11,
+      "norm_label": "project structure",
+      "id": "readme_project_structure"
     },
     {
       "label": "RDM Roadmap",
@@ -907,9 +907,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "roadmap_rdm",
-      "community": 6,
-      "norm_label": "rdm roadmap"
+      "community": 12,
+      "norm_label": "rdm roadmap",
+      "id": "roadmap_rdm"
     },
     {
       "label": "Architecture",
@@ -920,9 +920,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "roadmap_architecture",
-      "community": 5,
-      "norm_label": "architecture"
+      "community": 11,
+      "norm_label": "architecture",
+      "id": "roadmap_architecture"
     },
     {
       "label": "Roadmap Tech Stack",
@@ -933,9 +933,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "roadmap_tech_stack",
-      "community": 2,
-      "norm_label": "roadmap tech stack"
+      "community": 7,
+      "norm_label": "roadmap tech stack",
+      "id": "roadmap_tech_stack"
     },
     {
       "label": "Database Schema",
@@ -946,9 +946,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "roadmap_database_schema",
-      "community": 49,
-      "norm_label": "database schema"
+      "community": 46,
+      "norm_label": "database schema",
+      "id": "roadmap_database_schema"
     },
     {
       "label": "Design Decisions",
@@ -959,9 +959,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "roadmap_design_decisions",
-      "community": 50,
-      "norm_label": "design decisions"
+      "community": 47,
+      "norm_label": "design decisions",
+      "id": "roadmap_design_decisions"
     },
     {
       "label": "Electron Builder Config",
@@ -972,9 +972,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "electron_builder_config",
-      "community": 17,
-      "norm_label": "electron builder config"
+      "community": 22,
+      "norm_label": "electron builder config",
+      "id": "electron_builder_config"
     },
     {
       "label": "Chrome Popup UI",
@@ -985,9 +985,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "chrome_popup_ui",
-      "community": 3,
-      "norm_label": "chrome popup ui"
+      "community": 10,
+      "norm_label": "chrome popup ui",
+      "id": "chrome_popup_ui"
     },
     {
       "label": "Firefox Popup UI",
@@ -998,9 +998,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "firefox_popup_ui",
-      "community": 3,
-      "norm_label": "firefox popup ui"
+      "community": 10,
+      "norm_label": "firefox popup ui",
+      "id": "firefox_popup_ui"
     },
     {
       "label": "Renderer Index HTML",
@@ -1011,9 +1011,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "renderer_index_html",
-      "community": 48,
-      "norm_label": "renderer index html"
+      "community": 45,
+      "norm_label": "renderer index html",
+      "id": "renderer_index_html"
     },
     {
       "label": "PNPM Workspace Config",
@@ -1024,9 +1024,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "pnpm_workspace_config",
-      "community": 46,
-      "norm_label": "pnpm workspace config"
+      "community": 43,
+      "norm_label": "pnpm workspace config",
+      "id": "pnpm_workspace_config"
     },
     {
       "label": "App Icon",
@@ -1037,9 +1037,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "icons_icon",
-      "community": 1,
-      "norm_label": "app icon"
+      "community": 6,
+      "norm_label": "app icon",
+      "id": "icons_icon"
     },
     {
       "label": "Background Gradient",
@@ -1050,9 +1050,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "icons_icon_bg",
-      "community": 1,
-      "norm_label": "background gradient"
+      "community": 6,
+      "norm_label": "background gradient",
+      "id": "icons_icon_bg"
     },
     {
       "label": "Download Arrow",
@@ -1063,9 +1063,9 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "icons_icon_arrow",
-      "community": 1,
-      "norm_label": "download arrow"
+      "community": 6,
+      "norm_label": "download arrow",
+      "id": "icons_icon_arrow"
     },
     {
       "label": "Text: CAN YOU SEE ME?",
@@ -1076,12 +1076,872 @@
       "captured_at": null,
       "author": null,
       "contributor": null,
-      "id": "rdm_screenshot_text",
-      "community": 47,
-      "norm_label": "text: can you see me?"
+      "community": 44,
+      "norm_label": "text: can you see me?",
+      "id": "rdm_screenshot_text"
+    },
+    {
+      "label": "engine.ts",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "engine.ts",
+      "id": "download_engine"
+    },
+    {
+      "label": "SpeedSample",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L26",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "speedsample",
+      "id": "download_engine_speedsample"
+    },
+    {
+      "label": "ChunkStream",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L31",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "chunkstream",
+      "id": "download_engine_chunkstream"
+    },
+    {
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L52",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".constructor()",
+      "id": "download_engine_downloadengine_constructor"
+    },
+    {
+      "label": ".loadFromDB()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L63",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".loadfromdb()",
+      "id": "download_engine_downloadengine_loadfromdb"
+    },
+    {
+      "label": ".startSaveLoop()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L73",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".startsaveloop()",
+      "id": "download_engine_downloadengine_startsaveloop"
+    },
+    {
+      "label": ".addPreDownload()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L83",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".addpredownload()",
+      "id": "download_engine_downloadengine_addpredownload"
+    },
+    {
+      "label": ".discardPreDownload()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L90",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".discardpredownload()",
+      "id": "download_engine_downloadengine_discardpredownload"
+    },
+    {
+      "label": ".add()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L98",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".add()",
+      "id": "download_engine_downloadengine_add"
+    },
+    {
+      "label": ".pause()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L141",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".pause()",
+      "id": "download_engine_downloadengine_pause"
+    },
+    {
+      "label": ".resume()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L151",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".resume()",
+      "id": "download_engine_downloadengine_resume"
+    },
+    {
+      "label": ".cancel()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L163",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".cancel()",
+      "id": "download_engine_downloadengine_cancel"
+    },
+    {
+      "label": ".remove()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L173",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".remove()",
+      "id": "download_engine_downloadengine_remove"
+    },
+    {
+      "label": ".updateFilePath()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L185",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".updatefilepath()",
+      "id": "download_engine_downloadengine_updatefilepath"
+    },
+    {
+      "label": ".reorder()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L194",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".reorder()",
+      "id": "download_engine_downloadengine_reorder"
+    },
+    {
+      "label": ".setSpeedLimit()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L204",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".setspeedlimit()",
+      "id": "download_engine_downloadengine_setspeedlimit"
+    },
+    {
+      "label": ".setConnections()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L211",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".setconnections()",
+      "id": "download_engine_downloadengine_setconnections"
+    },
+    {
+      "label": ".setMaxConcurrent()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L218",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".setmaxconcurrent()",
+      "id": "download_engine_downloadengine_setmaxconcurrent"
+    },
+    {
+      "label": ".setGlobalSpeedLimit()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L223",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".setglobalspeedlimit()",
+      "id": "download_engine_downloadengine_setglobalspeedlimit"
+    },
+    {
+      "label": ".getDownload()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L227",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".getdownload()",
+      "id": "download_engine_downloadengine_getdownload"
+    },
+    {
+      "label": ".getAll()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L231",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".getall()",
+      "id": "download_engine_downloadengine_getall"
+    },
+    {
+      "label": ".getQueueOrder()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L235",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".getqueueorder()",
+      "id": "download_engine_downloadengine_getqueueorder"
+    },
+    {
+      "label": ".getQueueStatus()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L239",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".getqueuestatus()",
+      "id": "download_engine_downloadengine_getqueuestatus"
+    },
+    {
+      "label": ".pauseAll()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L253",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".pauseall()",
+      "id": "download_engine_downloadengine_pauseall"
+    },
+    {
+      "label": ".resumeAll()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L260",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".resumeall()",
+      "id": "download_engine_downloadengine_resumeall"
+    },
+    {
+      "label": ".activeCount()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L265",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".activecount()",
+      "id": "download_engine_downloadengine_activecount"
+    },
+    {
+      "label": ".getGlobalBytesPerSecond()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L273",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".getglobalbytespersecond()",
+      "id": "download_engine_downloadengine_getglobalbytespersecond"
+    },
+    {
+      "label": ".processQueue()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L280",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".processqueue()",
+      "id": "download_engine_downloadengine_processqueue"
+    },
+    {
+      "label": "DownloadTask",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L304",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "downloadtask",
+      "id": "download_engine_downloadtask"
+    },
+    {
+      "label": ".status()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L318",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".status()",
+      "id": "download_engine_downloadtask_status"
+    },
+    {
+      "label": ".numConnections()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L322",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".numconnections()",
+      "id": "download_engine_downloadtask_numconnections"
+    },
+    {
+      "label": ".currentSpeed()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L330",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".currentspeed()",
+      "id": "download_engine_downloadtask_currentspeed"
+    },
+    {
+      "label": ".constructor()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L334",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".constructor()",
+      "id": "download_engine_downloadtask_constructor"
+    },
+    {
+      "label": ".getSetting()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L342",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".getsetting()",
+      "id": "download_engine_downloadtask_getsetting"
+    },
+    {
+      "label": ".snapshot()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L352",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".snapshot()",
+      "id": "download_engine_downloadtask_snapshot"
+    },
+    {
+      "label": ".updateFilePath()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L356",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".updatefilepath()",
+      "id": "download_engine_downloadtask_updatefilepath"
+    },
+    {
+      "label": ".updateOptions()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L360",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".updateoptions()",
+      "id": "download_engine_downloadtask_updateoptions"
+    },
+    {
+      "label": ".start()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L369",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".start()",
+      "id": "download_engine_downloadtask_start"
+    },
+    {
+      "label": ".retryWithBackoff()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L388",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".retrywithbackoff()",
+      "id": "download_engine_downloadtask_retrywithbackoff"
+    },
+    {
+      "label": ".performDownload()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L401",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".performdownload()",
+      "id": "download_engine_downloadtask_performdownload"
+    },
+    {
+      "label": ".pause()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L424",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".pause()",
+      "id": "download_engine_downloadtask_pause"
+    },
+    {
+      "label": ".resume()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L434",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".resume()",
+      "id": "download_engine_downloadtask_resume"
+    },
+    {
+      "label": ".cancel()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L441",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".cancel()",
+      "id": "download_engine_downloadtask_cancel"
+    },
+    {
+      "label": ".getTempPath()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L452",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".gettemppath()",
+      "id": "download_engine_downloadtask_gettemppath"
+    },
+    {
+      "label": ".cleanupTemp()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L456",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".cleanuptemp()",
+      "id": "download_engine_downloadtask_cleanuptemp"
+    },
+    {
+      "label": ".getRequestOptions()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L469",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".getrequestoptions()",
+      "id": "download_engine_downloadtask_getrequestoptions"
+    },
+    {
+      "label": ".getResumeInfo()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L502",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".getresumeinfo()",
+      "id": "download_engine_downloadtask_getresumeinfo"
+    },
+    {
+      "label": ".applySpeedThrottle()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L532",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".applyspeedthrottle()",
+      "id": "download_engine_downloadtask_applyspeedthrottle"
+    },
+    {
+      "label": ".clearThrottleTimer()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L559",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": ".clearthrottletimer()",
+      "id": "download_engine_downloadtask_clearthrottletimer"
+    },
+    {
+      "label": ".getEffectiveSpeedLimit()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L566",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".geteffectivespeedlimit()",
+      "id": "download_engine_downloadtask_geteffectivespeedlimit"
+    },
+    {
+      "label": ".downloadSequential()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L574",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".downloadsequential()",
+      "id": "download_engine_downloadtask_downloadsequential"
+    },
+    {
+      "label": ".downloadChunked()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L678",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".downloadchunked()",
+      "id": "download_engine_downloadtask_downloadchunked"
+    },
+    {
+      "label": ".dispatchConnections()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L712",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".dispatchconnections()",
+      "id": "download_engine_downloadtask_dispatchconnections"
+    },
+    {
+      "label": ".downloadChunk()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L776",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".downloadchunk()",
+      "id": "download_engine_downloadtask_downloadchunk"
+    },
+    {
+      "label": ".mergeChunks()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L916",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".mergechunks()",
+      "id": "download_engine_downloadtask_mergechunks"
+    },
+    {
+      "label": ".runAntivirusScanAndComplete()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L955",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".runantivirusscanandcomplete()",
+      "id": "download_engine_downloadtask_runantivirusscanandcomplete"
+    },
+    {
+      "label": ".handleCompletion()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L985",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".handlecompletion()",
+      "id": "download_engine_downloadtask_handlecompletion"
+    },
+    {
+      "label": ".verifyChecksum()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L1024",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".verifychecksum()",
+      "id": "download_engine_downloadtask_verifychecksum"
+    },
+    {
+      "label": ".emitProgress()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L1041",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".emitprogress()",
+      "id": "download_engine_downloadtask_emitprogress"
+    },
+    {
+      "label": ".pruneSpeedSamples()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L1049",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".prunespeedsamples()",
+      "id": "download_engine_downloadtask_prunespeedsamples"
+    },
+    {
+      "label": ".calculateSpeed()",
+      "file_type": "code",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L1059",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".calculatespeed()",
+      "id": "download_engine_downloadtask_calculatespeed"
+    },
+    {
+      "label": "download.ipc.ts",
+      "file_type": "code",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "download.ipc.ts",
+      "id": "ipc_download_ipc"
+    },
+    {
+      "label": "sendToRenderer()",
+      "file_type": "code",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L25",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "sendtorenderer()",
+      "id": "ipc_download_ipc_sendtorenderer"
+    },
+    {
+      "label": "getQueueStatus()",
+      "file_type": "code",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L31",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "getqueuestatus()",
+      "id": "ipc_download_ipc_getqueuestatus"
+    },
+    {
+      "label": "emitQueueStatus()",
+      "file_type": "code",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L35",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "emitqueuestatus()",
+      "id": "ipc_download_ipc_emitqueuestatus"
+    },
+    {
+      "label": "index.ts",
+      "file_type": "code",
+      "source_file": "packages/preload/src/index.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "index.ts",
+      "id": "src_index"
+    },
+    {
+      "label": "api",
+      "file_type": "code",
+      "source_file": "packages/preload/src/index.ts",
+      "source_location": "L4",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "api",
+      "id": "src_index_api"
+    },
+    {
+      "label": "App.tsx",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "app.tsx",
+      "id": "src_app"
+    },
+    {
+      "label": "BatchDownloadDialog.tsx",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/downloads/BatchDownloadDialog.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "batchdownloaddialog.tsx",
+      "id": "downloads_batchdownloaddialog"
+    },
+    {
+      "label": "BatchDownloadDialog()",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/downloads/BatchDownloadDialog.tsx",
+      "source_location": "L3",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "batchdownloaddialog()",
+      "id": "downloads_batchdownloaddialog_batchdownloaddialog"
+    },
+    {
+      "label": "BatchDownloadListDialog.tsx",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/downloads/BatchDownloadListDialog.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "batchdownloadlistdialog.tsx",
+      "id": "downloads_batchdownloadlistdialog"
+    },
+    {
+      "label": "BatchLink",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/downloads/BatchDownloadListDialog.tsx",
+      "source_location": "L5",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "batchlink",
+      "id": "downloads_batchdownloadlistdialog_batchlink"
+    },
+    {
+      "label": "BatchDownloadListDialog()",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/downloads/BatchDownloadListDialog.tsx",
+      "source_location": "L16",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "batchdownloadlistdialog()",
+      "id": "downloads_batchdownloadlistdialog_batchdownloadlistdialog"
+    },
+    {
+      "label": "DownloadPropertiesDialog.tsx",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/downloads/DownloadPropertiesDialog.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "downloadpropertiesdialog.tsx",
+      "id": "downloads_downloadpropertiesdialog"
+    },
+    {
+      "label": "DownloadPropertiesDialogProps",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/downloads/DownloadPropertiesDialog.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "downloadpropertiesdialogprops",
+      "id": "downloads_downloadpropertiesdialog_downloadpropertiesdialogprops"
+    },
+    {
+      "label": "DownloadPropertiesDialog()",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/downloads/DownloadPropertiesDialog.tsx",
+      "source_location": "L13",
+      "_origin": "ast",
+      "community": 5,
+      "norm_label": "downloadpropertiesdialog()",
+      "id": "downloads_downloadpropertiesdialog_downloadpropertiesdialog"
+    },
+    {
+      "label": "GlobalAddUrlDialog.tsx",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/downloads/GlobalAddUrlDialog.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "globaladdurldialog.tsx",
+      "id": "downloads_globaladdurldialog"
+    },
+    {
+      "label": "GlobalAddUrlDialog()",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/downloads/GlobalAddUrlDialog.tsx",
+      "source_location": "L7",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "globaladdurldialog()",
+      "id": "downloads_globaladdurldialog_globaladdurldialog"
+    },
+    {
+      "label": "MenuBar.tsx",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/layout/MenuBar.tsx",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "menubar.tsx",
+      "id": "layout_menubar"
+    },
+    {
+      "label": "MenuBar()",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/components/layout/MenuBar.tsx",
+      "source_location": "L4",
+      "_origin": "ast",
+      "community": 4,
+      "norm_label": "menubar()",
+      "id": "layout_menubar_menubar"
+    },
+    {
+      "label": "preload.d.ts",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "preload.d.ts",
+      "id": "src_preload_d"
+    },
+    {
+      "label": "Window",
+      "file_type": "code",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L77",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "window",
+      "id": "src_preload_d_window"
+    },
+    {
+      "label": "download.ts",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/download.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "download.ts",
+      "id": "types_download"
+    },
+    {
+      "label": "ipc.ts",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/ipc.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "ipc.ts",
+      "id": "types_ipc"
+    },
+    {
+      "label": "IPC_CHANNELS",
+      "file_type": "code",
+      "source_file": "packages/shared/src/types/ipc.ts",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 9,
+      "norm_label": "ipc_channels",
+      "id": "types_ipc_ipc_channels"
     }
   ],
   "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L37",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine",
+      "target": "download_engine_downloadengineevents"
+    },
     {
       "relation": "references",
       "context": "field",
@@ -1089,9 +1949,450 @@
       "source_file": "packages/main/src/download/engine.ts",
       "source_location": "L38",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "download_engine_downloadengineevents",
-      "target": "types_download_download",
-      "confidence_score": 1.0
+      "target": "types_download_download"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L44",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine",
+      "target": "download_engine_downloadengine"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L265",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_activecount"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L98",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_add"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L83",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_addpredownload"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L163",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_cancel"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L52",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_constructor"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L90",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_discardpredownload"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L231",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_getall"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L227",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_getdownload"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L273",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_getglobalbytespersecond"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L235",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_getqueueorder"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L239",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_getqueuestatus"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L63",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_loadfromdb"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L141",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_pause"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L253",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_pauseall"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L280",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_processqueue"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L173",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_remove"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L194",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_reorder"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L151",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_resume"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L260",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_resumeall"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L211",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_setconnections"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L223",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_setglobalspeedlimit"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L218",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_setmaxconcurrent"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L204",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_setspeedlimit"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L73",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_startsaveloop"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L185",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine",
+      "target": "download_engine_downloadengine_updatefilepath"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ipc_download_ipc",
+      "target": "download_engine_downloadengine"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ipc_download_ipc",
+      "target": "ipc_download_ipc_setdownloadengine"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ipc_download_ipc",
+      "target": "ipc_download_ipc_getdownloadengine"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ipc_download_ipc_getqueuestatus",
+      "target": "ipc_download_ipc_getdownloadengine"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ipc_download_ipc_registerdownloadipc",
+      "target": "ipc_download_ipc_getdownloadengine"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L39",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ipc_download_ipc",
+      "target": "ipc_download_ipc_registerdownloadipc"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ipc_download_ipc",
+      "target": "notifications_index_notifydownloadcomplete"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ipc_download_ipc",
+      "target": "notifications_index_notifydownloaderror"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine",
+      "target": "storage_database_getdatabase"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ipc_download_ipc",
+      "target": "storage_database_getdatabase"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine",
+      "target": "storage_download_repository_downloadrepository"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/preload/src/index.ts",
+      "source_location": "L170",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index",
+      "target": "src_index_rdmapi"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "src_app_app"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "layout_statusbar_statusbar"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "layout_titlebar_titlebar"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "layout_toptoolbar_toptoolbar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_preload_d",
+      "target": "src_preload_d_rdmapi"
     },
     {
       "relation": "references",
@@ -1100,9 +2401,9 @@
       "source_file": "packages/renderer/src/preload.d.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_preload_d_rdmapi",
-      "target": "types_download_download",
-      "confidence_score": 1.0
+      "target": "types_download_download"
     },
     {
       "relation": "references",
@@ -1111,9 +2412,9 @@
       "source_file": "packages/renderer/src/preload.d.ts",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_preload_d_rdmapi",
-      "target": "types_download_downloadoptions",
-      "confidence_score": 1.0
+      "target": "types_download_downloadoptions"
     },
     {
       "relation": "references",
@@ -1122,9 +2423,9 @@
       "source_file": "packages/renderer/src/preload.d.ts",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_preload_d_rdmapi",
-      "target": "types_download_queuestatus",
-      "confidence_score": 1.0
+      "target": "types_download_queuestatus"
     },
     {
       "relation": "references",
@@ -1133,9 +2434,9 @@
       "source_file": "packages/renderer/src/preload.d.ts",
       "source_location": "L65",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_preload_d_rdmapi",
-      "target": "types_grabber_grabresult",
-      "confidence_score": 1.0
+      "target": "types_grabber_grabresult"
     },
     {
       "relation": "references",
@@ -1144,9 +2445,9 @@
       "source_file": "packages/renderer/src/preload.d.ts",
       "source_location": "L58",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_preload_d_rdmapi",
-      "target": "types_plugin_plugininstance",
-      "confidence_score": 1.0
+      "target": "types_plugin_plugininstance"
     },
     {
       "relation": "references",
@@ -1155,9 +2456,79 @@
       "source_file": "packages/renderer/src/preload.d.ts",
       "source_location": "L31",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "src_preload_d_rdmapi",
-      "target": "types_settings_category",
-      "confidence_score": 1.0
+      "target": "types_settings_category"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/types/download.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "types_download",
+      "target": "types_download_downloadstatus"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/types/download.ts",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "types_download",
+      "target": "types_download_downloadpriority"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/types/download.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "types_download",
+      "target": "types_download_chunkinfo"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/types/download.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "types_download",
+      "target": "types_download_download"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/types/download.ts",
+      "source_location": "L55",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "types_download",
+      "target": "types_download_downloadoptions"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/types/download.ts",
+      "source_location": "L71",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "types_download",
+      "target": "types_download_queuestatus"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/types/ipc.ts",
+      "source_location": "L64",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "types_ipc",
+      "target": "types_ipc_ipcchannel"
     },
     {
       "relation": "conceptually_related_to",
@@ -1228,8 +2599,1236 @@
       "weight": 1.0,
       "source": "icons_icon",
       "target": "icons_icon_bg"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine",
+      "target": "download_engine_chunkstream"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L304",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine",
+      "target": "download_engine_downloadtask"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine",
+      "target": "download_engine_speedsample"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ipc_download_ipc",
+      "target": "download_engine"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L59",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_constructor",
+      "target": "download_engine_downloadengine_loadfromdb"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L60",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_constructor",
+      "target": "download_engine_downloadengine_startsaveloop"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L87",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_addpredownload",
+      "target": "download_engine_downloadtask_start"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L93",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_discardpredownload",
+      "target": "download_engine_downloadtask_cancel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L138",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_add",
+      "target": "download_engine_downloadengine_processqueue"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L104",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_add",
+      "target": "download_engine_downloadtask_pause"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L119",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_add",
+      "target": "download_engine_downloadtask_snapshot"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L102",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_add",
+      "target": "download_engine_downloadtask_updateoptions"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L808",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_downloadchunk",
+      "target": "download_engine_downloadengine_add"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L147",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_pause",
+      "target": "download_engine_downloadengine_processqueue"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L144",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_pause",
+      "target": "download_engine_downloadtask_pause"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L145",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_pause",
+      "target": "download_engine_downloadtask_snapshot"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L159",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_resume",
+      "target": "download_engine_downloadengine_processqueue"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L154",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_resume",
+      "target": "download_engine_downloadtask_resume"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L155",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_resume",
+      "target": "download_engine_downloadtask_snapshot"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L169",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_cancel",
+      "target": "download_engine_downloadengine_processqueue"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L166",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_cancel",
+      "target": "download_engine_downloadtask_cancel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L167",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_cancel",
+      "target": "download_engine_downloadtask_snapshot"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L181",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_remove",
+      "target": "download_engine_downloadengine_processqueue"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L176",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_remove",
+      "target": "download_engine_downloadtask_cancel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L189",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_updatefilepath",
+      "target": "download_engine_downloadtask_snapshot"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L188",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_updatefilepath",
+      "target": "download_engine_downloadtask_updatefilepath"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L220",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_setmaxconcurrent",
+      "target": "download_engine_downloadengine_processqueue"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L228",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_getdownload",
+      "target": "download_engine_downloadtask_snapshot"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L255",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_pauseall",
+      "target": "download_engine_downloadtask_pause"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L262",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_resumeall",
+      "target": "download_engine_downloadengine_processqueue"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L297",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadengine_processqueue",
+      "target": "download_engine_downloadtask_start"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L532",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_applyspeedthrottle"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L1059",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_calculatespeed"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L441",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_cancel"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L456",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_cleanuptemp"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L559",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_clearthrottletimer"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L334",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_constructor"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L330",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_currentspeed"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L712",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_dispatchconnections"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L776",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_downloadchunk"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L678",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_downloadchunked"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L574",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_downloadsequential"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L1041",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_emitprogress"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L566",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_geteffectivespeedlimit"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L469",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_getrequestoptions"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L502",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_getresumeinfo"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L342",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_getsetting"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L452",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_gettemppath"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L985",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_handlecompletion"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L916",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_mergechunks"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L326",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_numconnections"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L424",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_pause"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L401",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_performdownload"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L1049",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_prunespeedsamples"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L434",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_resume"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L388",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_retrywithbackoff"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L955",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_runantivirusscanandcomplete"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L352",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_snapshot"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L369",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_start"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L318",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_status"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L356",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_updatefilepath"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L360",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_updateoptions"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L1024",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask",
+      "target": "download_engine_downloadtask_verifychecksum"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L470",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_getrequestoptions",
+      "target": "download_engine_downloadtask_getsetting"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L956",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_runantivirusscanandcomplete",
+      "target": "download_engine_downloadtask_getsetting"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L1045",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_emitprogress",
+      "target": "download_engine_downloadtask_snapshot"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L993",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_handlecompletion",
+      "target": "download_engine_downloadtask_snapshot"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L383",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_start",
+      "target": "download_engine_downloadtask_snapshot"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L398",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_retrywithbackoff",
+      "target": "download_engine_downloadtask_start"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L375",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_start",
+      "target": "download_engine_downloadtask_performdownload"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L417",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_performdownload",
+      "target": "download_engine_downloadtask_downloadchunked"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L420",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_performdownload",
+      "target": "download_engine_downloadtask_downloadsequential"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L410",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_performdownload",
+      "target": "download_engine_downloadtask_getresumeinfo"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L427",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_pause",
+      "target": "download_engine_downloadtask_clearthrottletimer"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L449",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_cancel",
+      "target": "download_engine_downloadtask_cleanuptemp"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L444",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_cancel",
+      "target": "download_engine_downloadtask_clearthrottletimer"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L458",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_cleanuptemp",
+      "target": "download_engine_downloadtask_gettemppath"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L725",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_dispatchconnections",
+      "target": "download_engine_downloadtask_gettemppath"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L783",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_downloadchunk",
+      "target": "download_engine_downloadtask_gettemppath"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L578",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_downloadsequential",
+      "target": "download_engine_downloadtask_gettemppath"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L927",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_mergechunks",
+      "target": "download_engine_downloadtask_gettemppath"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L811",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_downloadchunk",
+      "target": "download_engine_downloadtask_getrequestoptions"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L533",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_applyspeedthrottle",
+      "target": "download_engine_downloadtask_clearthrottletimer"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L534",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_applyspeedthrottle",
+      "target": "download_engine_downloadtask_geteffectivespeedlimit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L683",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_downloadchunked",
+      "target": "download_engine_downloadtask_applyspeedthrottle"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L580",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_downloadsequential",
+      "target": "download_engine_downloadtask_applyspeedthrottle"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L723",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_dispatchconnections",
+      "target": "download_engine_downloadtask_clearthrottletimer"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L733",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_dispatchconnections",
+      "target": "download_engine_downloadtask_downloadchunk"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L726",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_dispatchconnections",
+      "target": "download_engine_downloadtask_mergechunks"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L919",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_mergechunks",
+      "target": "download_engine_downloadtask_emitprogress"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L969",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_runantivirusscanandcomplete",
+      "target": "download_engine_downloadtask_emitprogress"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L958",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_runantivirusscanandcomplete",
+      "target": "download_engine_downloadtask_handlecompletion"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/download/engine.ts",
+      "source_location": "L989",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "download_engine_downloadtask_handlecompletion",
+      "target": "download_engine_downloadtask_verifychecksum"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ipc_download_ipc",
+      "target": "ipc_download_ipc_emitqueuestatus"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ipc_download_ipc",
+      "target": "ipc_download_ipc_getqueuestatus"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ipc_download_ipc",
+      "target": "ipc_download_ipc_sendtorenderer"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ipc_download_ipc_emitqueuestatus",
+      "target": "ipc_download_ipc_sendtorenderer"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/main/src/ipc/download.ipc.ts",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ipc_download_ipc_emitqueuestatus",
+      "target": "ipc_download_ipc_getqueuestatus"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/preload/src/index.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_index",
+      "target": "src_index_api"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "downloads_batchdownloaddialog"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "downloads_batchdownloaddialog_batchdownloaddialog"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "downloads_batchdownloadlistdialog"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "downloads_batchdownloadlistdialog_batchdownloadlistdialog"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "downloads_globaladdurldialog"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "downloads_globaladdurldialog_globaladdurldialog"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "layout_menubar"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/App.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_app",
+      "target": "layout_menubar_menubar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/BatchDownloadDialog.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "downloads_batchdownloaddialog",
+      "target": "downloads_batchdownloaddialog_batchdownloaddialog"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/BatchDownloadListDialog.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "downloads_batchdownloadlistdialog",
+      "target": "downloads_batchdownloadlistdialog_batchdownloadlistdialog"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/BatchDownloadListDialog.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "downloads_batchdownloadlistdialog",
+      "target": "downloads_batchdownloadlistdialog_batchlink"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/DownloadPropertiesDialog.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "downloads_downloadpropertiesdialog",
+      "target": "downloads_downloadpropertiesdialog_downloadpropertiesdialog"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/DownloadPropertiesDialog.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "downloads_downloadpropertiesdialog",
+      "target": "downloads_downloadpropertiesdialog_downloadpropertiesdialogprops"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/downloads/GlobalAddUrlDialog.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "downloads_globaladdurldialog",
+      "target": "downloads_globaladdurldialog_globaladdurldialog"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/components/layout/MenuBar.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "layout_menubar",
+      "target": "layout_menubar_menubar"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/renderer/src/preload.d.ts",
+      "source_location": "L77",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "src_preload_d",
+      "target": "src_preload_d_window"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "packages/shared/src/types/ipc.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "types_ipc",
+      "target": "types_ipc_ipc_channels"
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "38bf66f6ce594b79f6a2d4408580695fa90e1ca2"
+  "built_at_commit": "2f227a72f71f740065b34608dc08d25bc72d1415"
 }

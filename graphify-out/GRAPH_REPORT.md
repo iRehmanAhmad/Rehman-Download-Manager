@@ -1,13 +1,17 @@
 # Graph Report - .  (2026-06-15)
 
 ## Corpus Check
-- 98 files · ~29,834 words
-- Verdict: corpus is large enough that graph structure adds value.
+- cluster-only mode — file stats not available
 
 ## Summary
-- 102 nodes · 14 edges · 89 communities (3 shown, 86 thin omitted)
-- Extraction: 50% EXTRACTED · 50% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.95)
+- 187 nodes · 181 edges · 78 communities (5 shown, 73 thin omitted)
+- Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.95)
 - Token cost: 0 input · 0 output
+
+## Graph Freshness
+- Built from commit: `2f227a72`
+- Run `git rev-parse HEAD` and compare to check if the graph is stale.
+- Run `graphify update .` after code changes (no API cost).
 
 ## Community Hubs (Navigation)
 - [[_COMMUNITY_Community 0|Community 0]]
@@ -88,29 +92,18 @@
 - [[_COMMUNITY_Community 75|Community 75]]
 - [[_COMMUNITY_Community 76|Community 76]]
 - [[_COMMUNITY_Community 77|Community 77]]
-- [[_COMMUNITY_Community 78|Community 78]]
-- [[_COMMUNITY_Community 79|Community 79]]
-- [[_COMMUNITY_Community 80|Community 80]]
-- [[_COMMUNITY_Community 81|Community 81]]
-- [[_COMMUNITY_Community 82|Community 82]]
-- [[_COMMUNITY_Community 83|Community 83]]
-- [[_COMMUNITY_Community 84|Community 84]]
-- [[_COMMUNITY_Community 85|Community 85]]
-- [[_COMMUNITY_Community 86|Community 86]]
-- [[_COMMUNITY_Community 87|Community 87]]
-- [[_COMMUNITY_Community 88|Community 88]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `RdmApi` - 6 edges
-2. `Download` - 2 edges
-3. `Roadmap Tech Stack` - 2 edges
-4. `App Icon` - 2 edges
-5. `DownloadEngineEvents` - 1 edges
-6. `DownloadOptions` - 1 edges
-7. `QueueStatus` - 1 edges
-8. `GrabResult` - 1 edges
-9. `PluginInstance` - 1 edges
-10. `Category` - 1 edges
+1. `DownloadTask` - 33 edges
+2. `DownloadEngine` - 27 edges
+3. `RdmApi` - 7 edges
+4. `getDownloadEngine` - 3 edges
+5. `Download` - 3 edges
+6. `getQueueStatus()` - 3 edges
+7. `emitQueueStatus()` - 3 edges
+8. `DownloadEngineEvents` - 2 edges
+9. `registerDownloadIpc` - 2 edges
+10. `getDatabase` - 2 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `RDM Roadmap` --semantically_similar_to--> `RDM`  [INFERRED] [semantically similar]
@@ -121,41 +114,51 @@
   ROADMAP.md → README.md
 - `Taste Tech Stack` --conceptually_related_to--> `Roadmap Tech Stack`  [INFERRED]
   .commandcode/taste/taste.md → ROADMAP.md
-- `RdmApi` --references--> `Download`  [EXTRACTED]
-  packages/renderer/src/preload.d.ts → packages/shared/src/types/download.ts
+- `Chrome Popup UI` --semantically_similar_to--> `Firefox Popup UI`  [INFERRED] [semantically similar]
+  packages/browser-extensions/chrome/popup.html → packages/browser-extensions/firefox/popup.html
 
 ## Import Cycles
 - None detected.
 
-## Communities (89 total, 86 thin omitted)
+## Communities (78 total, 73 thin omitted)
 
-### Community 0 - "Community 0"
-Cohesion: 0.33
-Nodes (6): RdmApi, DownloadOptions, QueueStatus, GrabResult, PluginInstance, Category
+### Community 2 - "Community 2"
+Cohesion: 0.20
+Nodes (12): ChunkStream, SpeedSample, emitQueueStatus(), getDownloadEngine, getQueueStatus(), registerDownloadIpc, sendToRenderer(), setDownloadEngine (+4 more)
 
-### Community 1 - "Community 1"
+### Community 3 - "Community 3"
+Cohesion: 0.16
+Nodes (12): DownloadEngineEvents, RdmApi, Window, ChunkInfo, Download, DownloadOptions, DownloadPriority, DownloadStatus (+4 more)
+
+### Community 4 - "Community 4"
+Cohesion: 0.19
+Nodes (9): BatchDownloadDialog(), BatchDownloadListDialog(), BatchLink, GlobalAddUrlDialog(), MenuBar(), StatusBar, TitleBar, TopToolbar (+1 more)
+
+### Community 6 - "Community 6"
 Cohesion: 0.67
 Nodes (3): App Icon, Download Arrow, Background Gradient
 
-### Community 2 - "Community 2"
+### Community 7 - "Community 7"
 Cohesion: 0.67
 Nodes (3): Tech Stack, Roadmap Tech Stack, Taste Tech Stack
 
 ## Knowledge Gaps
 - **97 isolated node(s):** `evaluateRules`, `getRules`, `registerAutomationIpc`, `startBrowserBridge`, `stopBrowserBridge` (+92 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **86 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **73 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `RdmApi` connect `Community 0` to `Community 4`?**
-  _High betweenness centrality (0.004) - this node is a cross-community bridge._
-- **Why does `Download` connect `Community 4` to `Community 0`?**
-  _High betweenness centrality (0.001) - this node is a cross-community bridge._
-- **Are the 2 inferred relationships involving `Roadmap Tech Stack` (e.g. with `Tech Stack` and `Taste Tech Stack`) actually correct?**
-  _`Roadmap Tech Stack` has 2 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 2 inferred relationships involving `App Icon` (e.g. with `Download Arrow` and `Background Gradient`) actually correct?**
-  _`App Icon` has 2 INFERRED edges - model-reasoned connections that need verification._
+- **Why does `DownloadTask` connect `Community 1` to `Community 0`, `Community 2`?**
+  _High betweenness centrality (0.103) - this node is a cross-community bridge._
+- **Why does `DownloadEngine` connect `Community 0` to `Community 1`, `Community 2`?**
+  _High betweenness centrality (0.085) - this node is a cross-community bridge._
+- **Why does `DownloadEngineEvents` connect `Community 3` to `Community 2`?**
+  _High betweenness centrality (0.055) - this node is a cross-community bridge._
 - **What connects `evaluateRules`, `getRules`, `registerAutomationIpc` to the rest of the system?**
   _98 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Community 0` be split into smaller, more focused modules?**
+  _Cohesion score 0.09885057471264368 - nodes in this community are weakly interconnected._
+- **Should `Community 1` be split into smaller, more focused modules?**
+  _Cohesion score 0.13054187192118227 - nodes in this community are weakly interconnected._
