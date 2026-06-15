@@ -1,10 +1,25 @@
 import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useDownloadStore } from '../../stores/download-store';
 
 export function MenuBar() {
   const { t } = useTranslation();
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  const downloads = useDownloadStore(s => s.downloads);
+  const selectedIds = useDownloadStore(s => Array.from(s.selectedIds));
+
+  const canPause = selectedIds.length > 0 && selectedIds.some(id => {
+    const d = downloads.get(id);
+    return d && ['downloading', 'queued'].includes(d.status);
+  });
+  const canResume = selectedIds.length > 0 && selectedIds.some(id => {
+    const d = downloads.get(id);
+    return d && ['paused', 'error'].includes(d.status);
+  });
+  const canDelete = selectedIds.length > 0;
+  const canRestart = selectedIds.length > 0;
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -81,10 +96,10 @@ export function MenuBar() {
       id: 'file',
       label: 'File',
       items: [
-        { label: 'Pause Download', action: () => {} },
-        { label: 'Delete Download', action: () => {} },
-        { label: 'Resume Download', action: () => {} },
-        { label: 'Restart Download', action: () => {} },
+        { label: 'Pause Download', disabled: !canPause, action: () => selectedIds.forEach(id => window.api.download.pause(id)) },
+        { label: 'Delete Download', disabled: !canDelete, action: () => selectedIds.forEach(id => window.api.download.delete(id)) },
+        { label: 'Resume Download', disabled: !canResume, action: () => selectedIds.forEach(id => window.api.download.resume(id)) },
+        { label: 'Restart Download', disabled: !canRestart, action: () => selectedIds.forEach(id => window.api.download.restart(id)) },
       ],
     },
     {
@@ -182,11 +197,17 @@ export function MenuBar() {
                 ) : (
                   <button
                     key={idx}
+                    disabled={item.disabled}
                     onClick={() => {
+                      if (item.disabled) return;
                       item.action?.();
                       setActiveMenu(null);
                     }}
-                    className="text-left px-4 py-1.5 hover:bg-brand-500/20 hover:text-brand-300 transition-colors w-full"
+                    className={`text-left px-4 py-1.5 transition-colors w-full ${
+                      item.disabled 
+                        ? 'opacity-50 cursor-not-allowed text-slate-500' 
+                        : 'hover:bg-brand-500/20 hover:text-brand-300'
+                    }`}
                   >
                     {item.label}
                   </button>
