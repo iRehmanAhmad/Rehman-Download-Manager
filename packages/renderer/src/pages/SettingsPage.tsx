@@ -46,7 +46,7 @@ export function SettingsPage() {
         </div>
         <div className="flex-1 overflow-auto p-6">
           {tab === 'general' && <GeneralSettings />}
-          {tab === 'file-types' && <div className="text-slate-400">File types settings coming soon...</div>}
+          {tab === 'file-types' && <FileTypesSettings />}
           {tab === 'save-to' && <FolderSettings />}
           {tab === 'downloads' && <DownloadSettings />}
           {tab === 'connection' && <div className="text-slate-400">Connection settings coming soon...</div>}
@@ -62,6 +62,7 @@ export function SettingsPage() {
 }
 
 import { DownloadPanelsDialog } from '../components/settings/DownloadPanelsDialog';
+import { AddressExceptionsDialog } from '../components/settings/AddressExceptionsDialog';
 
 function GeneralSettings() {
   const settings = useSettingsStore((s) => s.settings);
@@ -404,6 +405,80 @@ function SecuritySettings() {
         <h3 className="text-sm font-medium text-slate-300 mb-2">Checksums</h3>
         <p className="text-sm text-slate-500">MD5 checksum verification runs automatically on download completion if a checksum is provided when adding a URL.</p>
       </div>
+    </div>
+  );
+}
+
+function FileTypesSettings() {
+  const settings = useSettingsStore((s) => s.settings);
+  const setValue = useSettingsStore((s) => s.setValue);
+  const [exceptionsDialogOpen, setExceptionsDialogOpen] = useState(false);
+
+  const defaultFileTypes = "3GP 7Z AAC ACE AIF APK ARJ ASF AVI BIN BZ2 EXE GZ GZIP IMG ISO LZH M4A M4V MKV MOV MP3 MP4 MPA MPE MPEG MPG MSI MSU OGG OGV PDF PLJ PPS PPT QT R0* R1* RA RAR RM RMVB SEA SIT SITX TAR TIF TIFF WAV WMA WMV Z ZIP";
+  const defaultExcludedSites = "*.update.microsoft.com download.windowsupdate.com *.download.windowsupdate.com siteseal.thawte.com ecom.cimetz.com *.voice2page.com";
+
+  const fileTypes = settings.autoDownloadTypes !== undefined ? settings.autoDownloadTypes : defaultFileTypes;
+  const excludedSites = settings.noAutoDownloadSites !== undefined ? settings.noAutoDownloadSites : defaultExcludedSites;
+
+  return (
+    <div className="max-w-2xl space-y-4 text-sm text-slate-200">
+      
+      <div className="flex items-center justify-between border-b border-gray-600 pb-2">
+        <div className="flex items-center gap-2">
+          <img src="/icons/icon.png" alt="" className="w-5 h-5 object-contain opacity-80" />
+          <span className="font-medium text-[15px] font-sans">Downloaded file types</span>
+        </div>
+      </div>
+
+      <div className="space-y-1">
+        <label className="block mb-1">Automatically start downloading the following file types:</label>
+        <textarea
+          value={fileTypes}
+          onChange={(e) => setValue('autoDownloadTypes', e.target.value)}
+          className="w-full h-24 border border-gray-400 p-2 text-black bg-white rounded-none resize-none outline-none font-sans"
+        />
+        <div className="flex justify-end pt-1">
+          <button 
+            onClick={() => setValue('autoDownloadTypes', defaultFileTypes)}
+            className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 text-black rounded hover:bg-[#e0e0e0] transition-colors"
+          >
+            Default
+          </button>
+        </div>
+      </div>
+
+      <div className="space-y-1 mt-6">
+        <label className="block mb-1">Don't start downloading automatically from the following sites:</label>
+        <textarea
+          value={excludedSites}
+          onChange={(e) => setValue('noAutoDownloadSites', e.target.value)}
+          className="w-full h-16 border border-gray-400 p-2 text-black bg-white rounded-none resize-none outline-none font-sans"
+        />
+        <div className="flex items-center justify-between pt-1">
+          <span className="text-slate-400">(separate names by spaces)</span>
+          <button 
+            onClick={() => setValue('noAutoDownloadSites', defaultExcludedSites)}
+            className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 text-black rounded hover:bg-[#e0e0e0] transition-colors"
+          >
+            Default
+          </button>
+        </div>
+      </div>
+
+      <div className="space-y-2 mt-6">
+        <label className="block mb-1">Don't start downloading automatically from the following addresses:</label>
+        <button 
+          onClick={() => setExceptionsDialogOpen(true)}
+          className="px-8 py-1.5 bg-[#f0f0f0] border border-gray-400 text-black rounded hover:bg-[#e0e0e0] transition-colors min-w-[120px]"
+        >
+          Edit list ...
+        </button>
+      </div>
+
+      <AddressExceptionsDialog 
+        open={exceptionsDialogOpen} 
+        onOpenChange={setExceptionsDialogOpen} 
+      />
     </div>
   );
 }
