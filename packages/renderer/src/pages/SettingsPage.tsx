@@ -257,22 +257,6 @@ function NetworkSettings() {
 function ConnectionSettings() {
   const settings = useSettingsStore((s) => s.settings);
   const setValue = useSettingsStore((s) => s.setValue);
-  const [globalLimitInput, setGlobalLimitInput] = useState(settings.globalSpeedLimit || '0');
-  const [concurrencyInput, setConcurrencyInput] = useState(settings.maxConcurrent || '5');
-
-  const handleMaxConcurrent = useCallback(
-    async (v: number) => {
-      const clamped = Math.max(1, Math.min(v, 32));
-      setConcurrencyInput(String(clamped));
-      await setValue('maxConcurrent', String(clamped));
-      await window.api.queue.setConcurrency(clamped);
-    },
-    [setValue],
-  );
-
-  const handleGlobalSpeedLimit = useCallback(
-    async (v: number) => {
-      const clamped = Math.max(0, v);
 
   const getBool = (key: string, def: boolean) => settings[key] !== undefined ? settings[key] === 'true' : def;
 
