@@ -3,6 +3,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { useSettingsStore } from '../stores/settings-store';
 import { useTranslation } from 'react-i18next';
 import type { Category } from '@rdm/shared';
+import * as Dialog from '@radix-ui/react-dialog';
 
 const TABS = [
   { id: 'general', label: 'General', icon: Settings },
