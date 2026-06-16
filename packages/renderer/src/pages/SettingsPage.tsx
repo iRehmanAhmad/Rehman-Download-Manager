@@ -1,4 +1,4 @@
-import { Settings, Monitor, Download, Bell, Folder, Shield } from 'lucide-react';
+import { Settings, Monitor, Download, Bell, Folder, Shield, Network } from 'lucide-react';
 import { useState, useCallback, useEffect } from 'react';
 import { useSettingsStore } from '../stores/settings-store';
 import { useTranslation } from 'react-i18next';
