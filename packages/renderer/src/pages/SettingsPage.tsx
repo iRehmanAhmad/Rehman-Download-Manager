@@ -333,8 +333,6 @@ function DownloadSettings() {
   const showCompleteDialog = getBool('showCompleteDialog', true);
   const startImmediatelyWhenInfoDialog = getBool('startImmediatelyWhenInfoDialog', true);
   const showQueueSelectionOnLater = getBool('showQueueSelectionOnLater', true);
-  const showQueueSelectionOnBatchClose = getBool('showQueueSelectionOnBatchClose', true);
-  const ignoreFileModTime = getBool('ignoreFileModTime', false);
   const duplicateLinkAction = settings.duplicateLinkAction || 'ask';
 
   return (
@@ -412,26 +410,6 @@ function DownloadSettings() {
             className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
           />
           <span>Show queue selection panel on pressing "Download Later" button</span>
-        </label>
-
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input 
-            type="checkbox" 
-            checked={showQueueSelectionOnBatchClose}
-            onChange={(e) => setValue('showQueueSelectionOnBatchClose', String(e.target.checked))}
-            className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
-          />
-          <span>Show queue selection panel on closing batch download dialogs</span>
-        </label>
-
-        <label className="flex items-center gap-2 cursor-pointer pb-2">
-          <input 
-            type="checkbox" 
-            checked={ignoreFileModTime}
-            onChange={(e) => setValue('ignoreFileModTime', String(e.target.checked))}
-            className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
-          />
-          <span>Ignore file modification time changes when resuming a download</span>
         </label>
       </div>
 
