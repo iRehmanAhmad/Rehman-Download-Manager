@@ -57,7 +57,9 @@ CREATE TABLE IF NOT EXISTS categories (
     default_dir     TEXT NOT NULL,
     icon            TEXT,
     color           TEXT,
-    sort_order      INTEGER DEFAULT 0
+    sort_order      INTEGER DEFAULT 0,
+    extensions      TEXT,
+    save_last_folder INTEGER DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS schedules (
@@ -174,5 +176,12 @@ export async function initDatabase(): Promise<void> {
     db.exec("ALTER TABLE downloads ADD COLUMN queue_id TEXT DEFAULT 'main'");
   } catch (e) {
     // Column might already exist
+  }
+
+  try {
+    db.exec("ALTER TABLE categories ADD COLUMN extensions TEXT");
+    db.exec("ALTER TABLE categories ADD COLUMN save_last_folder INTEGER DEFAULT 0");
+  } catch (e) {
+    // Columns might already exist
   }
 }

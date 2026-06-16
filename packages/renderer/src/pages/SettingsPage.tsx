@@ -1,7 +1,8 @@
 import { Settings, Monitor, Download, Bell, Folder, Shield } from 'lucide-react';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useSettingsStore } from '../stores/settings-store';
 import { useTranslation } from 'react-i18next';
+import type { Category } from '@rdm/shared';
 
 const TABS = [
   { id: 'general', label: 'General', icon: Settings },
@@ -356,10 +357,173 @@ function NotificationSettings() {
 }
 
 function FolderSettings() {
+  const settings = useSettingsStore((s) => s.settings);
+  const categories = useSettingsStore((s) => s.categories);
+  const setValue = useSettingsStore((s) => s.setValue);
+  const setCategories = useSettingsStore((s) => s.setCategories);
+  
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string>('');
+
+  useEffect(() => {
+    if (categories.length > 0 && !selectedCategoryId) {
+      const otherCategory = categories.find((c) => c.id === 'other');
+      setSelectedCategoryId(otherCategory ? otherCategory.id : categories[0].id);
+    }
+  }, [categories, selectedCategoryId]);
+
+  const selectedCategory = categories.find((c) => c.id === selectedCategoryId) || categories[0];
+
+  const handleCategoryUpdate = async (updates: Partial<Category>) => {
+    if (!selectedCategory) return;
+    const updatedCategory = { ...selectedCategory, ...updates };
+    
+    // Optimistic update
+    setCategories(categories.map((c) => (c.id === updatedCategory.id ? updatedCategory : c)));
+    
+    // Persist
+    await window.api.categories.update(updatedCategory);
+  };
+
+  const handleBrowseDefaultDir = async () => {
+    const dirs = await window.api.system.showOpenDialog({
+      properties: ['openDirectory'],
+      defaultPath: selectedCategory?.defaultDir,
+    });
+    if (dirs && dirs.length > 0) {
+      handleCategoryUpdate({ defaultDir: dirs[0] });
+    }
+  };
+
+  const handleBrowseTempDir = async () => {
+    const dirs = await window.api.system.showOpenDialog({
+      properties: ['openDirectory'],
+      defaultPath: settings.tempDirectory,
+    });
+    if (dirs && dirs.length > 0) {
+      setValue('tempDirectory', dirs[0]);
+    }
+  };
+
+  if (!selectedCategory) return null;
+
+  const isGeneral = selectedCategory.id === 'other';
+
   return (
-    <div className="max-w-lg space-y-6">
-      <h2 className="text-base font-medium text-slate-200">Folders</h2>
-      <p className="text-sm text-slate-500">Default download location and temp directory management coming soon.</p>
+    <div className="max-w-2xl space-y-4 text-sm text-slate-200">
+      
+      <div className="flex items-center justify-between border-b border-gray-600 pb-2">
+        <div className="flex items-center gap-2">
+          <img src="/icons/icon.png" alt="" className="w-5 h-5 object-contain opacity-80" />
+          <span className="font-medium text-[15px] font-sans">Categories, file types, folders</span>
+        </div>
+      </div>
+
+      <div className="border border-gray-400 p-4 space-y-4 rounded-sm bg-[#f0f0f0] text-black">
+        <div className="text-xs -mt-6 bg-[#f0f0f0] inline-block px-1 ml-2 mb-2">Save To...</div>
+        
+        <div className="flex items-center gap-2 justify-between">
+          <div className="flex flex-col flex-1">
+            <label className="mb-1">Category</label>
+            <select
+              value={selectedCategoryId}
+              onChange={(e) => setSelectedCategoryId(e.target.value)}
+              className="border border-gray-400 p-1 w-64 bg-white outline-none"
+            >
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <button className="px-6 py-1 bg-white border border-gray-400 rounded hover:bg-[#e0e0e0] w-24">New</button>
+            <button className="px-6 py-1 bg-[#f0f0f0] border border-gray-300 text-gray-400 rounded cursor-not-allowed w-24">Edit...</button>
+          </div>
+        </div>
+
+        <div className="flex flex-col">
+          <label className="mb-1">Automatically put in "{selectedCategory.name}" category the following file types:</label>
+          {isGeneral ? (
+            <input 
+              type="text" 
+              value="The file types that are not listed in any other category" 
+              readOnly 
+              className="border border-gray-400 p-1 bg-[#e0e0e0] text-gray-600 cursor-not-allowed outline-none" 
+            />
+          ) : (
+            <input 
+              type="text" 
+              value={selectedCategory.extensions || ''} 
+              onChange={(e) => handleCategoryUpdate({ extensions: e.target.value })}
+              className="border border-gray-400 p-1 bg-white outline-none" 
+            />
+          )}
+        </div>
+
+        <div className="flex flex-col mt-2">
+          <label className="mb-1">Default download directory for "{selectedCategory.name}" category</label>
+          <div className="flex gap-2">
+            <input 
+              type="text" 
+              value={selectedCategory.defaultDir} 
+              onChange={(e) => handleCategoryUpdate({ defaultDir: e.target.value })}
+              className="border border-gray-400 p-1 bg-white flex-1 outline-none" 
+            />
+            <button 
+              onClick={handleBrowseDefaultDir}
+              className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 rounded hover:bg-[#e0e0e0]"
+            >
+              Browse
+            </button>
+          </div>
+        </div>
+
+        <label className="flex items-center gap-2 cursor-pointer mt-4">
+          <input 
+            type="checkbox" 
+            checked={!!selectedCategory.saveLastFolder}
+            onChange={(e) => handleCategoryUpdate({ saveLastFolder: e.target.checked })}
+            className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+          />
+          <span>Change folder for "{selectedCategory.name}" category on last selected</span>
+        </label>
+      </div>
+
+      <label className="flex items-center gap-2 cursor-pointer pt-2">
+        <input 
+          type="checkbox" 
+          checked={settings.serverCreationDate === 'true'}
+          onChange={(e) => setValue('serverCreationDate', String(e.target.checked))}
+          className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+        />
+        <span>Set file creation date as provided by the server</span>
+      </label>
+
+      <div className="border border-gray-400 p-4 rounded-sm bg-[#f0f0f0] text-black mt-6">
+        <div className="text-xs -mt-6 bg-[#f0f0f0] inline-block px-1 ml-2 mb-2">Temporary directory</div>
+        
+        <div className="flex gap-2 mb-2 mt-1">
+          <input 
+            type="text" 
+            value={settings.tempDirectory || 'C:\\Users\\Default\\AppData\\Roaming\\RDM\\'} 
+            onChange={(e) => setValue('tempDirectory', e.target.value)}
+            className="border border-gray-400 p-1 bg-white flex-1 outline-none" 
+          />
+          <button 
+            onClick={handleBrowseTempDir}
+            className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 rounded hover:bg-[#e0e0e0]"
+          >
+            Browse
+          </button>
+        </div>
+        
+        <p className="text-xs text-gray-700 leading-tight mt-3">
+          Temporary directory is required for storing file parts during download.<br/>
+          If you have several physical drives on your computer, you should select<br/>
+          different physical drives for temporary directory and "Save To" folders for<br/>
+          faster assembling of downloaded files.
+        </p>
+      </div>
+
     </div>
   );
 }

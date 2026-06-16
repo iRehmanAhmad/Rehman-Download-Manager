@@ -5,4 +5,6 @@ export interface Category {
   icon?: string;
   color?: string;
   sortOrder: number;
+  extensions?: string;
+  saveLastFolder?: boolean;
 }
