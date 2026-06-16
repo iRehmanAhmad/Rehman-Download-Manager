@@ -17,6 +17,7 @@ const TABS = [
   { id: 'sites-logins', label: 'Sites Logins', icon: Shield },
   { id: 'dial-up-vpn', label: 'Dial Up / VPN', icon: Network },
   { id: 'sounds', label: 'Sounds', icon: Bell },
+  { id: 'appearance', label: 'Appearance', icon: Monitor },
 ];
 
 export function SettingsPage() {
@@ -57,6 +58,7 @@ export function SettingsPage() {
           {tab === 'sites-logins' && <SitesLoginsSettings />}
           {tab === 'dial-up-vpn' && <DialUpVpnSettings />}
           {tab === 'sounds' && <SoundsSettings />}
+          {tab === 'appearance' && <AppearanceSettings />}
         </div>
       </div>
     </div>
@@ -210,6 +212,28 @@ function GeneralSettings() {
   );
 }
 
+function AppearanceSettings() {
+  const settings = useSettingsStore((s) => s.settings);
+  const setValue = useSettingsStore((s) => s.setValue);
+
+  return (
+    <div className="max-w-lg space-y-6">
+      <h2 className="text-base font-medium text-slate-200">Appearance</h2>
+      <div className="space-y-2">
+        <label className="text-sm text-slate-400 block">Theme</label>
+        <select
+          value={settings.theme || 'dark'}
+          onChange={(e) => setValue('theme', e.target.value)}
+          className="w-full bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-200"
+        >
+          <option value="dark">Dark</option>
+          <option value="light">Light</option>
+          <option value="system">System</option>
+        </select>
+      </div>
+    </div>
+  );
+}
 
 function NetworkSettings() {
   const settings = useSettingsStore((s) => s.settings);

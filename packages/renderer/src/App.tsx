@@ -63,6 +63,18 @@ export function App() {
     };
   }, [loadAll, updateDownload, addDownload]);
 
+  const settings = useSettingsStore((s) => s.settings);
+
+  useEffect(() => {
+    const theme = settings.theme || 'dark';
+    if (theme === 'system') {
+      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      document.documentElement.dataset.theme = prefersLight ? 'light' : 'dark';
+    } else {
+      document.documentElement.dataset.theme = theme;
+    }
+  }, [settings.theme]);
+
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'copy';
