@@ -1024,7 +1024,7 @@ function SoundsSettings() {
 
   const handleBrowse = async () => {
     if (!selectedEventId) return;
-    const result = await window.electron.ipcRenderer.invoke('system:show-open-dialog', {
+    const result = await window.api.system.showOpenDialog({
       properties: ['openFile'],
       filters: [{ name: 'Audio Files', extensions: ['wav', 'mp3'] }]
     });
