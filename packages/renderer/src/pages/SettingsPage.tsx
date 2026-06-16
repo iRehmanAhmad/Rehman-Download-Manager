@@ -55,7 +55,7 @@ export function SettingsPage() {
           {tab === 'downloads' && <DownloadSettings />}
           {tab === 'connection' && <ConnectionSettings />}
           {tab === 'proxy' && <NetworkSettings />}
-          {tab === 'sites-logins' && <SecuritySettings />}
+          {tab === 'sites-logins' && <SitesLoginsSettings />}
           {tab === 'dial-up-vpn' && <div className="text-slate-400">Dial Up / VPN settings coming soon...</div>}
           {tab === 'sounds' && <NotificationSettings />}
           {tab === 'appearance' && <AppearanceSettings />}
