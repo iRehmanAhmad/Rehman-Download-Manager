@@ -231,15 +231,15 @@ export function GlobalAddUrlDialog() {
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[100]" onMouseDown={handleClose}>
       <div
-        className="bg-[#2b2b2b] border border-slate-700 rounded-md p-3 w-full max-w-[620px] shadow-2xl font-sans"
+        className="bg-[#f0f0f0] dark:bg-[#2b2b2b] border border-gray-400 dark:border-slate-700 rounded-md p-3 w-full max-w-[620px] shadow-2xl font-sans"
         onMouseDown={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-3 border-b border-slate-700 pb-2">
+        <div className="flex items-center justify-between mb-3 border-b border-gray-400 dark:border-slate-700 pb-2">
           <div className="flex items-center gap-2">
             <img src="/logo.png" alt="Icon" className="w-4 h-4 object-contain" onError={(e) => e.currentTarget.style.display = 'none'} />
-            <h2 className="text-[13px] text-slate-100 font-medium">Download File Info</h2>
+            <h2 className="text-[13px] text-black dark:text-slate-100 font-medium">Download File Info</h2>
           </div>
-          <button onClick={handleClose} className="text-slate-400 hover:text-white px-1">✕</button>
+          <button onClick={handleClose} className="text-gray-600 dark:text-slate-400 hover:text-white px-1">✕</button>
         </div>
 
         <div className="flex gap-4">
@@ -247,23 +247,23 @@ export function GlobalAddUrlDialog() {
           <div className="flex-1 flex flex-col">
             <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <label className="w-16 text-right text-[13px] text-slate-300">URL</label>
+            <label className="w-16 text-right text-[13px] text-black dark:text-slate-300">URL</label>
             <input
               type="text"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
-              className="flex-1 px-2 py-1 bg-[#1e1e1e] border border-slate-600 rounded text-[13px] text-slate-200 focus:outline-none focus:border-brand-500"
+              className="flex-1 px-2 py-1 bg-white dark:bg-[#1e1e1e] border border-gray-400 dark:border-slate-600 rounded text-[13px] text-black dark:text-slate-200 focus:outline-none focus:border-brand-500"
               autoFocus
             />
           </div>
 
           <div className="flex items-center gap-2">
-            <label className="w-16 text-right text-[13px] text-slate-300">Category</label>
+            <label className="w-16 text-right text-[13px] text-black dark:text-slate-300">Category</label>
             <div className="flex-1 flex gap-2">
               <select
                 value={categoryId}
                 onChange={handleCategoryChange}
-                className="flex-1 px-2 py-1 bg-[#1e1e1e] border border-slate-600 rounded text-[13px] text-slate-200 focus:outline-none focus:border-brand-500"
+                className="flex-1 px-2 py-1 bg-white dark:bg-[#1e1e1e] border border-gray-400 dark:border-slate-600 rounded text-[13px] text-black dark:text-slate-200 focus:outline-none focus:border-brand-500"
               >
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -271,24 +271,24 @@ export function GlobalAddUrlDialog() {
                   </option>
                 ))}
               </select>
-              <button className="px-2 py-0.5 bg-[#3a3a3a] hover:bg-[#4a4a4a] border border-slate-600 rounded text-slate-200 text-[13px]">
+              <button className="px-2 py-0.5 bg-[#e1e1e1] dark:bg-[#3a3a3a] hover:bg-[#d1d1d1] dark:hover:bg-[#4a4a4a] border border-gray-400 dark:border-slate-600 rounded text-black dark:text-slate-200 text-[13px]">
                 +
               </button>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <label className="w-16 text-right text-[13px] text-slate-300">Save As</label>
+            <label className="w-16 text-right text-[13px] text-black dark:text-slate-300">Save As</label>
             <div className="flex-1 flex gap-2">
               <input
                 type="text"
                 value={filepath}
                 onChange={(e) => setFilepath(e.target.value)}
-                className="flex-1 px-2 py-1 bg-[#1e1e1e] border border-slate-600 rounded text-[13px] text-slate-200 focus:outline-none focus:border-brand-500"
+                className="flex-1 px-2 py-1 bg-white dark:bg-[#1e1e1e] border border-gray-400 dark:border-slate-600 rounded text-[13px] text-black dark:text-slate-200 focus:outline-none focus:border-brand-500"
               />
               <button
                 onClick={handleBrowse}
-                className="px-3 py-1 bg-[#3a3a3a] hover:bg-[#4a4a4a] border border-slate-600 rounded text-slate-200 text-[13px]"
+                className="px-3 py-1 bg-[#e1e1e1] dark:bg-[#3a3a3a] hover:bg-[#d1d1d1] dark:hover:bg-[#4a4a4a] border border-gray-400 dark:border-slate-600 rounded text-black dark:text-slate-200 text-[13px]"
               >
                 Browse
               </button>
@@ -298,12 +298,12 @@ export function GlobalAddUrlDialog() {
           <div className="flex">
             <div className="w-16 mr-2"></div>
             <fieldset className="flex-1 border border-slate-500 rounded px-2 pb-1.5 pt-0 mt-1">
-              <legend className="px-1 ml-1 flex items-center gap-1.5 text-[12px] text-slate-300 cursor-pointer">
+              <legend className="px-1 ml-1 flex items-center gap-1.5 text-[12px] text-black dark:text-slate-300 cursor-pointer">
                 <input
                   type="checkbox"
                   checked={rememberPath}
                   onChange={(e) => setRememberPath(e.target.checked)}
-                  className="rounded border-slate-600 bg-[#1e1e1e] text-brand-500 focus:ring-brand-500 scale-90"
+                  className="rounded border-gray-400 dark:border-slate-600 bg-white dark:bg-[#1e1e1e] text-brand-500 focus:ring-brand-500 scale-90"
                 />
                 Remember this path for "{currentCategoryName}" category
               </legend>
@@ -311,18 +311,18 @@ export function GlobalAddUrlDialog() {
                 type="text" 
                 value={(filepath.substring(0, Math.max(filepath.lastIndexOf('\\'), filepath.lastIndexOf('/'))) || filepath) + (filepath.includes('\\') ? '\\' : '/')} 
                 readOnly 
-                className="w-full bg-transparent border-none text-[13px] text-slate-300 focus:outline-none px-1" 
+                className="w-full bg-transparent border-none text-[13px] text-black dark:text-slate-300 focus:outline-none px-1" 
               />
             </fieldset>
           </div>
 
           <div className="flex items-center gap-2 mt-1">
-            <label className="w-16 text-right text-[13px] text-slate-300">Description</label>
+            <label className="w-16 text-right text-[13px] text-black dark:text-slate-300">Description</label>
             <input
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="flex-1 px-2 py-1 bg-[#1e1e1e] border border-slate-600 rounded text-[13px] text-slate-200 focus:outline-none focus:border-brand-500"
+              className="flex-1 px-2 py-1 bg-white dark:bg-[#1e1e1e] border border-gray-400 dark:border-slate-600 rounded text-[13px] text-black dark:text-slate-200 focus:outline-none focus:border-brand-500"
             />
           </div>
         </div>
@@ -331,20 +331,20 @@ export function GlobalAddUrlDialog() {
           <button
             onClick={() => handleAdd(true)}
             disabled={!url.trim() || adding}
-            className="px-4 py-1.5 bg-[#3a3a3a] hover:bg-[#4a4a4a] border border-slate-600 text-slate-200 text-[13px] rounded transition-colors disabled:opacity-50"
+            className="px-4 py-1.5 bg-[#e1e1e1] dark:bg-[#3a3a3a] hover:bg-[#d1d1d1] dark:hover:bg-[#4a4a4a] border border-gray-400 dark:border-slate-600 text-black dark:text-slate-200 text-[13px] rounded transition-colors disabled:opacity-50"
           >
             Download Later
           </button>
           <button
             onClick={() => handleAdd(false)}
             disabled={!url.trim() || adding}
-            className="px-4 py-1.5 bg-[#3a3a3a] hover:bg-[#4a4a4a] border border-slate-600 text-slate-200 text-[13px] rounded transition-colors disabled:opacity-50"
+            className="px-4 py-1.5 bg-[#e1e1e1] dark:bg-[#3a3a3a] hover:bg-[#d1d1d1] dark:hover:bg-[#4a4a4a] border border-gray-400 dark:border-slate-600 text-black dark:text-slate-200 text-[13px] rounded transition-colors disabled:opacity-50"
           >
             Start Download
           </button>
           <button
             onClick={handleClose}
-            className="px-4 py-1.5 bg-[#3a3a3a] hover:bg-[#4a4a4a] border border-slate-600 text-slate-200 text-[13px] rounded transition-colors"
+            className="px-4 py-1.5 bg-[#e1e1e1] dark:bg-[#3a3a3a] hover:bg-[#d1d1d1] dark:hover:bg-[#4a4a4a] border border-gray-400 dark:border-slate-600 text-black dark:text-slate-200 text-[13px] rounded transition-colors"
           >
             Cancel
           </button>
@@ -352,26 +352,26 @@ export function GlobalAddUrlDialog() {
       </div>
 
       {/* Right Column */}
-      <div className="w-[150px] flex flex-col items-center justify-start border-l border-slate-700 pl-4 py-1">
+      <div className="w-[150px] flex flex-col items-center justify-start border-l border-gray-400 dark:border-slate-700 pl-4 py-1">
         {getCategoryIcon(currentCategoryName)}
         
-        <div className="text-[13px] font-medium text-slate-200 mt-2 mb-1">
+        <div className="text-[13px] font-medium text-black dark:text-slate-200 mt-2 mb-1">
           {fetchingSize ? 'Fetching size...' : formatSize(fileSize)}
         </div>
         
-        <div className="w-full h-px bg-slate-700 my-2"></div>
+        <div className="w-full h-px bg-gray-300 dark:bg-slate-700 my-2"></div>
         
         <div className="w-full text-center space-y-1">
-          <div className="text-[11px] text-slate-400">Est. Time (5MB/s)</div>
+          <div className="text-[11px] text-gray-600 dark:text-slate-400">Est. Time (5MB/s)</div>
           <div className="text-[12px] text-brand-400 font-medium">
             {fetchingSize ? '--' : getEstTime(fileSize, 5)}
           </div>
         </div>
         
-        <div className="w-full h-px bg-slate-700 my-2"></div>
+        <div className="w-full h-px bg-gray-300 dark:bg-slate-700 my-2"></div>
         
         <div className="w-full text-center space-y-1">
-          <div className="text-[11px] text-slate-400">Time Saved ({connections}x)</div>
+          <div className="text-[11px] text-gray-600 dark:text-slate-400">Time Saved ({connections}x)</div>
           <div className="text-[12px] text-green-400 font-medium">
             {fetchingSize || fileSize <= 0 ? '--' : getEstTime(fileSize * (1 - 1/connections), 5)}
           </div>

@@ -106,17 +106,13 @@ export function DownloadPanelsDialog({ open, onOpenChange }: DownloadPanelsDialo
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-        <Dialog.Content className="fixed left-[50%] top-[50%] z-50 flex flex-col w-full max-w-[600px] translate-x-[-50%] translate-y-[-50%] bg-[#f0f0f0] shadow-lg border border-gray-400 p-0 text-black font-sans text-sm h-[600px]">
+        <Dialog.Content className="fixed left-[50%] top-[50%] z-50 flex flex-col w-full max-w-[600px] translate-x-[-50%] translate-y-[-50%] bg-[#f0f0f0] shadow-lg border border-gray-400 p-0 text-black font-sans text-[11px] h-[550px]">
           
-          <div className="flex items-center px-4 py-2 bg-white border-b border-gray-300 gap-2">
-            <img src="/icons/icon.png" alt="" className="w-4 h-4 object-contain opacity-70" />
-            <Dialog.Title className="text-sm font-normal">Customize IDM Download panels in browsers</Dialog.Title>
-          </div>
 
           <div className="flex px-4 pt-4 border-b border-gray-300">
             <button
               onClick={() => setActiveTab('web-players')}
-              className={`px-4 py-1.5 border border-b-0 rounded-t ${
+              className={`px-4 py-1 border border-b-0 rounded-t ${
                 activeTab === 'web-players' ? 'bg-white border-gray-300 pb-[7px] mb-[-1px] z-10' : 'bg-[#e0e0e0] border-gray-300 text-gray-600'
               }`}
             >
@@ -124,7 +120,7 @@ export function DownloadPanelsDialog({ open, onOpenChange }: DownloadPanelsDialo
             </button>
             <button
               onClick={() => setActiveTab('selected-files')}
-              className={`px-4 py-1.5 border border-b-0 rounded-t ml-1 ${
+              className={`px-4 py-1 border border-b-0 rounded-t ml-1 ${
                 activeTab === 'selected-files' ? 'bg-white border-gray-300 pb-[7px] mb-[-1px] z-10' : 'bg-[#e0e0e0] border-gray-300 text-gray-600'
               }`}
             >
@@ -132,7 +128,7 @@ export function DownloadPanelsDialog({ open, onOpenChange }: DownloadPanelsDialo
             </button>
           </div>
 
-          <div className="flex-1 bg-white border-t-0 p-4 overflow-hidden flex flex-col relative">
+          <div className="flex-1 bg-white border-t-0 p-2 overflow-hidden flex flex-col relative">
             {activeTab === 'web-players' && (
               <div className="flex flex-col h-full gap-3">
                 <p>IDM can show its Download panel on a web-player in a browser when IDM detects a multimedia request from the web-player</p>
@@ -220,7 +216,7 @@ export function DownloadPanelsDialog({ open, onOpenChange }: DownloadPanelsDialo
                       </div>
                     </div>
                   ) : (
-                    <div className="flex gap-4 h-[160px]">
+                    <div className="flex gap-2 h-[160px]">
                       <div className="flex-1 border border-gray-400 bg-white overflow-y-auto">
                         <table className="w-full text-left border-collapse">
                           <thead className="bg-[#f0f0f0] border-b border-gray-300">
@@ -285,7 +281,7 @@ export function DownloadPanelsDialog({ open, onOpenChange }: DownloadPanelsDialo
             )}
 
             {activeTab === 'selected-files' && (
-              <div className="flex flex-col h-full gap-4">
+              <div className="flex flex-col h-full gap-2">
                 <p>IDM can show Download panel on a web-page when you select a text that contains download links.</p>
                 <hr className="border-gray-300" />
                 
@@ -338,7 +334,7 @@ export function DownloadPanelsDialog({ open, onOpenChange }: DownloadPanelsDialo
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-2 mt-4">
+                <div className="flex flex-col gap-2 mt-2">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input 
                       type="radio" 
@@ -389,7 +385,7 @@ export function DownloadPanelsDialog({ open, onOpenChange }: DownloadPanelsDialo
                     <button onClick={() => setAddingSite(false)} className="px-3 py-1 bg-gray-200 border border-gray-400 rounded">Cancel</button>
                   </div>
                 ) : (
-                  <div className="flex gap-4 h-[160px] pl-6 mt-2">
+                  <div className="flex gap-2 h-[160px] pl-6 mt-2">
                     <div className="flex-1 border border-gray-400 bg-white overflow-y-auto p-1">
                       {specificSites.map((site: string, idx: number) => (
                         <div 
@@ -411,16 +407,16 @@ export function DownloadPanelsDialog({ open, onOpenChange }: DownloadPanelsDialo
             )}
           </div>
 
-          <div className="flex justify-end gap-2 p-4 bg-[#f0f0f0] border-t border-gray-300">
+          <div className="flex justify-end gap-2 p-2 bg-[#f0f0f0] border-t border-gray-300">
             <button
               onClick={() => onOpenChange(false)}
-              className="px-8 py-1.5 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors min-w-[80px]"
+              className="px-8 py-1 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors min-w-[80px]"
             >
               OK
             </button>
             <button
               onClick={() => onOpenChange(false)}
-              className="px-8 py-1.5 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors min-w-[80px]"
+              className="px-8 py-1 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors min-w-[80px]"
             >
               Cancel
             </button>

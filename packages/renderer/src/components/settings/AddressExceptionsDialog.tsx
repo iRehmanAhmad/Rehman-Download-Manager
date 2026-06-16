@@ -58,30 +58,30 @@ export function AddressExceptionsDialog({ open, onOpenChange }: AddressException
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-        <Dialog.Content className="fixed left-[50%] top-[50%] z-50 flex flex-col w-full max-w-[500px] translate-x-[-50%] translate-y-[-50%] bg-[#f0f0f0] shadow-lg border border-gray-400 p-0 text-black font-sans text-sm">
+        <Dialog.Content className="fixed left-[50%] top-[50%] z-50 flex flex-col w-full max-w-[500px] translate-x-[-50%] translate-y-[-50%] bg-[#f0f0f0] shadow-lg border border-gray-400 p-0 text-black font-sans text-[11px]">
           
-          <div className="flex items-center px-4 py-2 bg-white border-b border-gray-300 gap-2">
-            <Dialog.Title className="text-sm font-normal">The list of address exceptions</Dialog.Title>
+          <div className="flex items-center px-3 py-0.5 bg-white border-b border-gray-300 gap-2">
+            <Dialog.Title className="text-[11px] font-normal">The list of address exceptions</Dialog.Title>
           </div>
 
-          <div className="p-4 flex flex-col gap-3">
+          <div className="p-2 flex flex-col gap-2">
             <label className="flex items-start gap-2 cursor-pointer">
               <input 
                 type="checkbox" 
                 checked={showDialog}
                 onChange={(e) => setValue('showAddressExceptionDialog', String(e.target.checked))}
-                className="mt-0.5 w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+                className="mt-0.5 w-3.5 h-3.5 accent-blue-600 border border-gray-400 rounded-sm"
               />
               <span className="leading-tight">Show the dialog to add an address to the list of exceptions for a twice-cancelled download</span>
             </label>
 
-            <div className="flex flex-col mt-2">
+            <div className="flex flex-col mt-1">
               <div className="mb-1">Don't start downloading automatically from the following addresses:</div>
-              <div className="border border-gray-400 bg-white h-[200px] overflow-y-auto p-1 text-black">
+              <div className="border border-gray-400 bg-white h-[180px] overflow-y-auto p-0.5 text-black">
                 {addresses.map((address: string, idx: number) => (
                   <div 
                     key={idx} 
-                    className={`py-0.5 px-1 cursor-pointer ${selectedIdx === idx ? 'bg-blue-600 text-white' : 'hover:bg-blue-50'}`}
+                    className={`py-0 px-0.5 cursor-pointer ${selectedIdx === idx ? 'bg-blue-600 text-white' : 'hover:bg-blue-50'}`}
                     onClick={() => setSelectedIdx(idx)}
                   >
                     {address}
@@ -126,7 +126,7 @@ export function AddressExceptionsDialog({ open, onOpenChange }: AddressException
               </div>
               <button
                 onClick={() => onOpenChange(false)}
-                className="px-8 py-1.5 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors"
+                className="px-8 py-1 bg-[#e1e1e1] border border-gray-400 rounded hover:bg-[#d1d1d1] transition-colors"
               >
                 OK
               </button>

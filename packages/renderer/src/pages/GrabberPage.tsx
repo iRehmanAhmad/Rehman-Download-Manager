@@ -92,7 +92,7 @@ export function GrabberPage() {
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="Enter a web page URL to scan for media..."
-              className="flex-1 px-4 py-2.5 bg-slate-900 border border-slate-700 rounded-lg text-sm text-slate-200 placeholder-slate-600 focus:outline-none focus:border-brand-500"
+              className="flex-1 px-4 py-2.5 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-lg text-sm text-slate-900 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 focus:outline-none focus:border-brand-500"
               onKeyDown={(e) => e.key === 'Enter' && handleScanVideos()}
             />
             <button
@@ -106,7 +106,7 @@ export function GrabberPage() {
             <button
               onClick={handleCrawlSite}
               disabled={scanning || !url.trim()}
-              className="flex items-center gap-2 px-4 py-2.5 bg-slate-700 hover:bg-slate-600 disabled:opacity-50 text-slate-200 text-sm rounded-lg transition-colors"
+              className="flex items-center gap-2 px-4 py-2.5 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 disabled:opacity-50 text-slate-900 dark:text-slate-200 text-sm rounded-lg transition-colors"
             >
               {scanning ? <Loader2 size={16} className="animate-spin" /> : <Search size={16} />}
               Crawl All
@@ -124,7 +124,7 @@ export function GrabberPage() {
                   <select
                     value={filter}
                     onChange={(e) => setFilter(e.target.value)}
-                    className="bg-slate-800 border border-slate-700 rounded-md px-2 py-1 text-xs text-slate-300"
+                    className="bg-slate-200 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-md px-2 py-1 text-xs text-slate-700 dark:text-slate-300"
                   >
                     <option value="all">All ({results.length})</option>
                     {Object.entries(typeCounts).map(([type, count]) => (
@@ -147,14 +147,14 @@ export function GrabberPage() {
                 {filteredResults.map((item, i) => (
                   <div
                     key={`${item.url}-${i}`}
-                    className="flex items-center gap-3 bg-slate-900 border border-slate-800 rounded-lg px-4 py-3 hover:border-slate-700 transition-colors"
+                    className="flex items-center gap-3 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg px-4 py-3 hover:border-slate-300 dark:hover:border-slate-700 transition-colors"
                   >
                     <span className="text-lg">{TYPE_ICONS[item.type] || '🔗'}</span>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-slate-200 truncate">{item.filename}</p>
                       <p className="text-xs text-slate-500 truncate">{item.url}</p>
                     </div>
-                    <span className={`text-xs font-medium px-2 py-0.5 rounded bg-slate-800 ${TYPE_COLORS[item.type] || 'text-slate-400'}`}>
+                    <span className={`text-xs font-medium px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 ${TYPE_COLORS[item.type] || 'text-slate-500 dark:text-slate-400'}`}>
                       {item.type}
                     </span>
                     <button
@@ -164,7 +164,7 @@ export function GrabberPage() {
                           setStatusMsg(`Added: ${item.filename}`);
                         } catch {}
                       }}
-                      className="p-1.5 hover:bg-slate-800 rounded text-slate-400 hover:text-brand-400"
+                      className="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-800 rounded text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400"
                       title="Add to downloads"
                     >
                       <Plus size={16} />

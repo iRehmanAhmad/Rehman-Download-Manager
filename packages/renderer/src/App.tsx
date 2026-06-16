@@ -97,7 +97,7 @@ export function App() {
   return (
     <HashRouter>
       <div 
-        className="flex flex-col h-full bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950/20 text-slate-100"
+        className="flex flex-col h-full bg-slate-50 dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/20 text-slate-900 dark:text-slate-100"
         onDragOver={handleDragOver}
         onDrop={handleDrop}
       >

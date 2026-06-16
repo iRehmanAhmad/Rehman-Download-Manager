@@ -178,31 +178,31 @@ export function MenuBar() {
   ];
 
   return (
-    <div ref={menuRef} className="flex items-center h-6 bg-slate-900 border-b border-slate-800 text-[13px] text-slate-300 px-2 select-none z-50 relative">
+    <div ref={menuRef} className="flex items-center h-6 bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 text-xs text-slate-700 dark:text-slate-300 px-1 select-none z-50 relative">
       {menus.map((menu) => (
         <div key={menu.id} className="relative">
           <button
             onClick={() => setActiveMenu(activeMenu === menu.id ? null : menu.id)}
             onMouseEnter={() => activeMenu && setActiveMenu(menu.id)}
-            className={`px-3 py-0.5 rounded-sm hover:bg-slate-700/50 hover:text-white transition-colors ${
-              activeMenu === menu.id ? 'bg-slate-700/50 text-white' : ''
+            className={`px-2 py-0.5 rounded-sm hover:bg-slate-200 dark:hover:bg-slate-700/50 hover:text-slate-900 dark:hover:text-white transition-colors ${
+              activeMenu === menu.id ? 'bg-slate-200 text-slate-900 dark:bg-slate-700/50 dark:text-white' : ''
             }`}
           >
             {menu.label}
           </button>
           
           {activeMenu === menu.id && (
-            <div className="absolute top-full left-0 mt-0.5 py-1 w-48 bg-slate-800 border border-slate-700 shadow-xl rounded-md flex flex-col">
+            <div className="absolute top-full left-0 mt-0.5 py-1 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl rounded-md flex flex-col text-slate-800 dark:text-slate-200">
               {menu.items.map((item, idx) => 
                 item.divider ? (
-                  <div key={idx} className="h-px bg-slate-700 my-1 mx-2" />
+                  <div key={idx} className="h-px bg-slate-200 dark:bg-slate-700 my-1 mx-2" />
                 ) : item.subItems ? (
                   <div key={idx} className="relative group">
                     <button className="w-full text-left px-4 py-1.5 hover:bg-brand-500/20 hover:text-brand-300 transition-colors flex justify-between items-center">
                       <span>{item.label}</span>
                       <span className="text-slate-500 text-[10px]">▶</span>
                     </button>
-                    <div className="absolute top-0 left-[100%] py-1 w-48 bg-slate-800 border border-slate-700 shadow-xl rounded-md flex-col hidden group-hover:flex">
+                    <div className="absolute top-0 left-[100%] py-1 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-xl rounded-md flex-col hidden group-hover:flex">
                       {item.subItems.map((sub, sidx) => (
                         <button
                           key={sidx}

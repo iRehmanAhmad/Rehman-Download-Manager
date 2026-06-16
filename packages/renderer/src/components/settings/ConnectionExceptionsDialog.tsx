@@ -47,25 +47,25 @@ export function ConnectionExceptionsDialog({ open, onOpenChange, exception, onSa
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-        <Dialog.Content className="fixed left-[50%] top-[50%] z-50 flex flex-col w-full max-w-[450px] translate-x-[-50%] translate-y-[-50%] bg-[#f0f0f0] shadow-lg border border-gray-400 p-0 text-black font-sans text-sm">
+        <Dialog.Content className="fixed left-[50%] top-[50%] z-50 flex flex-col w-full max-w-[450px] translate-x-[-50%] translate-y-[-50%] bg-[#f0f0f0] shadow-lg border border-gray-400 p-0 text-black font-sans text-[11px]">
           
-          <div className="flex items-center justify-between px-4 py-2 bg-white border-b border-gray-300 gap-2">
-            <Dialog.Title className="text-sm font-normal">Max. connections number for a server</Dialog.Title>
+          <div className="flex items-center justify-between px-3 py-1 bg-white border-b border-gray-300 gap-2">
+            <Dialog.Title className="text-[11px] font-normal">Max. connections number for a server</Dialog.Title>
             <Dialog.Close className="text-gray-500 hover:text-black">
-              <span className="text-lg leading-none">&times;</span>
+              <span className="text-md leading-none">&times;</span>
             </Dialog.Close>
           </div>
 
-          <div className="p-5 flex flex-col gap-6">
+          <div className="p-3 flex flex-col gap-2">
             
             {/* Server input */}
-            <div className="flex flex-col gap-1 items-center">
-              <label className="mb-1 text-center pr-12">Server</label>
-              <div className="flex w-full gap-2 px-6">
+            <div className="flex flex-col gap-0.5 items-center">
+              <label className="mb-0 text-center pr-12">Server</label>
+              <div className="flex w-full gap-2 px-3">
                 <select 
                   value={protocol} 
                   onChange={(e) => setProtocol(e.target.value)}
-                  className="border border-gray-400 p-1 bg-white outline-none w-24 text-center"
+                  className="border border-gray-400 p-0.5 bg-white outline-none w-20 text-center"
                 >
                   {PROTOCOLS.map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
@@ -73,17 +73,17 @@ export function ConnectionExceptionsDialog({ open, onOpenChange, exception, onSa
                   type="text" 
                   value={server}
                   onChange={(e) => setServer(e.target.value)}
-                  className="border border-gray-400 border-b-blue-600 border-b-2 p-1 bg-white outline-none flex-1"
+                  className="border border-gray-400 border-b-blue-600 border-b-2 p-0.5 bg-white outline-none flex-1"
                   autoFocus
                 />
               </div>
-              <div className="text-xs mt-1 text-black pr-12">
+              <div className="text-[10px] mt-0 text-black pr-12">
                 You may use asterisk as a wildcard pattern
               </div>
             </div>
 
             {/* Connections Dropdown */}
-            <div className="flex items-center justify-end px-6 gap-3 pt-2">
+            <div className="flex items-center justify-end px-3 gap-3 pt-1">
               <label>Max. connections number</label>
               <select 
                 value={maxConnections} 
@@ -95,7 +95,7 @@ export function ConnectionExceptionsDialog({ open, onOpenChange, exception, onSa
             </div>
 
             {/* Buttons */}
-            <div className="flex justify-center gap-4 pt-4 pb-2">
+            <div className="flex justify-center gap-2 pt-4 pb-2">
               <button 
                 onClick={handleSave}
                 className="px-8 py-1 bg-white border border-blue-500 rounded hover:bg-blue-50 w-28 border-2"

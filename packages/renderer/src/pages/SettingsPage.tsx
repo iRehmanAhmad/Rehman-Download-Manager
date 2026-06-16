@@ -25,21 +25,21 @@ export function SettingsPage() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="px-6 py-4 border-b border-slate-800">
-        <h1 className="text-lg font-semibold text-slate-100">Settings</h1>
+      <div className="px-4 py-1 border-b border-slate-200 dark:border-slate-800 flex-shrink-0">
+        <h1 className="text-[15px] font-semibold text-slate-900 dark:text-slate-100">Settings</h1>
       </div>
       <div className="flex flex-1 overflow-hidden">
-        <div className="w-48 border-r border-slate-800 py-2">
+        <div className="w-48 border-r border-slate-200 dark:border-slate-800 py-1">
           {TABS.map((item) => {
             const Icon = item.icon;
             return (
               <button
                 key={item.id}
                 onClick={() => setTab(item.id)}
-                className={`w-full flex items-center gap-3 px-4 py-2.5 text-sm transition-colors ${
+                className={`w-full flex items-center gap-3 px-3 py-1 text-[12px] transition-colors ${
                   tab === item.id
-                    ? 'bg-slate-800 text-slate-100'
-                    : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
+                    ? 'bg-slate-200 text-slate-900 dark:bg-slate-800 dark:text-slate-100'
+                    : 'text-slate-500 hover:bg-slate-100 hover:text-slate-900 dark:text-slate-400 dark:hover:bg-slate-800/50 dark:hover:text-slate-200'
                 }`}
               >
                 <Icon size={16} />
@@ -48,7 +48,7 @@ export function SettingsPage() {
             );
           })}
         </div>
-        <div className="flex-1 overflow-auto p-6">
+        <div className="flex-1 overflow-auto p-2">
           {tab === 'general' && <GeneralSettings />}
           {tab === 'file-types' && <FileTypesSettings />}
           {tab === 'save-to' && <FolderSettings />}
@@ -118,13 +118,13 @@ function GeneralSettings() {
   };
 
   return (
-    <div className="max-w-2xl space-y-4 text-sm text-slate-200">
+    <div className="max-w-2xl space-y-1.5 text-[12px] text-slate-800 dark:text-slate-200">
       
-      <div className="flex items-center justify-between border-b border-gray-600 pb-2">
+      <div className="flex items-center justify-between border-b border-gray-300 dark:border-gray-600 pb-2">
         <span className="font-medium text-[15px]">Browser/System Integration</span>
       </div>
 
-      <div className="flex items-center justify-center gap-4 py-2">
+      <div className="flex items-center justify-center gap-2 py-1">
         <span>Advanced browser integration is enabled</span>
         <button className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 text-black rounded hover:bg-[#e0e0e0] transition-colors">
           Restart
@@ -153,9 +153,9 @@ function GeneralSettings() {
         </label>
       </div>
 
-      <div className="border border-gray-500 rounded p-4 mt-6">
-        <div className="mb-2 -mt-7 bg-[#0f172a] px-1 w-fit text-slate-300">Capture downloads from the following browsers:</div>
-        <div className="border border-gray-500 bg-white h-48 overflow-y-auto p-1 text-black">
+      <div className="border border-gray-300 dark:border-gray-500 rounded p-2 mt-2">
+        <div className="mb-2 -mt-7 bg-slate-50 dark:bg-[#0f172a] px-1 w-fit text-slate-800 dark:text-slate-300 font-medium">Capture downloads from the following browsers:</div>
+        <div className="border border-gray-300 dark:border-gray-500 bg-white h-24 overflow-y-auto p-1 text-black">
           {capturedBrowsers.map((b: any, idx: number) => (
             <label key={idx} className="flex items-center gap-2 p-0.5 cursor-pointer hover:bg-blue-50">
               <input 
@@ -178,8 +178,8 @@ function GeneralSettings() {
         </div>
       </div>
 
-      <div className="space-y-3 mt-6">
-        <div className="flex items-center justify-between border-t border-gray-600 pt-3">
+      <div className="space-y-1.5 mt-2">
+        <div className="flex items-center justify-between border-t border-gray-300 dark:border-gray-600 pt-3">
           <span>Customize keys to prevent or force downloading with IDM</span>
           <button className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 text-black rounded hover:bg-[#e0e0e0] transition-colors">
             Keys...
@@ -217,14 +217,14 @@ function AppearanceSettings() {
   const setValue = useSettingsStore((s) => s.setValue);
 
   return (
-    <div className="max-w-lg space-y-6">
-      <h2 className="text-base font-medium text-slate-200">Appearance</h2>
+    <div className="max-w-lg space-y-1.5">
+      <h2 className="text-base font-medium text-slate-900 dark:text-slate-200">Appearance</h2>
       <div className="space-y-2">
-        <label className="text-sm text-slate-400 block">Theme</label>
+        <label className="text-sm text-slate-600 dark:text-slate-400 block">Theme</label>
         <select
           value={settings.theme || 'dark'}
           onChange={(e) => setValue('theme', e.target.value)}
-          className="w-full bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-200"
+          className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded px-3 py-1 text-sm text-slate-900 dark:text-slate-200"
         >
           <option value="dark">Dark</option>
           <option value="light">Light</option>
@@ -268,9 +268,9 @@ function NetworkSettings() {
   };
 
   return (
-    <div className="max-w-2xl text-sm text-slate-200 flex flex-col h-full">
+    <div className="max-w-2xl text-[12px] text-slate-800 dark:text-slate-200 flex flex-col h-full">
       <div className="flex items-center justify-between pb-4">
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <img src="/icons/icon.png" alt="" className="w-8 h-8 object-contain opacity-80" />
           <span className="font-bold text-lg font-sans">Proxy / socks configuration</span>
         </div>
@@ -282,7 +282,7 @@ function NetworkSettings() {
         </button>
       </div>
 
-      <div className="space-y-4 px-2">
+      <div className="space-y-1.5 px-2">
         <label className="flex items-start gap-2 cursor-pointer pt-2">
           <input 
             type="checkbox" 
@@ -338,7 +338,7 @@ function NetworkSettings() {
           Use automatic configuration script
         </label>
 
-        <div className="flex items-center gap-4 pl-6 pt-2 pb-2">
+        <div className="flex items-center gap-2 pl-6 pt-2 pb-2">
           <span className={proxyType === 'pac' ? 'text-gray-600' : 'text-gray-400'}>Address</span>
           <input 
             type="text" 
@@ -363,7 +363,7 @@ function NetworkSettings() {
           Manual proxy/socks configuration
         </label>
 
-        <div className="pl-6 pt-2 grid grid-cols-[1fr_80px_1fr_1fr] gap-4 text-black">
+        <div className="pl-6 pt-2 grid grid-cols-[1fr_80px_1fr_1fr] gap-2 text-black">
           <div className="flex flex-col gap-1">
             <span className={proxyType === 'manual' ? 'text-gray-500' : 'text-gray-300'}>Proxy server address</span>
             <input 
@@ -411,7 +411,7 @@ function NetworkSettings() {
             Use this proxy for the following protocols:
           </div>
           <div className="flex justify-between items-center">
-            <div className="flex gap-6">
+            <div className="flex gap-2">
               <label className={`flex items-center gap-1.5 ${proxyType === 'manual' ? 'cursor-pointer text-gray-700' : 'cursor-not-allowed text-gray-400'}`}>
                 <input 
                   type="checkbox" 
@@ -472,14 +472,14 @@ function NetworkSettings() {
           <Dialog.Overlay className="fixed inset-0 bg-transparent z-50" />
           <Dialog.Content className="fixed left-[50%] top-[50%] z-50 flex flex-col w-[380px] translate-x-[-50%] translate-y-[-50%] bg-[#f0f0f0] shadow-lg border border-gray-400 p-0 text-black font-sans text-sm outline-none">
             
-            <div className="flex items-center justify-between px-3 py-2 bg-white border-b border-gray-300 gap-2">
+            <div className="flex items-center justify-between px-3 py-1 bg-white border-b border-gray-300 gap-2">
               <Dialog.Title className="text-xs font-normal">Internet Download Manager</Dialog.Title>
               <Dialog.Close className="text-gray-500 hover:text-black">
                 <span className="text-lg leading-none">&times;</span>
               </Dialog.Close>
             </div>
 
-            <div className="flex items-center gap-4 px-6 py-8 pb-10">
+            <div className="flex items-center gap-2 px-6 py-8 pb-10">
               {/* Alert Triangle Icon */}
               <div className="flex-shrink-0 text-yellow-500">
                 <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
@@ -547,7 +547,7 @@ function ConnectionSettings() {
   };
 
   return (
-    <div className="max-w-2xl space-y-4 text-sm text-slate-200 h-full flex flex-col">
+    <div className="max-w-2xl space-y-1.5 text-[12px] text-slate-800 dark:text-slate-200 h-full flex flex-col">
       <div className="flex items-center justify-between border-b border-gray-600 pb-2">
         <div className="flex items-center gap-2">
           <img src="/icons/icon.png" alt="" className="w-5 h-5 object-contain opacity-80" />
@@ -555,7 +555,7 @@ function ConnectionSettings() {
         </div>
       </div>
 
-      <div className="border border-gray-300 p-4 bg-white text-black relative mt-6">
+      <div className="border border-gray-300 p-2 bg-white text-black relative mt-2">
         <div className="absolute -top-3 left-2 bg-[#f0f0f0] px-1 text-black font-sans">
           Max. connections number
         </div>
@@ -571,10 +571,10 @@ function ConnectionSettings() {
           </select>
         </div>
 
-        <div className="flex items-start gap-4 pb-2">
+        <div className="flex items-start gap-2 pb-2">
           <div className="flex-1 flex flex-col">
             <label className="mb-1">Exceptions:</label>
-            <div className="border border-gray-400 h-32 bg-white overflow-y-auto">
+            <div className="border border-gray-400 h-20 bg-white overflow-y-auto">
               <table className="w-full text-left border-collapse">
                 <thead className="bg-white sticky top-0 border-b border-gray-300">
                   <tr>
@@ -628,7 +628,7 @@ function ConnectionSettings() {
         </div>
       </div>
 
-      <div className="border border-gray-300 p-4 bg-white text-black relative mt-8">
+      <div className="border border-gray-300 p-2 bg-white text-black relative mt-8">
         <div className="absolute -top-3 left-2 bg-[#f0f0f0] px-1 text-black font-sans flex items-center gap-2">
           <input 
             type="checkbox" 
@@ -639,7 +639,7 @@ function ConnectionSettings() {
           Download limits
         </div>
 
-        <div className="pl-6 space-y-2 mt-4">
+        <div className="pl-6 space-y-2 mt-2">
           <div className="flex items-center gap-2">
             <span className={downloadLimitsEnabled ? 'text-black' : 'text-gray-400'}>Download no more than</span>
             <input 
@@ -704,7 +704,7 @@ function DownloadSettings() {
   const duplicateLinkAction = settings.duplicateLinkAction || 'ask';
 
   return (
-    <div className="max-w-2xl space-y-4 text-sm text-slate-200">
+    <div className="max-w-2xl space-y-1.5 text-[12px] text-slate-800 dark:text-slate-200">
       
       <div className="flex items-center justify-between border-b border-gray-600 pb-2">
         <div className="flex items-center gap-2">
@@ -713,14 +713,14 @@ function DownloadSettings() {
         </div>
       </div>
 
-      <div className="flex justify-between items-center px-4 py-2 mt-4">
+      <div className="flex justify-between items-center px-4 py-1 mt-2">
         <span>Customize "Download progress" dialog</span>
         <button className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 text-black rounded hover:bg-[#e0e0e0] transition-colors w-24">
           Edit...
         </button>
       </div>
 
-      <div className="space-y-3 px-4">
+      <div className="space-y-1.5 px-4">
         <label className="flex items-center gap-2 cursor-pointer">
           <input 
             type="checkbox" 
@@ -759,7 +759,7 @@ function DownloadSettings() {
 
       <div className="border-b border-gray-600 mx-2"></div>
 
-      <div className="space-y-3 px-4 pt-2">
+      <div className="space-y-1.5 px-4 pt-2">
         <label className="flex items-center gap-2 cursor-pointer">
           <input 
             type="checkbox" 
@@ -830,8 +830,8 @@ function SitesLoginsSettings() {
   };
 
   return (
-    <div className="max-w-2xl text-sm text-slate-200 flex flex-col h-full">
-      <div className="flex items-center gap-4 pb-2 border-b border-gray-400">
+    <div className="max-w-2xl text-[12px] text-slate-800 dark:text-slate-200 flex flex-col h-full">
+      <div className="flex items-center gap-2 pb-2 border-b border-gray-400">
         <img src="/icons/icon.png" alt="" className="w-8 h-8 object-contain opacity-80" />
         <span className="font-bold text-lg font-sans text-black">User names and passwords for servers/sites</span>
       </div>
@@ -840,7 +840,7 @@ function SitesLoginsSettings() {
         <div className="border border-gray-400 bg-white flex-1 overflow-auto">
           <table className="w-full text-black">
             <thead className="sticky top-0 bg-white border-b border-gray-300 shadow-sm">
-              <tr className="text-left text-[13px]">
+              <tr className="text-left text-[12px]">
                 <th className="font-normal px-2 py-1 w-1/2 border-r border-gray-300">Site/path</th>
                 <th className="font-normal px-2 py-1 border-r border-gray-300">User</th>
                 <th className="font-normal px-2 py-1">Password</th>
@@ -862,7 +862,7 @@ function SitesLoginsSettings() {
           </table>
         </div>
         
-        <div className="flex gap-4 mt-4">
+        <div className="flex gap-2 mt-2">
           <button 
             onClick={() => { setDialogMode('new'); setDialogOpen(true); }}
             className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 rounded hover:bg-[#e0e0e0] w-24 text-black"
@@ -911,13 +911,13 @@ function DialUpVpnSettings() {
   const vpnRedialDelay = settings.vpnRedialDelay || '30';
 
   return (
-    <div className="max-w-2xl text-sm text-slate-200 flex flex-col h-full">
-      <div className="flex items-center gap-4 pb-2 border-b border-gray-400">
+    <div className="max-w-2xl text-[12px] text-slate-800 dark:text-slate-200 flex flex-col h-full">
+      <div className="flex items-center gap-2 pb-2 border-b border-gray-400">
         <img src="/icons/icon.png" alt="" className="w-8 h-8 object-contain opacity-80" />
         <span className="font-bold text-lg font-sans text-black">Dial up / VPN settings</span>
       </div>
 
-      <div className="pt-4 space-y-4 px-2">
+      <div className="pt-4 space-y-1.5 px-2">
         <label className="flex items-center gap-2 cursor-pointer text-black">
           <input 
             type="checkbox" 
@@ -928,7 +928,7 @@ function DialUpVpnSettings() {
           Use Windows Dial Up / VPN Networking
         </label>
 
-        <fieldset className="border border-gray-300 p-4 pt-2 relative mt-4">
+        <fieldset className="border border-gray-300 p-2 pt-2 relative mt-2">
           <legend className="px-1 text-black bg-[#f0f0f0] absolute -top-2.5 left-2">Connection options</legend>
           <div className="grid grid-cols-[120px_1fr] items-center gap-y-3 gap-x-2 pt-2">
             <span className="text-right text-black pr-2">Connection:</span>
@@ -982,7 +982,7 @@ function DialUpVpnSettings() {
           </div>
         </fieldset>
 
-        <fieldset className="border border-gray-300 p-4 pt-2 relative mt-4">
+        <fieldset className="border border-gray-300 p-2 pt-2 relative mt-2">
           <legend className="px-1 text-black bg-[#f0f0f0] absolute -top-2.5 left-2">Redial options</legend>
           <div className="grid grid-cols-[250px_60px_1fr] items-center gap-y-3 gap-x-2 pt-2">
             <span className="text-right text-black pr-2">Redial attempts (zero if endlessly):</span>
@@ -1044,8 +1044,8 @@ function SoundsSettings() {
   };
 
   return (
-    <div className="max-w-2xl text-sm text-slate-200 flex flex-col h-full">
-      <div className="flex items-center gap-4 pb-2 border-b border-gray-400">
+    <div className="max-w-2xl text-[12px] text-slate-800 dark:text-slate-200 flex flex-col h-full">
+      <div className="flex items-center gap-2 pb-2 border-b border-gray-400">
         <img src="/icons/icon.png" alt="" className="w-8 h-8 object-contain opacity-80" />
         <span className="font-bold text-lg font-sans text-black">Sound settings</span>
       </div>
@@ -1057,7 +1057,7 @@ function SoundsSettings() {
           <div className="border border-gray-400 bg-white flex-1 overflow-auto">
             <table className="w-full text-black table-fixed">
               <thead className="sticky top-0 bg-white border-b border-gray-300">
-                <tr className="text-left text-[13px]">
+                <tr className="text-left text-[12px]">
                   <th className="font-normal px-2 py-0.5 w-[250px] border-r border-gray-300">Event</th>
                   <th className="font-normal px-2 py-0.5">Sound file</th>
                 </tr>
@@ -1092,18 +1092,18 @@ function SoundsSettings() {
             </table>
           </div>
 
-          <div className="flex justify-center gap-16 mt-4 mb-2">
+          <div className="flex justify-center gap-16 mt-2 mb-2">
             <button 
               onClick={handleBrowse}
               disabled={!selectedEventId}
-              className={`px-8 py-1.5 border rounded w-32 ${selectedEventId ? 'bg-[#f0f0f0] border-gray-400 text-black hover:bg-[#e0e0e0]' : 'bg-[#f0f0f0] border-gray-200 text-gray-400 cursor-not-allowed'}`}
+              className={`px-8 py-1 border rounded w-32 ${selectedEventId ? 'bg-[#f0f0f0] border-gray-400 text-black hover:bg-[#e0e0e0]' : 'bg-[#f0f0f0] border-gray-200 text-gray-400 cursor-not-allowed'}`}
             >
               Browse...
             </button>
             <button 
               onClick={handlePlay}
               disabled={!selectedEventId || !settings[`${selectedEventId}_file`]}
-              className={`px-8 py-1.5 border rounded w-32 ${selectedEventId && settings[`${selectedEventId}_file`] ? 'bg-[#f0f0f0] border-gray-400 text-black hover:bg-[#e0e0e0]' : 'bg-[#f0f0f0] border-gray-200 text-gray-400 cursor-not-allowed'}`}
+              className={`px-8 py-1 border rounded w-32 ${selectedEventId && settings[`${selectedEventId}_file`] ? 'bg-[#f0f0f0] border-gray-400 text-black hover:bg-[#e0e0e0]' : 'bg-[#f0f0f0] border-gray-200 text-gray-400 cursor-not-allowed'}`}
             >
               Play
             </button>
@@ -1179,7 +1179,7 @@ function FolderSettings() {
   const isGeneral = selectedCategory.id === 'other';
 
   return (
-    <div className="max-w-2xl space-y-4 text-sm text-slate-200">
+    <div className="max-w-2xl space-y-1.5 text-[12px] text-slate-800 dark:text-slate-200">
       
       <div className="flex items-center justify-between border-b border-gray-600 pb-2">
         <div className="flex items-center gap-2">
@@ -1188,8 +1188,8 @@ function FolderSettings() {
         </div>
       </div>
 
-      <div className="border border-gray-400 p-4 space-y-4 rounded-sm bg-[#f0f0f0] text-black">
-        <div className="text-xs -mt-6 bg-[#f0f0f0] inline-block px-1 ml-2 mb-2">Save To...</div>
+      <div className="border border-gray-400 p-2 space-y-1.5 rounded-sm bg-[#f0f0f0] text-black">
+        <div className="text-xs -mt-2 bg-[#f0f0f0] inline-block px-1 ml-2 mb-2">Save To...</div>
         
         <div className="flex items-center gap-2 justify-between">
           <div className="flex flex-col flex-1">
@@ -1258,7 +1258,7 @@ function FolderSettings() {
           </div>
         </div>
 
-        <label className="flex items-center gap-2 cursor-pointer mt-4">
+        <label className="flex items-center gap-2 cursor-pointer mt-2">
           <input 
             type="checkbox" 
             checked={!!selectedCategory.saveLastFolder}
@@ -1279,8 +1279,8 @@ function FolderSettings() {
         <span>Set file creation date as provided by the server</span>
       </label>
 
-      <div className="border border-gray-400 p-4 rounded-sm bg-[#f0f0f0] text-black mt-6">
-        <div className="text-xs -mt-6 bg-[#f0f0f0] inline-block px-1 ml-2 mb-2">Temporary directory</div>
+      <div className="border border-gray-400 p-2 rounded-sm bg-[#f0f0f0] text-black mt-2">
+        <div className="text-xs -mt-2 bg-[#f0f0f0] inline-block px-1 ml-2 mb-2">Temporary directory</div>
         
         <div className="flex gap-2 mb-2 mt-1">
           <input 
@@ -1322,12 +1322,12 @@ function SecuritySettings() {
   const setValue = useSettingsStore((s) => s.setValue);
 
   return (
-    <div className="max-w-lg space-y-6">
-      <h2 className="text-base font-medium text-slate-200">Security</h2>
+    <div className="max-w-lg space-y-1.5">
+      <h2 className="text-base font-medium text-slate-900 dark:text-slate-200">Security</h2>
       
       <label className="flex items-center justify-between">
         <div>
-          <span className="text-sm text-slate-400">Enable Antivirus Scanning</span>
+          <span className="text-sm text-slate-600 dark:text-slate-400">Enable Antivirus Scanning</span>
           <p className="text-xs text-slate-600 mt-0.5">Automatically scan files after they finish downloading</p>
         </div>
         <input
@@ -1339,14 +1339,14 @@ function SecuritySettings() {
       </label>
 
       {settings.antivirusEnabled === 'true' && (
-        <div className="space-y-2 mt-4 p-4 bg-slate-800/50 rounded-lg border border-slate-800">
-          <label className="text-sm text-slate-400 block">Antivirus Executable Command</label>
+        <div className="space-y-2 mt-2 p-2 bg-slate-800/50 rounded-lg border border-slate-800">
+          <label className="text-sm text-slate-600 dark:text-slate-400 block">Antivirus Executable Command</label>
           <input
             type="text"
             placeholder="C:\ProgramData\Microsoft\Windows Defender\Platform\...\MpCmdRun.exe"
             value={settings.antivirusCmd || ''}
             onChange={(e) => setValue('antivirusCmd', e.target.value)}
-            className="w-full bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-200"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded px-3 py-1 text-sm text-slate-800 dark:text-slate-200"
           />
           <p className="text-xs text-slate-500 mt-2">
             Enter the absolute path to your antivirus scanner's CLI tool. RDM will append the downloaded file path as the final argument.
@@ -1355,7 +1355,7 @@ function SecuritySettings() {
       )}
 
       <div className="mt-8 border-t border-slate-800 pt-6">
-        <h3 className="text-sm font-medium text-slate-300 mb-2">Checksums</h3>
+        <h3 className="text-sm font-medium text-slate-800 dark:text-slate-300 mb-2">Checksums</h3>
         <p className="text-sm text-slate-500">MD5 checksum verification runs automatically on download completion if a checksum is provided when adding a URL.</p>
       </div>
     </div>
@@ -1374,7 +1374,7 @@ function FileTypesSettings() {
   const excludedSites = settings.noAutoDownloadSites !== undefined ? settings.noAutoDownloadSites : defaultExcludedSites;
 
   return (
-    <div className="max-w-2xl space-y-4 text-sm text-slate-200">
+    <div className="max-w-2xl space-y-1.5 text-[12px] text-slate-800 dark:text-slate-200">
       
       <div className="flex items-center justify-between border-b border-gray-600 pb-2">
         <div className="flex items-center gap-2">
@@ -1400,15 +1400,15 @@ function FileTypesSettings() {
         </div>
       </div>
 
-      <div className="space-y-1 mt-6">
+      <div className="space-y-1 mt-2">
         <label className="block mb-1">Don't start downloading automatically from the following sites:</label>
         <textarea
           value={excludedSites}
           onChange={(e) => setValue('noAutoDownloadSites', e.target.value)}
-          className="w-full h-16 border border-gray-400 p-2 text-black bg-white rounded-none resize-none outline-none font-sans"
+          className="w-full h-12 border border-gray-400 p-2 text-black bg-white rounded-none resize-none outline-none font-sans"
         />
         <div className="flex items-center justify-between pt-1">
-          <span className="text-slate-400">(separate names by spaces)</span>
+          <span className="text-slate-500 dark:text-slate-400">(separate names by spaces)</span>
           <button 
             onClick={() => setValue('noAutoDownloadSites', defaultExcludedSites)}
             className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 text-black rounded hover:bg-[#e0e0e0] transition-colors"
@@ -1418,11 +1418,11 @@ function FileTypesSettings() {
         </div>
       </div>
 
-      <div className="space-y-2 mt-6">
+      <div className="space-y-2 mt-2">
         <label className="block mb-1">Don't start downloading automatically from the following addresses:</label>
         <button 
           onClick={() => setExceptionsDialogOpen(true)}
-          className="px-8 py-1.5 bg-[#f0f0f0] border border-gray-400 text-black rounded hover:bg-[#e0e0e0] transition-colors min-w-[120px]"
+          className="px-8 py-1 bg-[#f0f0f0] border border-gray-400 text-black rounded hover:bg-[#e0e0e0] transition-colors min-w-[120px]"
         >
           Edit list ...
         </button>

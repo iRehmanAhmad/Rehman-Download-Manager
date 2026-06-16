@@ -22,7 +22,7 @@ export function StatusBar() {
   const globalSpeedLimit = qStatus?.globalSpeedLimit ?? 0;
 
   return (
-    <div className="flex items-center justify-between h-7 bg-slate-900 border-t border-slate-800 px-4 text-xs text-slate-500 flex-shrink-0">
+    <div className="flex items-center justify-between h-7 bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 px-4 text-xs text-slate-500 flex-shrink-0">
       <span>
         {activeCount > 0
           ? `Downloading ${activeCount} / ${maxConcurrent} max${formatSpeed(totalSpeed)}`

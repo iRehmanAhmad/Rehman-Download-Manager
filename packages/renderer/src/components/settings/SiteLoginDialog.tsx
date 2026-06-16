@@ -55,16 +55,16 @@ export function SiteLoginDialog({ open, onOpenChange, siteLogin, onSave }: SiteL
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-transparent z-50" />
-        <Dialog.Content className="fixed left-[50%] top-[50%] z-50 flex flex-col w-[480px] translate-x-[-50%] translate-y-[-50%] bg-[#f0f0f0] shadow-lg border border-gray-400 p-0 text-black font-sans text-sm outline-none">
+        <Dialog.Content className="fixed left-[50%] top-[50%] z-50 flex flex-col w-[480px] translate-x-[-50%] translate-y-[-50%] bg-[#f0f0f0] shadow-lg border border-gray-400 p-0 text-black font-sans text-[11px] outline-none">
           
-          <div className="flex items-center justify-between px-3 py-2 bg-white border-b border-gray-300 gap-2">
-            <Dialog.Title className="text-xs font-normal">Site login</Dialog.Title>
+          <div className="flex items-center justify-between px-2 py-0.5 bg-white border-b border-gray-300 gap-2">
+            <Dialog.Title className="text-[11px] font-normal">Site login</Dialog.Title>
             <Dialog.Close className="text-gray-500 hover:text-black">
-              <span className="text-lg leading-none">&times;</span>
+              <span className="text-base leading-none">&times;</span>
             </Dialog.Close>
           </div>
 
-          <div className="px-4 pt-6 pb-2 grid grid-cols-[100px_1fr] items-start gap-x-2 gap-y-4">
+          <div className="px-3 pt-3 pb-1 grid grid-cols-[100px_1fr] items-start gap-x-2 gap-y-2">
             <div className="col-span-2 grid grid-cols-[80px_1fr] items-center gap-2 pl-2 pr-28">
               <span className="invisible">Label offset</span>
               <span className="text-black col-span-1">Server/path</span>
@@ -74,7 +74,7 @@ export function SiteLoginDialog({ open, onOpenChange, siteLogin, onSave }: SiteL
               <select 
                 value={protocol}
                 onChange={(e) => setProtocol(e.target.value)}
-                className="border border-gray-400 p-1 py-0.5 outline-none bg-white text-black"
+                className="border border-gray-400 p-0.5 outline-none bg-white text-black text-[11px]"
               >
                 <option value="*">*</option>
                 <option value="http://">http://</option>
@@ -85,23 +85,23 @@ export function SiteLoginDialog({ open, onOpenChange, siteLogin, onSave }: SiteL
                 type="text" 
                 value={server}
                 onChange={(e) => setServer(e.target.value)}
-                className="border border-gray-400 p-1 py-0.5 outline-none bg-white w-full"
+                className="border border-gray-400 p-0.5 outline-none bg-white w-full"
               />
             </div>
 
             <div className="col-span-2 pl-[90px] pr-4">
-              <p className="text-black text-[13px] leading-tight">
+              <p className="text-black text-[11px] leading-tight">
                 Note: Type the path only if you have different login names for different server directories.
               </p>
             </div>
 
-            <div className="col-span-2 grid grid-cols-[80px_1fr_100px] items-center gap-x-2 gap-y-4 pl-[70px] pr-2 pt-4">
+            <div className="col-span-2 grid grid-cols-[80px_1fr_100px] items-center gap-x-2 gap-y-2 pl-[70px] pr-2 pt-2">
               <span className="text-right pr-2">User</span>
               <input 
                 type="text" 
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="border border-gray-400 p-1 py-0.5 outline-none bg-white w-48"
+                className="border border-gray-400 p-0.5 outline-none bg-white w-40"
               />
               <button 
                 onClick={handleSave}

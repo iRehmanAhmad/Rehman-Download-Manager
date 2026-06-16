@@ -36,9 +36,9 @@ export function Sidebar() {
   };
 
   return (
-    <aside className="w-64 flex-shrink-0 bg-slate-900/40 backdrop-blur-md border-r border-white/5 flex flex-col shadow-2xl relative z-10">
+    <aside className="w-48 lg:w-64 flex-shrink-0 bg-slate-100/80 dark:bg-slate-900/40 backdrop-blur-md border-r border-slate-200 dark:border-white/5 flex flex-col shadow-2xl relative z-10 transition-all">
       <div className="flex-1 overflow-auto py-2">
-        <div className="px-3 py-1 text-[13px] font-medium text-slate-300 border-b border-slate-800 mb-2 pb-2">
+        <div className="px-3 py-1 text-xs font-semibold text-slate-500 dark:text-slate-300 border-b border-slate-200 dark:border-slate-800 mb-1 pb-1">
           {t('sidebar.categories')}
         </div>
         
@@ -182,26 +182,26 @@ function CollapsibleNode({
       <div className="flex items-center group relative">
         <button
           onClick={onToggle}
-          className="w-5 h-5 flex items-center justify-center text-slate-500 hover:text-slate-300 absolute left-0 z-10"
+          className="w-4 h-4 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-white/10 rounded mr-1 flex-shrink-0 transition-colors"
         >
           {children ? <ToggleIcon size={12} className="stroke-[1.5]" /> : null}
         </button>
         
         <button
           onClick={onClick}
-          className={`flex-1 flex items-center gap-2 pl-6 pr-3 py-1.5 rounded-sm text-[13px] transition-all ${
-            active && !children
-              ? 'bg-brand-500/20 text-brand-400'
-              : 'text-slate-300 hover:bg-white/5 hover:text-white'
+          className={`flex items-center w-full px-2 py-1 cursor-pointer select-none transition-colors group text-xs ${
+            active 
+              ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/20 dark:text-white font-medium' 
+              : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-white/5 dark:hover:text-white'
           }`}
         >
-          <Icon size={16} className={active ? 'text-brand-400' : 'text-yellow-500'} />
-          <span>{label}</span>
+          <Icon size={14} className={active ? 'text-brand-400' : 'text-yellow-500'} />
+          <span className="ml-1.5">{label}</span>
         </button>
       </div>
       
       {expanded && children && (
-        <div className="mt-0.5 relative before:absolute before:left-[9px] before:top-0 before:bottom-0 before:w-px before:bg-slate-700/50">
+        <div className="mt-0.5 relative before:absolute before:left-[9px] before:top-0 before:bottom-0 before:w-px before:bg-slate-300 dark:before:bg-slate-700/50">
           {children}
         </div>
       )}
@@ -213,15 +213,15 @@ function TreeItem({ icon: Icon, label, active, onClick, indentLevel = 0 }: { ico
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center gap-2 py-1.5 pr-3 rounded-sm text-[13px] transition-all relative ${
+      className={`w-full flex items-center gap-1.5 py-1 pr-3 rounded-sm text-[11px] transition-all relative ${
         active
-          ? 'bg-brand-500/20 text-brand-400 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]'
-          : 'text-slate-300 hover:bg-white/5 hover:text-white'
+          ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/20 dark:text-brand-400 dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]'
+          : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-white/5 dark:hover:text-white'
       }`}
       style={{ paddingLeft: `${1.5 + indentLevel * 1.5}rem` }}
     >
-      <div className="absolute left-[9px] top-1/2 w-4 h-px bg-slate-700/50" />
-      <Icon size={16} className={active ? 'drop-shadow-[0_0_8px_rgba(96,165,250,0.5)]' : 'text-slate-400'} />
+      <div className="absolute left-[9px] top-1/2 w-4 h-px bg-slate-300 dark:bg-slate-700/50" />
+      <Icon size={13} className={active ? 'drop-shadow-[0_0_8px_rgba(96,165,250,0.5)]' : 'text-slate-400'} />
       <span>{label}</span>
     </button>
   );

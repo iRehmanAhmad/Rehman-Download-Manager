@@ -58,38 +58,38 @@ export function CategoryDialog({ open, onOpenChange, category, onSave, title }: 
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/60 z-50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-        <Dialog.Content className="fixed left-[50%] top-[50%] z-50 flex flex-col w-full max-w-[500px] translate-x-[-50%] translate-y-[-50%] bg-[#f0f0f0] shadow-lg border border-gray-400 p-0 text-black font-sans text-sm">
+        <Dialog.Content className="fixed left-[50%] top-[50%] z-50 flex flex-col w-full max-w-[500px] translate-x-[-50%] translate-y-[-50%] bg-[#f0f0f0] shadow-lg border border-gray-400 p-0 text-black font-sans text-[11px]">
           
-          <div className="flex items-center justify-between px-4 py-2 bg-white border-b border-gray-300 gap-2">
-            <Dialog.Title className="text-sm font-normal">{title}</Dialog.Title>
+          <div className="flex items-center justify-between px-3 py-1 bg-white border-b border-gray-300 gap-2">
+            <Dialog.Title className="text-[11px] font-normal">{title}</Dialog.Title>
             <Dialog.Close className="text-gray-500 hover:text-black">
-              <span className="text-lg leading-none">&times;</span>
+              <span className="text-md leading-none">&times;</span>
             </Dialog.Close>
           </div>
 
-          <div className="p-4 flex flex-col gap-3">
+          <div className="p-2 flex flex-col gap-2">
             
             {/* Category Name */}
             <div className="flex justify-between items-start">
-              <div className="flex flex-col flex-1 mr-4">
-                <label className="mb-1">Category name</label>
+              <div className="flex flex-col flex-1 mr-4 mt-1">
+                <label className="mb-0.5">Category name</label>
                 <input 
                   type="text" 
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="border border-gray-400 p-1 bg-white outline-none"
+                  className="border border-gray-400 p-0.5 bg-white outline-none"
                   autoFocus
                 />
               </div>
-              <div className="flex flex-col gap-2 pt-5">
+              <div className="flex flex-col gap-1 pt-4">
                 <button 
                   onClick={handleSave}
-                  className="px-6 py-1 bg-white border border-blue-500 rounded hover:bg-blue-50 w-24 border-2"
+                  className="px-4 py-0.5 bg-white border border-blue-500 rounded hover:bg-blue-50 w-20 border-2"
                 >
                   OK
                 </button>
                 <Dialog.Close asChild>
-                  <button className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 rounded hover:bg-[#e0e0e0] w-24">
+                  <button className="px-4 py-0.5 bg-[#f0f0f0] border border-gray-400 rounded hover:bg-[#e0e0e0] w-20">
                     Cancel
                   </button>
                 </Dialog.Close>
@@ -97,29 +97,29 @@ export function CategoryDialog({ open, onOpenChange, category, onSave, title }: 
             </div>
 
             {/* File Types */}
-            <div className="flex flex-col -mt-2">
-              <label className="mb-1">Automatically put in this category the following file types:</label>
+            <div className="flex flex-col -mt-1">
+              <label className="mb-0.5">Automatically put in this category the following file types:</label>
               <input 
                 type="text" 
                 value={extensions}
                 onChange={(e) => setExtensions(e.target.value)}
-                className="border border-gray-400 p-1 bg-white outline-none w-[340px]"
+                className="border border-gray-400 p-0.5 bg-white outline-none w-[340px]"
               />
-              <div className="text-xs mt-1 text-gray-700">
+              <div className="text-[10px] mt-0.5 text-gray-700">
                 Note: type file extensions separated by space (e.g. avi mpg mpeg)
               </div>
             </div>
 
-            <div className="border-b border-gray-300 my-1"></div>
+            <div className="border-b border-gray-300 my-0.5"></div>
 
             {/* Sites */}
             <div className="flex flex-col">
-              <label className="flex items-center gap-2 cursor-pointer mb-1">
+              <label className="flex items-center gap-1.5 cursor-pointer mb-0.5">
                 <input 
                   type="checkbox" 
                   checked={sitesEnabled}
                   onChange={(e) => setSitesEnabled(e.target.checked)}
-                  className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+                  className="w-3.5 h-3.5 accent-blue-600 border border-gray-400 rounded-sm"
                 />
                 <span>Automatically put in this category the files from the following sites only:</span>
               </label>
@@ -128,24 +128,24 @@ export function CategoryDialog({ open, onOpenChange, category, onSave, title }: 
                 value={sites}
                 onChange={(e) => setSites(e.target.value)}
                 disabled={!sitesEnabled}
-                className={`border p-1 w-full outline-none ${sitesEnabled ? 'border-gray-400 bg-white' : 'border-gray-200 bg-[#f0f0f0] text-gray-400'}`}
+                className={`border p-0.5 w-full outline-none ${sitesEnabled ? 'border-gray-400 bg-white' : 'border-gray-200 bg-[#f0f0f0] text-gray-400'}`}
               />
-              <div className={`text-xs mt-1 ${sitesEnabled ? 'text-gray-700' : 'text-gray-400'}`}>
+              <div className={`text-[10px] mt-0.5 ${sitesEnabled ? 'text-gray-700' : 'text-gray-400'}`}>
                 Separate sites by spaces. You may use asterisk as a wildcard pattern
               </div>
             </div>
 
-            <div className="border-b border-gray-300 my-1"></div>
+            <div className="border-b border-gray-300 my-0.5"></div>
 
             {/* Save Directory */}
             <div className="flex flex-col">
-              <label className="mb-1 text-blue-700">Save future downloads of this category to the following folder:</label>
-              <div className="flex gap-2 mb-2">
+              <label className="mb-0.5 text-blue-700">Save future downloads of this category to the following folder:</label>
+              <div className="flex gap-1.5 mb-1">
                 <input 
                   type="text" 
                   value={defaultDir}
                   onChange={(e) => setDefaultDir(e.target.value)}
-                  className="border border-gray-400 p-1 bg-white flex-1 outline-none"
+                  className="border border-gray-400 p-0.5 bg-white flex-1 outline-none"
                 />
               </div>
               <div className="flex justify-between items-center">

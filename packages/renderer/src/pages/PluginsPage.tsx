@@ -78,7 +78,7 @@ export function PluginsPage() {
             <Puzzle size={48} strokeWidth={1.5} />
             <p className="mt-4 text-sm">No plugins installed</p>
             <p className="text-xs mt-1">Install plugins to extend download capabilities</p>
-            <div className="mt-6 p-4 bg-slate-900 border border-slate-800 rounded-lg max-w-md text-left">
+            <div className="mt-6 p-4 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg max-w-md text-left">
               <h3 className="text-xs font-medium text-slate-400 mb-2">Bundled Plugins</h3>
               <div className="space-y-2">
                 <QuickInstallItem
@@ -123,12 +123,12 @@ function PluginCard({
   onUninstall: (id: string) => void;
 }) {
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-lg p-4 hover:border-slate-700 transition-colors">
+    <div className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4 hover:border-slate-300 dark:hover:border-slate-700 transition-colors">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div
             className={`w-2 h-2 rounded-full ${
-              plugin.enabled ? 'bg-green-500' : 'bg-slate-600'
+              plugin.enabled ? 'bg-green-500' : 'bg-slate-300 dark:bg-slate-600'
             }`}
           />
           <div>
@@ -143,7 +143,7 @@ function PluginCard({
           {plugin.enabled ? (
             <button
               onClick={() => onDisable(plugin.id)}
-              className="p-1.5 hover:bg-slate-800 rounded text-slate-400 hover:text-yellow-400"
+              className="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-800 rounded text-slate-500 dark:text-slate-400 hover:text-yellow-600 dark:hover:text-yellow-400"
               title="Disable"
             >
               <PowerOff size={15} />
@@ -151,7 +151,7 @@ function PluginCard({
           ) : (
             <button
               onClick={() => onEnable(plugin.id)}
-              className="p-1.5 hover:bg-slate-800 rounded text-slate-400 hover:text-green-400"
+              className="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-800 rounded text-slate-500 dark:text-slate-400 hover:text-green-600 dark:hover:text-green-400"
               title="Enable"
             >
               <Power size={15} />
@@ -159,7 +159,7 @@ function PluginCard({
           )}
           <button
             onClick={() => onUninstall(plugin.id)}
-            className="p-1.5 hover:bg-slate-800 rounded text-slate-400 hover:text-red-400"
+            className="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-800 rounded text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400"
             title="Uninstall"
           >
             <Trash2 size={15} />
@@ -174,7 +174,7 @@ function PluginCard({
           {plugin.manifest.permissions.map((perm) => (
             <span
               key={perm}
-              className="text-[10px] px-1.5 py-0.5 rounded bg-slate-800 text-slate-500"
+              className="text-[10px] px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-500"
             >
               {perm}
             </span>
@@ -197,7 +197,7 @@ function QuickInstallItem({
   onInstall: () => void;
 }) {
   return (
-    <div className="flex items-center justify-between bg-slate-800/50 rounded p-2.5">
+    <div className="flex items-center justify-between bg-slate-200/50 dark:bg-slate-800/50 rounded p-2.5">
       <div>
         <p className="text-xs font-medium text-slate-300">{name}</p>
         <p className="text-[10px] text-slate-500">{desc}</p>

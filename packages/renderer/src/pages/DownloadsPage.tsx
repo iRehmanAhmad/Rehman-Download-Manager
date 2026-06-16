@@ -78,7 +78,7 @@ export function DownloadsPage() {
     <div className="flex flex-col h-full bg-surface p-4">
       <div className="flex-1 overflow-hidden flex flex-col">
         {downloads.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-slate-600">
+          <div className="flex flex-col items-center justify-center h-full text-slate-500 dark:text-slate-600">
             <ArrowDownIcon />
             <p className="mt-4 text-sm">No downloads yet</p>
             <p className="text-xs mt-1">Add a URL or drag a link here to start downloading</p>
@@ -97,7 +97,7 @@ export function DownloadsPage() {
 
 function ArrowDownIcon() {
   return (
-    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-slate-800">
+    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-slate-400 dark:text-slate-800">
       <path d="M12 5v14M5 12l7 7 7-7" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );

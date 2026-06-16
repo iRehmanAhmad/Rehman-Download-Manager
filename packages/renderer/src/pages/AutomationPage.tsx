@@ -109,7 +109,7 @@ export function AutomationPage() {
                     key={template.label}
                     onClick={() => handleCreate(template)}
                     disabled={rules.some((r) => r.name === template.name)}
-                    className="flex items-center gap-2 px-4 py-3 bg-slate-900 border border-slate-800 hover:border-brand-700 rounded-lg text-sm text-slate-400 hover:text-slate-200 transition-colors disabled:opacity-40 disabled:border-slate-800"
+                    className="flex items-center gap-2 px-4 py-3 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-brand-500 dark:hover:border-brand-700 rounded-lg text-sm text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 transition-colors disabled:opacity-40 disabled:border-slate-200 dark:disabled:border-slate-800"
                   >
                     <Plus size={14} className="text-brand-500" />
                     {template.label}
@@ -198,28 +198,28 @@ function RuleItem({
   onDelete: () => void;
 }) {
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-lg p-4">
+    <div className="bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-4">
       <div className="flex items-center gap-3">
-        <div className={`w-2 h-2 rounded-full flex-shrink-0 ${rule.enabled ? 'bg-brand-500' : 'bg-slate-600'}`} />
+        <div className={`w-2 h-2 rounded-full flex-shrink-0 ${rule.enabled ? 'bg-brand-500' : 'bg-slate-300 dark:bg-slate-600'}`} />
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-slate-200">{rule.name}</p>
           <div className="flex flex-wrap gap-2 mt-1.5">
             {rule.conditions.map((c, i) => (
-              <span key={i} className="text-xs text-slate-400 bg-slate-800 px-1.5 py-0.5 rounded">
+              <span key={i} className="text-xs text-slate-600 dark:text-slate-400 bg-slate-200 dark:bg-slate-800 px-1.5 py-0.5 rounded">
                 IF {getConditionLabel(c)}
               </span>
             ))}
             {rule.actions.map((a, i) => (
-              <span key={i} className="text-xs text-brand-400 bg-slate-800 px-1.5 py-0.5 rounded">
+              <span key={i} className="text-xs text-brand-600 dark:text-brand-400 bg-slate-200 dark:bg-slate-800 px-1.5 py-0.5 rounded">
                 THEN {getActionLabel(a)}
               </span>
             ))}
           </div>
         </div>
-        <button onClick={onToggle} className="p-1.5 hover:bg-slate-800 rounded text-slate-400">
+        <button onClick={onToggle} className="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-800 rounded text-slate-500 dark:text-slate-400">
           {rule.enabled ? <ToggleRight size={18} /> : <ToggleLeft size={18} />}
         </button>
-        <button onClick={onDelete} className="p-1.5 hover:bg-slate-800 rounded text-slate-400 hover:text-red-400">
+        <button onClick={onDelete} className="p-1.5 hover:bg-slate-200 dark:hover:bg-slate-800 rounded text-slate-500 dark:text-slate-400 hover:text-red-600 dark:hover:text-red-400">
           <Trash2 size={16} />
         </button>
       </div>
