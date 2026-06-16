@@ -20,9 +20,12 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
   const removeDownload = useDownloadStore((s) => s.removeDownload);
   const selectedIds = useDownloadStore((s) => s.selectedIds);
   const toggleSelection = useDownloadStore((s) => s.toggleSelection);
+  const activeMatchId = useDownloadStore((s) => s.activeMatchId);
+  const searchQuery = useDownloadStore((s) => s.searchQuery);
   const [showDialog, setShowDialog] = useState(false);
   const [showProperties, setShowProperties] = useState(false);
   const isSelected = selectedIds?.has(download.id);
+  const isActiveMatch = activeMatchId === download.id;
 
   const handleOpen = () => {
     window.api.download.openFile(download.id);
@@ -36,26 +39,26 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
     toggleSelection(download.id, e.ctrlKey || e.metaKey);
   };
 
-  const handlePause = (e?: React.MouseEvent) => {
+  const handlePause = (e?: any) => {
     e?.stopPropagation();
     window.api.download.pause(download.id);
     updateDownload(download.id, { status: 'paused' });
   };
 
-  const handleResume = (e?: React.MouseEvent) => {
+  const handleResume = (e?: any) => {
     e?.stopPropagation();
     window.api.download.resume(download.id);
     updateDownload(download.id, { status: 'downloading' });
   };
 
-  const handleCancel = (e?: React.MouseEvent) => {
+  const handleCancel = (e?: any) => {
     e?.stopPropagation();
     window.api.download.cancel(download.id);
     updateDownload(download.id, { status: 'cancelled' });
     setShowDialog(false);
   };
 
-  const handleRemove = (e?: React.MouseEvent) => {
+  const handleRemove = (e?: any) => {
     e?.stopPropagation();
     window.api.download.remove(download.id);
     removeDownload(download.id);
@@ -70,7 +73,7 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
           ? 'bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]'
           : download.status === 'error'
             ? 'bg-red-500'
-            : download.status === 'merging' || download.status === 'completing'
+            : download.status === 'merging' || download.status === 'completing' || download.status === 'scanning' || download.status === 'processing'
               ? 'bg-purple-500 shadow-[0_0_8px_rgba(168,85,247,0.8)]'
               : 'bg-slate-500';
 
@@ -89,7 +92,29 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
                 ? 'Merging'
                 : download.status === 'completing'
                   ? 'Finishing'
-                  : 'Cancelled';
+                  : download.status === 'scanning'
+                    ? 'Scanning'
+                    : download.status === 'processing'
+                      ? 'Processing'
+                      : download.status === 'cancelled'
+                        ? 'Cancelled'
+                        : 'Queued';
+
+  const renderHighlightedText = (text: string) => {
+    if (!searchQuery || !isActiveMatch) return text;
+    const lowerText = text.toLowerCase();
+    const lowerQuery = searchQuery.toLowerCase();
+    const index = lowerText.indexOf(lowerQuery);
+    if (index === -1) return text;
+    
+    return (
+      <>
+        {text.slice(0, index)}
+        <mark className="bg-yellow-300 dark:bg-yellow-600/50 text-slate-900 dark:text-white rounded px-0.5">{text.slice(index, index + searchQuery.length)}</mark>
+        {text.slice(index + searchQuery.length)}
+      </>
+    );
+  };
 
   return (
     <>
@@ -99,8 +124,10 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
             id={`download-row-${download.id}`}
             onClick={handleClick}
             onDoubleClick={() => setShowDialog(true)}
-            className={`grid grid-cols-[24px_auto_80px_70px] md:grid-cols-[24px_auto_80px_80px_70px] lg:grid-cols-[24px_auto_80px_80px_100px_80px_70px] gap-2 px-3 py-1.5 items-center hover:bg-slate-200/50 dark:hover:bg-white/5 transition-colors group relative cursor-pointer ${
-              isSelected ? 'bg-brand-500/10 dark:bg-brand-500/20 hover:bg-brand-500/20 dark:hover:bg-brand-500/30 border-l-2 border-brand-500' : 'border-l-2 border-transparent'
+            className={`grid grid-cols-[24px_auto_80px_70px] md:grid-cols-[24px_auto_80px_80px_70px] lg:grid-cols-[24px_auto_80px_80px_100px_80px_70px] gap-2 px-4 py-2.5 items-center hover:bg-slate-200/60 dark:hover:bg-white/10 transition-colors group relative cursor-pointer ${
+              isSelected ? 'bg-brand-50 dark:bg-brand-500/20 hover:bg-brand-100 dark:hover:bg-brand-500/30 border-l-4 border-brand-500' 
+              : isActiveMatch ? 'bg-yellow-50/50 dark:bg-yellow-900/20 border-l-4 border-yellow-400' 
+              : 'border-l-4 border-transparent'
             }`}
           >
         {/* Background Progress Bar (IDM Style) */}
@@ -115,9 +142,11 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
         <div className="text-center text-[11px] text-slate-500">{index + 1}</div>
 
         {/* File Name */}
-        <div className="min-w-0 flex items-center gap-1.5">
-          <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${statusColor}`} />
-          <span className="text-[12px] text-slate-800 dark:text-slate-200 truncate font-medium group-hover:text-slate-900 dark:group-hover:text-white transition-colors">{download.filename}</span>
+        <div className="min-w-0 flex items-center gap-2">
+          <div className={`w-2 h-2 rounded-full flex-shrink-0 ${statusColor} ${isSelected ? 'shadow-[0_0_8px_currentColor]' : ''}`} />
+          <span className={`text-[13px] truncate transition-colors ${isSelected ? 'text-brand-900 dark:text-brand-100 font-semibold' : 'text-slate-800 dark:text-slate-200 font-medium group-hover:text-slate-900 dark:group-hover:text-white'}`}>
+            {renderHighlightedText(download.filename)}
+          </span>
         </div>
 
         {/* Size */}
@@ -186,31 +215,10 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
           </ContextMenu.Item>
           
           <ContextMenu.Item 
-            className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed"
-          >
-            Open with...
-          </ContextMenu.Item>
-
-          <ContextMenu.Item 
             onSelect={handleOpenFolder}
             className="px-3 py-1.5 rounded outline-none hover:bg-brand-500 hover:text-white cursor-default"
           >
             Open folder
-          </ContextMenu.Item>
-
-          <ContextMenu.Separator className="h-px bg-white/10 my-1 mx-2" />
-
-          <ContextMenu.Item 
-            className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed flex items-center justify-between"
-          >
-            <span>Move/Rename</span>
-            <span className="text-xs opacity-60">Ctrl-M</span>
-          </ContextMenu.Item>
-
-          <ContextMenu.Item 
-            className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed"
-          >
-            Redownload
           </ContextMenu.Item>
 
           {download.status === 'paused' ? (
@@ -245,40 +253,13 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
             </ContextMenu.Item>
           )}
 
-          <ContextMenu.Separator className="h-px bg-white/10 my-1 mx-2" />
-
-          <ContextMenu.Item 
-            className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed"
-          >
-            Refresh download address
-          </ContextMenu.Item>
+          <ContextMenu.Separator className="h-px bg-slate-200 dark:bg-white/10 my-1 mx-2" />
 
           <ContextMenu.Item 
             onSelect={handleRemove}
             className="px-3 py-1.5 rounded outline-none hover:bg-red-500 hover:text-white cursor-default"
           >
             Remove
-          </ContextMenu.Item>
-
-          <ContextMenu.Separator className="h-px bg-white/10 my-1 mx-2" />
-
-          <ContextMenu.Item 
-            className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed flex items-center justify-between"
-          >
-            <span>Add to queue</span>
-            <span className="opacity-60">›</span>
-          </ContextMenu.Item>
-
-          <ContextMenu.Item 
-            className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed pl-6"
-          >
-            Create a new queue
-          </ContextMenu.Item>
-
-          <ContextMenu.Item 
-            className="px-3 py-1.5 rounded outline-none text-slate-500 cursor-not-allowed pl-6"
-          >
-            Synchronization queue
           </ContextMenu.Item>
 
           <ContextMenu.Separator className="h-px bg-white/10 my-1 mx-2" />

@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FolderOpen, Download, CheckCircle, Globe, List, PlusSquare, MinusSquare, File, FileArchive, FileMusic, AppWindow, Video, HelpCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useSettingsStore } from '../../stores/settings-store';
+import { useDownloadStore } from '../../stores/download-store';
 import type { Category } from '@rdm/shared';
 
 // Map category names to icons
@@ -21,14 +22,31 @@ export function Sidebar() {
   const location = useLocation();
   const { t } = useTranslation();
   const categories = useSettingsStore((s) => s.categories);
+  const downloadsMap = useDownloadStore((s) => s.downloads);
+  const downloads = Array.from(downloadsMap.values());
+  
+  const allCount = downloads.length;
+  const unfinishedCount = downloads.filter((d) => d.status !== 'completed' && d.status !== 'cancelled').length;
+  const finishedCount = downloads.filter((d) => d.status === 'completed').length;
+  const getCategoryCount = (id: string) => downloads.filter(d => d.categoryId === id).length;
 
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({
-    all: true,
-    unfinished: false,
-    finished: false,
-    grabber: false,
-    queues: false,
+  const [expanded, setExpanded] = useState<Record<string, boolean>>(() => {
+    try {
+      const saved = localStorage.getItem('sidebar-expanded');
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return {
+      all: true,
+      unfinished: false,
+      finished: false,
+      grabber: false,
+      queues: false,
+    };
   });
+
+  useEffect(() => {
+    localStorage.setItem('sidebar-expanded', JSON.stringify(expanded));
+  }, [expanded]);
 
   const toggle = (key: string, e: React.MouseEvent) => {
     e.stopPropagation();
@@ -53,6 +71,7 @@ export function Sidebar() {
             onToggle={(e) => toggle('all', e)}
             onClick={() => navigate('/list/all')}
             active={location.pathname === '/list/all'}
+            count={allCount}
           >
             {categories.map((cat) => (
               <TreeItem
@@ -62,6 +81,7 @@ export function Sidebar() {
                 active={location.pathname === `/list/all/${cat.id}`}
                 onClick={() => navigate(`/list/all/${cat.id}`)}
                 indentLevel={1}
+                count={getCategoryCount(cat.id)}
               />
             ))}
           </CollapsibleNode>
@@ -76,6 +96,7 @@ export function Sidebar() {
             onToggle={(e) => toggle('unfinished', e)}
             onClick={() => navigate('/list/unfinished')}
             active={location.pathname === '/list/unfinished'}
+            count={unfinishedCount}
           >
             {categories.map((cat) => (
               <TreeItem
@@ -85,6 +106,7 @@ export function Sidebar() {
                 active={location.pathname === `/list/unfinished/${cat.id}`}
                 onClick={() => navigate(`/list/unfinished/${cat.id}`)}
                 indentLevel={1}
+                count={getCategoryCount(cat.id)}
               />
             ))}
           </CollapsibleNode>
@@ -99,6 +121,7 @@ export function Sidebar() {
             onToggle={(e) => toggle('finished', e)}
             onClick={() => navigate('/list/finished')}
             active={location.pathname === '/list/finished'}
+            count={finishedCount}
           >
             {categories.map((cat) => (
               <TreeItem
@@ -108,6 +131,7 @@ export function Sidebar() {
                 active={location.pathname === `/list/finished/${cat.id}`}
                 onClick={() => navigate(`/list/finished/${cat.id}`)}
                 indentLevel={1}
+                count={getCategoryCount(cat.id)}
               />
             ))}
           </CollapsibleNode>
@@ -163,6 +187,7 @@ function CollapsibleNode({
   onToggle,
   onClick,
   active,
+  count,
   children,
 }: {
   id: string;
@@ -173,6 +198,7 @@ function CollapsibleNode({
   onToggle: (e: React.MouseEvent) => void;
   onClick: (e: React.MouseEvent) => void;
   active: boolean;
+  count?: number;
   children?: React.ReactNode;
 }) {
   const ToggleIcon = expanded ? MinusSquare : PlusSquare;
@@ -191,12 +217,19 @@ function CollapsibleNode({
           onClick={onClick}
           className={`flex items-center w-full px-2 py-1 cursor-pointer select-none transition-colors group text-xs ${
             active 
-              ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/20 dark:text-white font-medium' 
-              : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-white/5 dark:hover:text-white'
+              ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/40 dark:text-white font-semibold border-r-2 border-brand-500 rounded-l-md -mr-px' 
+              : 'text-slate-700 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-white/5 dark:hover:text-white rounded-md'
           }`}
         >
-          <Icon size={14} className={active ? 'text-brand-400' : 'text-yellow-500'} />
-          <span className="ml-1.5">{label}</span>
+          <Icon size={14} className={active ? 'text-brand-500 dark:text-brand-300' : 'text-yellow-500'} />
+          <span className="ml-1.5 truncate">{label}</span>
+          {count !== undefined && (
+            <span className={`ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full ${
+              active ? 'bg-brand-200 dark:bg-brand-400/40 text-brand-800 dark:text-brand-100' : 'bg-black/5 dark:bg-white/10 text-slate-500 dark:text-slate-400'
+            }`}>
+              {count}
+            </span>
+          )}
         </button>
       </div>
       
@@ -209,20 +242,27 @@ function CollapsibleNode({
   );
 }
 
-function TreeItem({ icon: Icon, label, active, onClick, indentLevel = 0 }: { icon: any; label: string; active: boolean; onClick: () => void; indentLevel?: number }) {
+function TreeItem({ icon: Icon, label, active, onClick, indentLevel = 0, count }: { icon: any; label: string; active: boolean; onClick: () => void; indentLevel?: number; count?: number }) {
   return (
     <button
       onClick={onClick}
       className={`w-full flex items-center gap-1.5 py-1 pr-3 rounded-sm text-[11px] transition-all relative ${
         active
-          ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/20 dark:text-brand-400 dark:shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]'
+          ? 'bg-brand-50 text-brand-600 dark:bg-brand-500/30 dark:text-brand-200 font-semibold'
           : 'text-slate-600 dark:text-slate-300 hover:bg-slate-200/50 dark:hover:bg-white/5 dark:hover:text-white'
       }`}
       style={{ paddingLeft: `${1.5 + indentLevel * 1.5}rem` }}
     >
       <div className="absolute left-[9px] top-1/2 w-4 h-px bg-slate-300 dark:bg-slate-700/50" />
-      <Icon size={13} className={active ? 'drop-shadow-[0_0_8px_rgba(96,165,250,0.5)]' : 'text-slate-400'} />
-      <span>{label}</span>
+      <Icon size={13} className={active ? 'text-brand-500 dark:text-brand-300' : 'text-slate-400'} />
+      <span className="truncate">{label}</span>
+      {count !== undefined && count > 0 && (
+        <span className={`ml-auto text-[9px] font-bold px-1.5 py-0.5 rounded-full ${
+          active ? 'bg-brand-200 dark:bg-brand-400/40 text-brand-800 dark:text-brand-100' : 'bg-black/5 dark:bg-white/10 text-slate-500 dark:text-slate-400'
+        }`}>
+          {count}
+        </span>
+      )}
     </button>
   );
 }

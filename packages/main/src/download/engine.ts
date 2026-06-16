@@ -22,6 +22,8 @@ import { spawn } from 'node:child_process';
 const MIN_CHUNK_SIZE = 1024 * 256;
 const SPEED_AVERAGE_WINDOW = 3000;
 const BASE_RETRY_DELAY = 2000;
+const MAX_CHUNK_RETRIES = 5;
+const CHUNK_RETRY_DELAY = 1500;
 
 interface SpeedSample {
   time: number;
@@ -53,7 +55,9 @@ export class DownloadEngine extends EventEmitter {
     super();
     this.maxConcurrent = maxConcurrent;
     this.globalSpeedLimit = globalSpeedLimit;
-    this.tempDir = path.join(app.getPath('temp'), 'rdm');
+    // Store partial chunks under userData (persistent) rather than the OS temp
+    // dir, which can be purged on reboot/cleanup and silently truncate resumes.
+    this.tempDir = path.join(app.getPath('userData'), 'partials');
     fs.mkdirSync(this.tempDir, { recursive: true });
     
     this.loadFromDB();
@@ -63,12 +67,38 @@ export class DownloadEngine extends EventEmitter {
   private loadFromDB(): void {
     const dls = DownloadRepository.loadAllDownloads();
     for (const dl of dls) {
+      // Defensive: loadAllDownloads already demotes crashed in-flight
+      // downloads to 'paused', but normalize any stray 'downloading' too.
       if (dl.status === 'downloading') {
         dl.status = 'queued';
         DownloadRepository.saveDownload(dl);
       }
-      this.tasks.set(dl.id, new DownloadTask(dl, this.tempDir, () => this.getGlobalBytesPerSecond()));
+      const task = new DownloadTask(dl, this.tempDir, () => this.getGlobalBytesPerSecond());
+      this.tasks.set(dl.id, task);
+
+      // Re-enqueue items that were genuinely waiting in the queue so they
+      // resume after a restart. Crash-paused downloads stay paused for the
+      // user to resume manually (safer than silently restarting them).
+      if (dl.status === 'queued') {
+        this.bindTaskListeners(task);
+        this.queue.push(dl.id);
+      }
     }
+    this.processQueue();
+  }
+
+  /** Bind engine-level event forwarding onto a task. */
+  private bindTaskListeners(task: DownloadTask): void {
+    task.removeAllListeners();
+    task.on('progress', (dl: Download) => this.emit('progress', dl));
+    task.on('completed', (dl: Download) => {
+      this.emit('completed', dl);
+      this.processQueue();
+    });
+    task.on('error', (dl: Download) => {
+      this.emit('error', dl);
+      this.processQueue();
+    });
   }
 
   private startSaveLoop(): void {
@@ -106,24 +136,14 @@ export class DownloadEngine extends EventEmitter {
       }
       
       // Bind listeners now that it's promoted
-      task.removeAllListeners();
-      task.on('progress', (dl: Download) => this.emit('progress', dl));
-      task.on('completed', (dl: Download) => {
-        this.emit('completed', dl);
-        this.processQueue();
-      });
-      task.on('error', (dl: Download) => {
-        this.emit('error', dl);
-        this.processQueue();
-      });
+      this.bindTaskListeners(task);
 
       if (!this.queue.includes(task.snapshot().id)) {
         if (task.status !== 'paused') {
           this.queue.push(task.snapshot().id);
         }
-        if (task.status === 'downloading') {
-          this.activeCount++; // It is already running, so count it now
-        }
+        // activeCount is a derived getter (counts tasks in 'downloading'
+        // state), so a running task is already reflected — no manual bump.
       }
     } else {
       task = new DownloadTask(download, this.tempDir, () => this.getGlobalBytesPerSecond());
@@ -296,16 +316,7 @@ export class DownloadEngine extends EventEmitter {
       if (!task) continue;
       if (task.status === 'cancelled' || task.status === 'completed') continue;
 
-      task.removeAllListeners();
-      task.on('progress', (dl: Download) => this.emit('progress', dl));
-      task.on('completed', (dl: Download) => {
-        this.emit('completed', dl);
-        this.processQueue();
-      });
-      task.on('error', (dl: Download) => {
-        this.emit('error', dl);
-        this.processQueue();
-      });
+      this.bindTaskListeners(task);
       task.start().catch((err) => {
         console.error('Unhandled task start error:', err);
       });
@@ -322,6 +333,7 @@ class DownloadTask extends EventEmitter {
   private cancelled = false;
   private lastProgressTime = 0;
   private globalRetryCount = 0;
+  private chunkRetries = new Map<string, number>();
   private getGlobalLimit: () => number;
   private isThrottleTimer: ReturnType<typeof setInterval> | null = null;
 
@@ -463,6 +475,39 @@ class DownloadTask extends EventEmitter {
 
   private getTempPath(id?: string): string {
     return path.join(this.tempDir, `rdm-${id || this.dl.id}`);
+  }
+
+  /**
+   * Re-sync each chunk's `downloaded` counter to the actual size of its part
+   * file on disk. Called when resuming a previously-started download so a
+   * missing or truncated part file cannot cause an append at the wrong offset.
+   */
+  private reconcileChunksFromDisk(): void {
+    for (const chunk of this.dl.chunks) {
+      if (chunk.status === 'completed') continue;
+      const partPath = `${this.getTempPath()}.part${chunk.index}`;
+      let realBytes = 0;
+      try {
+        realBytes = fs.statSync(partPath).size;
+      } catch {
+        realBytes = 0; // part file gone — restart this chunk from scratch
+      }
+
+      const chunkSize = chunk.endByte - chunk.startByte + 1;
+      // Never trust more bytes than the chunk is supposed to hold.
+      realBytes = Math.min(realBytes, Math.max(0, chunkSize));
+
+      if (realBytes !== chunk.downloaded) {
+        chunk.downloaded = realBytes;
+      }
+
+      if (chunkSize > 0 && realBytes >= chunkSize) {
+        chunk.status = 'completed';
+      } else if (realBytes === 0) {
+        chunk.status = 'pending';
+      }
+    }
+    this.dl.downloaded = this.dl.chunks.reduce((sum, c) => sum + c.downloaded, 0);
   }
 
   private cleanupTemp(): void {
@@ -708,6 +753,13 @@ class DownloadTask extends EventEmitter {
         }
       ];
     } else {
+      // Resuming: reconcile each chunk's recorded progress against the real
+      // bytes on disk. The persisted `downloaded` value can drift from reality
+      // if the part file was purged, truncated, or only partially flushed —
+      // trusting it blindly would append at the wrong offset and corrupt the
+      // merged file. The on-disk size is the source of truth.
+      this.reconcileChunksFromDisk();
+
       // Reset any previously downloading chunks to pending so they restart properly
       for (const chunk of this.dl.chunks) {
         if (chunk.status === 'downloading') {
@@ -785,6 +837,49 @@ class DownloadTask extends EventEmitter {
     }
   }
 
+  /**
+   * Handle a failed chunk. Retries the individual chunk up to
+   * MAX_CHUNK_RETRIES (marking it pending and re-dispatching) before failing
+   * the whole download. This prevents a single throttled/dropped range request
+   * from aborting every other healthy chunk.
+   */
+  private handleChunkFailure(
+    chunk: ChunkInfo,
+    err: unknown,
+    mod: typeof http | typeof https,
+    parsedUrl: URL,
+    resolve: () => void,
+    reject: (err: any) => void,
+  ): void {
+    if (this.paused || this.cancelled) {
+      resolve();
+      return;
+    }
+
+    const attempts = (this.chunkRetries.get(chunk.id) || 0) + 1;
+    this.chunkRetries.set(chunk.id, attempts);
+
+    if (attempts > MAX_CHUNK_RETRIES) {
+      chunk.status = 'error';
+      reject(err instanceof Error ? err : new Error(String(err)));
+      return;
+    }
+
+    // Re-queue this chunk; resume from whatever it has on disk already.
+    chunk.status = 'pending';
+    setTimeout(() => {
+      if (this.paused || this.cancelled) {
+        resolve();
+        return;
+      }
+      try {
+        this.dispatchConnections(mod, parsedUrl, resolve, reject);
+      } catch (e) {
+        reject(e);
+      }
+    }, CHUNK_RETRY_DELAY * attempts);
+  }
+
   private downloadChunk(
     mod: typeof http | typeof https,
     parsedUrl: URL,
@@ -825,8 +920,15 @@ class DownloadTask extends EventEmitter {
         if (res.statusCode && res.statusCode >= 400) {
            req.destroy();
            this.activeChunks.delete(streamHandle);
-           chunk.status = 'error';
-           reject(new Error(`Server responded with ${res.statusCode}`));
+           try { fileStream.close(); } catch {}
+           this.handleChunkFailure(
+             chunk,
+             new Error(`Server responded with ${res.statusCode}`),
+             mod,
+             parsedUrl,
+             resolve,
+             reject,
+           );
            return;
         }
 
@@ -913,14 +1015,16 @@ class DownloadTask extends EventEmitter {
         res.on('error', (err) => {
           clearInterval(speedTimer);
           this.activeChunks.delete(streamHandle);
-          fileStream.close();
-          if (this.paused || this.cancelled) resolve(); else reject(err);
+          try { fileStream.close(); } catch {}
+          this.handleChunkFailure(chunk, err, mod, parsedUrl, resolve, reject);
         });
       },
     );
 
-    req.on('error', (err) => {
-      if (this.paused || this.cancelled) resolve(); else reject(err);
+    req.on('error', (err: Error) => {
+      this.activeChunks.delete(streamHandle);
+      try { fileStream.close(); } catch {}
+      this.handleChunkFailure(chunk, err, mod, parsedUrl, resolve, reject);
     });
     req.end();
   }
@@ -980,9 +1084,23 @@ class DownloadTask extends EventEmitter {
     this.dl.status = 'scanning';
     this.emitProgress();
 
-    const child = spawn(`"${avCmd}" "${outputPath}"`, { shell: true });
-    
+    // Pass the scanner path and file as discrete argv entries with shell:false
+    // so neither the configured command nor the file path can inject shell
+    // metacharacters.
+    const child = spawn(avCmd, [outputPath], { shell: false });
+    let settled = false;
+
+    child.on('error', () => {
+      // Scanner failed to launch (bad path/permissions). Don't block the
+      // download on a misconfigured scanner — complete it normally.
+      if (settled) return;
+      settled = true;
+      this.handleCompletion(outputPath);
+    });
+
     child.on('close', (code) => {
+      if (settled) return;
+      settled = true;
       if (code !== 0) {
         this.dl.status = 'error';
         this.dl.errorMessage = 'Virus detected by Antivirus scanner!';
@@ -1028,21 +1146,68 @@ class DownloadTask extends EventEmitter {
     this.dl.filepath = finalPath;
     this.dl.downloaded = this.dl.fileSize;
     this.dl.progress = 100;
+
+    await this.runPostProcessing(finalPath);
+
     this.dl.status = 'completed';
     this.dl.completedAt = Date.now();
     this.emit('completed', this.snapshot());
   }
 
+  /**
+   * Run optional FFmpeg conversion / archive auto-extraction after the file is
+   * in place. Never throws — post-processing failures are logged but the
+   * download still counts as completed.
+   */
+  private async runPostProcessing(finalPath: string): Promise<void> {
+    try {
+      const { runPostProcessing } = await import('../postprocess');
+      const wantsConvert = typeof this.dl.metadata?.convertTo === 'string';
+      const autoExtract = this.getSetting(SETTINGS_KEY.AUTO_EXTRACT_ARCHIVES) === 'true';
+      if (!wantsConvert && !autoExtract) return; // nothing configured — skip
+
+      this.dl.status = 'processing';
+      this.emitProgress();
+
+      const res = await runPostProcessing(
+        finalPath,
+        this.dl.metadata,
+        (key) => this.getSetting(key),
+      );
+      if (res.newFilePath) this.dl.filepath = res.newFilePath;
+      if (res.messages.length > 0) {
+        console.log(`[postprocess] ${this.dl.filename}: ${res.messages.join('; ')}`);
+      }
+    } catch (err) {
+      console.error('[postprocess] error:', err);
+    }
+  }
+
+  /** Pick the hash algorithm from the expected checksum's hex length. */
+  private checksumAlgorithm(expected: string): string | null {
+    switch (expected.trim().length) {
+      case 32: return 'md5';
+      case 40: return 'sha1';
+      case 64: return 'sha256';
+      case 128: return 'sha512';
+      default: return null;
+    }
+  }
+
   private async verifyChecksum(filePath: string): Promise<boolean> {
+    const expected = (this.dl.checksum || '').trim().toLowerCase();
+    const algo = this.checksumAlgorithm(expected);
+    if (!algo) return false; // unrecognized checksum format
+
     return new Promise((resolve) => {
       try {
-        const hash = crypto.createHash('md5');
+        const hash = crypto.createHash(algo);
         const stream = fs.createReadStream(filePath);
         stream.on('error', () => resolve(false));
         stream.on('data', (chunk) => hash.update(chunk));
         stream.on('end', () => {
           const fileHash = hash.digest('hex');
-          resolve(fileHash.toLowerCase() === this.dl.checksum!.toLowerCase());
+          resolve(fileHash.toLowerCase() === expected);
         });
       } catch {
         resolve(false);

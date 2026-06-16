@@ -1,13 +1,12 @@
 import { readFileSync, existsSync, readdirSync, statSync, mkdirSync, cpSync, rmSync } from 'node:fs';
-import { join, resolve, dirname, basename } from 'node:path';
-import { app, BrowserWindow } from 'electron';
-import { EventEmitter } from 'events';
-import type { PluginManifest, PluginInstance, PluginAPI } from '@rdm/shared';
-import { v4 as uuid } from 'uuid';
+import { join, resolve } from 'node:path';
+import { app, utilityProcess, type UtilityProcess } from 'electron';
+import type { PluginManifest, PluginInstance } from '@rdm/shared';
 import { getDatabase } from '../storage/database';
 
 const loadedPlugins = new Map<string, PluginInstance>();
-const pluginEventBus = new EventEmitter();
+// Live utilityProcess per loaded plugin (the sandbox boundary).
+const pluginProcesses = new Map<string, UtilityProcess>();
 
 export function getPluginDir(): string {
   const dir = join(app.getPath('userData'), 'plugins');
@@ -74,25 +73,46 @@ export function scanPlugins(): PluginInstance[] {
   return instances;
 }
 
+/** Absolute path to the bundled plugin-host (built alongside main/index.js). */
+function getHostPath(): string {
+  return join(__dirname, 'plugin-host.js');
+}
+
 export function loadPlugin(id: string): PluginInstance | null {
   const instance = getPluginInstance(id);
   if (!instance) return null;
-  if (loadedPlugins.has(id)) return loadedPlugins.get(id) || null;
+  if (pluginProcesses.has(id)) return loadedPlugins.get(id) || instance;
 
   if (!existsSync(instance.entryPoint)) return null;
 
   try {
-    const api = createPluginApi(id);
-    const mod = require(instance.entryPoint);
+    // Launch the plugin in an isolated utilityProcess. It gets no Node
+    // integration into the app — it can only reach app state through the
+    // permission-checked message API serviced below.
+    const child = utilityProcess.fork(getHostPath(), [], {
+      serviceName: `rdm-plugin-${id}`,
+      stdio: 'ignore',
+    });
 
-    if (typeof mod.default === 'function') {
-      mod.default(api);
-    } else if (typeof mod.activate === 'function') {
-      mod.activate(api);
-    }
+    child.on('message', (msg: Record<string, unknown>) => {
+      handleHostMessage(id, child, msg);
+    });
 
+    child.on('exit', () => {
+      pluginProcesses.delete(id);
+      loadedPlugins.delete(id);
+    });
+
+    child.postMessage({
+      type: 'init',
+      pluginId: id,
+      entryPoint: instance.entryPoint,
+      permissions: instance.manifest.permissions || [],
+    });
+
+    pluginProcesses.set(id, child);
     loadedPlugins.set(id, instance);
-    console.log(`[plugin] Loaded: ${instance.manifest.name} v${instance.manifest.version}`);
+    console.log(`[plugin] Loaded (sandboxed): ${instance.manifest.name} v${instance.manifest.version}`);
     return instance;
   } catch (err) {
     console.error(`[plugin] Failed to load ${id}:`, err);
@@ -101,22 +121,141 @@ export function loadPlugin(id: string): PluginInstance | null {
 }
 
 export function unloadPlugin(id: string): boolean {
+  const child = pluginProcesses.get(id);
+  if (child) {
+    try { child.kill(); } catch { /* already dead */ }
+    pluginProcesses.delete(id);
+  }
   const instance = loadedPlugins.get(id);
-  if (!instance) return false;
+  loadedPlugins.delete(id);
+  if (instance) console.log(`[plugin] Unloaded: ${instance.manifest.name}`);
+  return !!instance || !!child;
+}
 
-  pluginEventBus.emit(`plugin:${id}:unload`);
-  pluginEventBus.removeAllListeners(`plugin:${id}:`);
-  pluginEventBus.removeAllListeners(`download:completed`);
+/**
+ * Deliver an event to every loaded plugin's sandbox (e.g. 'download:intercept').
+ * Plugins subscribe via api.events.on inside their utilityProcess.
+ */
+export function emitPluginEvent(event: string, ...args: unknown[]): void {
+  for (const child of pluginProcesses.values()) {
+    try {
+      child.postMessage({ type: 'event', event, args });
+    } catch { /* process may be exiting */ }
+  }
+}
 
-  try {
-    delete require.cache[require.resolve(instance.entryPoint)];
-  } catch {
-    // already uncached
+/** Service a message coming from a plugin's utilityProcess. */
+async function handleHostMessage(
+  pluginId: string,
+  child: UtilityProcess,
+  msg: Record<string, unknown>,
+): Promise<void> {
+  const type = msg.type;
+
+  if (type === 'log') {
+    const level = String(msg.level || 'info');
+    const line = `[plugin:${pluginId}] ${String(msg.msg)}`;
+    if (level === 'error') console.error(line);
+    else if (level === 'warn') console.warn(line);
+    else console.log(line);
+    return;
   }
 
-  loadedPlugins.delete(id);
-  console.log(`[plugin] Unloaded: ${instance.manifest.name}`);
-  return true;
+  if (type === 'load-error') {
+    console.error(`[plugin:${pluginId}] load error:`, msg.error);
+    return;
+  }
+
+  if (type === 'event-emit') {
+    // A plugin emitting an event is currently informational; broadcast to peers.
+    emitPluginEvent(String(msg.event), ...((msg.args as unknown[]) || []));
+    return;
+  }
+
+  if (type === 'api-call') {
+    const callId = msg.callId as number;
+    const instance = loadedPlugins.get(pluginId);
+    const perms = instance?.manifest.permissions || [];
+    try {
+      const value = await servicePluginApi(
+        pluginId,
+        perms,
+        String(msg.domain),
+        String(msg.method),
+        (msg.args as unknown[]) || [],
+      );
+      child.postMessage({ type: 'api-result', callId, ok: true, value });
+    } catch (err) {
+      child.postMessage({ type: 'api-result', callId, ok: false, error: String(err) });
+    }
+  }
+}
+
+function requirePerm(perms: string[], required: string[]): void {
+  if (!required.some((p) => perms.includes(p))) {
+    throw new Error(`Permission denied: requires one of [${required.join(', ')}]`);
+  }
+}
+
+/** Execute a privileged plugin API call in the main process, enforcing perms. */
+async function servicePluginApi(
+  pluginId: string,
+  perms: string[],
+  domain: string,
+  method: string,
+  args: unknown[],
+): Promise<unknown> {
+  if (domain === 'downloads') {
+    requirePerm(perms, ['download:intercept', 'download:post-process']);
+    const { getDownloadEngine } = await import('../ipc/download.ipc');
+    const eng = getDownloadEngine();
+    if (method === 'add') {
+      const { v4 } = await import('uuid');
+      const { extractFilename } = await import('@rdm/shared');
+      const options = (args[0] || {}) as Record<string, any>;
+      const dlId = v4();
+      eng.add({
+        id: dlId,
+        url: options.url,
+        filename: options.filename || extractFilename(options.url) || 'download',
+        tempDir: '',
+        fileSize: -1,
+        downloaded: 0,
+        status: 'queued',
+        priority: options.priority || 'normal',
+        categoryId: options.categoryId,
+        addedAt: Date.now(),
+        retryCount: 0,
+        maxRetries: 3,
+        speedLimit: options.speedLimit,
+        numConnections: options.numConnections || 8,
+        headers: options.headers,
+        referer: options.referer,
+        checksum: options.checksum,
+        chunks: [],
+        speed: 0,
+        progress: 0,
+        eta: 0,
+      });
+      return dlId;
+    }
+    if (method === 'getAll') return eng.getAll();
+    if (method === 'get') return eng.getDownload(String(args[0]));
+    throw new Error(`Unknown downloads method: ${method}`);
+  }
+
+  if (domain === 'storage') {
+    requirePerm(perms, ['storage:read']);
+    const storage = getPluginStorage(pluginId);
+    if (method === 'get') return storage.get(String(args[0]));
+    if (method === 'set') {
+      storage.set(String(args[0]), args[1]);
+      return undefined;
+    }
+    throw new Error(`Unknown storage method: ${method}`);
+  }
+
+  throw new Error(`Unknown API domain: ${domain}`);
 }
 
 export function enablePlugin(id: string): boolean {
@@ -198,6 +337,20 @@ export function getLoadedPlugins(): PluginInstance[] {
   return Array.from(loadedPlugins.values());
 }
 
+/** Load every plugin marked enabled in the DB. Call once at app startup. */
+export function loadEnabledPlugins(): void {
+  for (const inst of scanPlugins()) {
+    if (inst.enabled) loadPlugin(inst.id);
+  }
+}
+
+/** Kill all plugin sandboxes (call on app quit). */
+export function unloadAllPlugins(): void {
+  for (const id of Array.from(pluginProcesses.keys())) {
+    unloadPlugin(id);
+  }
+}
+
 export function getPluginInstance(id: string): PluginInstance | undefined {
   const loaded = loadedPlugins.get(id);
   if (loaded) return loaded;
@@ -233,84 +386,3 @@ function getPluginStorage(pluginId: string) {
   };
 }
 
-function createPluginApi(pluginId: string): PluginAPI {
-  const storage = getPluginStorage(pluginId);
-
-  return {
-    downloads: {
-      async add(options) {
-        const { getDownloadEngine } = await import('../ipc/download.ipc');
-        const { v4 } = await import('uuid');
-        const { extractFilename } = await import('@rdm/shared');
-        const eng = getDownloadEngine();
-        const id = v4();
-        const download = {
-          id,
-          url: options.url,
-          filename: options.filename || extractFilename(options.url) || 'download',
-          tempDir: '',
-          fileSize: -1,
-          downloaded: 0,
-          status: 'queued' as const,
-          priority: options.priority || 'normal',
-          categoryId: options.categoryId,
-          addedAt: Date.now(),
-          retryCount: 0,
-          maxRetries: 3,
-          speedLimit: options.speedLimit,
-          numConnections: options.numConnections || 8,
-          headers: options.headers,
-          referer: options.referer,
-          checksum: options.checksum,
-          chunks: [],
-          speed: 0,
-          progress: 0,
-          eta: 0,
-        };
-        eng.add(download);
-        return id;
-      },
-      async getAll() {
-        const { getDownloadEngine } = await import('../ipc/download.ipc');
-        return getDownloadEngine().getAll();
-      },
-      async get(id) {
-        const { getDownloadEngine } = await import('../ipc/download.ipc');
-        return getDownloadEngine().getDownload(id) as never;
-      },
-    },
-    storage: {
-      get: async (key) => storage.get(key),
-      set: async (key, value) => { storage.set(key, value); },
-    },
-    network: {
-      async fetch(url, options) {
-        return fetch(url, options);
-      },
-    },
-    ui: {
-      registerPanel(_component: unknown) {
-        console.log(`[plugin:${pluginId}] UI panel registered (renderer-side panels coming in future version)`);
-      },
-    },
-    events: {
-      on(event, handler) {
-        pluginEventBus.on(`plugin:${pluginId}:${event}`, handler);
-      },
-      emit(event, ...args) {
-        pluginEventBus.emit(`plugin:${pluginId}:${event}`, ...args);
-      },
-    },
-    log: {
-      info(msg) {
-        console.log(`[plugin:${pluginId}]`, msg);
-      },
-      warn(msg) {
-        console.warn(`[plugin:${pluginId}]`, msg);
-      },
-      error(msg) {
-        console.error(`[plugin:${pluginId}]`, msg);
-      },
-    },
-  };
-}

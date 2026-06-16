@@ -12,6 +12,7 @@ export default defineConfig({
         external: ['better-sqlite3'],
         input: {
           index: resolve(__dirname, 'packages/main/src/index.ts'),
+          'plugin-host': resolve(__dirname, 'packages/main/src/plugins/plugin-host.ts'),
         },
       },
     },

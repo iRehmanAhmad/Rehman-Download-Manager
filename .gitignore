@@ -12,6 +12,9 @@ coverage/
 playwright-report/
 test-results/
 
+# Tooling output
+graphify-out/
+
 # Downloaded files
 Music/
 Music

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSettingsStore } from '../../stores/settings-store';
 import { formatFileSize, extractFilename } from '@rdm/shared';
+import { FolderOpen, X, Download, Folder, HardDrive, AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
 
 interface ImportLink {
   id: string;
@@ -46,8 +47,6 @@ export function ImportLinksDialog() {
         newLinks = prefilled;
         setLinks(newLinks);
         setShowDialog(true);
-        // Pre-filled links from .ef2 already have filenames and sizes, we just need to get friendly types if missing, 
-        // but to be fast we can just assume they are loaded.
       } else if (urls) {
         newLinks = urls.map((url, i) => {
           let filename = extractFilename(url) || `download-${i}`;
@@ -77,7 +76,7 @@ export function ImportLinksDialog() {
               }
               
               let friendlyType = 'Unknown File';
-              if (info.contentType) {
+              if ('contentType' in info && info.contentType) {
                 const mime = info.contentType.toLowerCase();
                 if (mime.includes('image/jpeg')) friendlyType = 'JPG File';
                 else if (mime.includes('image/png')) friendlyType = 'PNG File';
@@ -101,7 +100,7 @@ export function ImportLinksDialog() {
               ));
             } catch (err) {
               setLinks(prev => prev.map(l => 
-                l.id === link.id ? { ...l, loading: false, type: 'Error' } : l
+                l.id === link.id ? { ...l, loading: false, type: 'Failed to inspect' } : l
               ));
             }
           }, idx * 20);
@@ -130,11 +129,11 @@ export function ImportLinksDialog() {
 
   const handleBrowse = async () => {
     try {
-      const result = await window.api.system.selectSavePath({
+      const result = await window.api.system.showOpenDialog({
         properties: ['openDirectory', 'createDirectory']
       });
-      if (!result.canceled && result.filePaths.length > 0) {
-        setSelectedDirectory(result.filePaths[0]);
+      if (result && result.length > 0) {
+        setSelectedDirectory(result[0]);
         setSaveMode('specific_directory');
       }
     } catch (err) {
@@ -199,76 +198,107 @@ export function ImportLinksDialog() {
 
   if (!showDialog) return null;
 
-  const allSelected = visibleLinks.length > 0 && visibleLinks.every(l => l.selected);
+  const selectedCount = visibleLinks.filter(l => l.selected).length;
+  const loadedCount = visibleLinks.filter(l => !l.loading).length;
+  const allSelected = visibleLinks.length > 0 && selectedCount === visibleLinks.length;
+  
+  // Validation
+  let saveModeError = false;
+  if (saveMode === 'specific_category' && !selectedCategoryId) saveModeError = true;
+  if (saveMode === 'specific_directory' && !selectedDirectory) saveModeError = true;
+
+  const canAdd = selectedCount > 0 && !saveModeError && !adding;
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[110]" onMouseDown={handleClose}>
       <div
-        className="bg-[#2b2d31] border border-[#1e1f22] rounded-md p-4 w-full max-w-[850px] shadow-2xl text-[#dbdee1] font-sans flex flex-col h-[600px] relative"
+        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-6 w-full max-w-4xl shadow-2xl text-slate-800 dark:text-slate-200 font-sans flex flex-col h-[70vh] min-h-[500px] relative"
         onMouseDown={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-[16px] text-white flex items-center gap-2">
-            <span className="w-5 h-5 bg-gradient-to-br from-blue-400 to-green-400 rounded-full flex items-center justify-center text-black text-[10px] font-bold shadow shadow-blue-500/50">⬇</span>
-            Import links to IDM
-          </h2>
-          <div className="flex gap-2">
-            <button className="text-slate-400 hover:text-white leading-none">—</button>
-            <button className="text-slate-400 hover:text-white leading-none">□</button>
-            <button onClick={handleClose} className="text-slate-400 hover:text-red-400 leading-none">✕</button>
+        <div className="flex items-start justify-between mb-4 flex-shrink-0">
+          <div className="flex flex-col">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+              <span className="w-6 h-6 bg-brand-100 dark:bg-brand-500/20 text-brand-600 dark:text-brand-400 rounded-full flex items-center justify-center shadow-sm">
+                <CheckCircle2 size={14} />
+              </span>
+              Import Links
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+              Review the links, choose where they should go, then add them to RDM.
+            </p>
+          </div>
+          <button onClick={handleClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Progress, Filters, and Selection Summary */}
+        <div className="flex items-center gap-4 text-sm flex-shrink-0 mb-3 bg-slate-50 dark:bg-slate-800/50 p-2 rounded-lg border border-slate-200 dark:border-slate-700">
+          <div className="flex items-center gap-2 px-2">
+            <label className="flex items-center gap-2 cursor-pointer font-medium text-slate-700 dark:text-slate-300">
+              <input type="checkbox" checked={allSelected} onChange={(e) => toggleAll(e.target.checked)} className="accent-brand-600 w-4 h-4 rounded" />
+              {selectedCount} of {visibleLinks.length} selected
+            </label>
+          </div>
+          <div className="w-px h-5 bg-slate-300 dark:bg-slate-600"></div>
+          <label className="flex items-center gap-1.5 cursor-pointer text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
+            <input type="checkbox" checked={hideHtml} onChange={(e) => setHideHtml(e.target.checked)} className="accent-brand-600 w-3.5 h-3.5 rounded" />
+            Hide HTML files
+          </label>
+          <label className="flex items-center gap-1.5 cursor-pointer text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
+            <input type="checkbox" checked={hideRepeated} onChange={(e) => setHideRepeated(e.target.checked)} className="accent-brand-600 w-3.5 h-3.5 rounded" />
+            Hide repeated files
+          </label>
+          
+          <div className="ml-auto flex items-center gap-2 text-slate-500 px-2">
+            {loadedCount < visibleLinks.length ? (
+              <><Loader2 size={14} className="animate-spin" /> Checking: {loadedCount} / {visibleLinks.length}</>
+            ) : (
+              <><CheckCircle2 size={14} className="text-green-500" /> All {visibleLinks.length} checked</>
+            )}
           </div>
         </div>
 
-        <p className="text-[13px] text-[#b5bac1] leading-snug mb-4">
-          Please check the links, which you want to add to the download list of IDM, and click OK button.<br/>
-          You may wait until IDM checks and fills all file types.
-        </p>
-
         {/* Data Grid */}
-        <div className="flex-1 overflow-auto border border-[#1e1f22] bg-[#313338] mb-4 relative rounded-sm">
-          <table className="w-full text-left text-[12px] border-collapse">
-            <thead className="sticky top-0 bg-[#2b2d31] text-[#949ba4] border-b border-[#1e1f22] z-10">
+        <div className="flex-1 overflow-auto border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 mb-4 rounded-lg shadow-inner">
+          <table className="w-full text-left text-sm border-collapse whitespace-nowrap">
+            <thead className="sticky top-0 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700 z-10 text-xs uppercase tracking-wider font-semibold shadow-sm">
               <tr>
-                <th className="font-normal border-r border-[#1e1f22] p-1 w-8 text-center">
-                  <input type="checkbox" checked={allSelected} onChange={(e) => toggleAll(e.target.checked)} className="accent-[#0078d7]" />
-                </th>
-                <th className="font-normal border-r border-[#1e1f22] p-1.5 min-w-[120px]">File Name</th>
-                <th className="font-normal border-r border-[#1e1f22] p-1.5 w-[90px]">File Type</th>
-                <th className="font-normal border-r border-[#1e1f22] p-1.5 w-[80px]">Size</th>
-                <th className="font-normal border-r border-[#1e1f22] p-1.5 w-[200px]">Download from</th>
-                <th className="font-normal border-r border-[#1e1f22] p-1.5 w-[150px]">Save to</th>
-                <th className="font-normal p-1.5">Link Text</th>
+                <th className="p-3 w-10 text-center border-r border-slate-200 dark:border-slate-700"></th>
+                <th className="p-3 min-w-[200px] border-r border-slate-200 dark:border-slate-700">File Name</th>
+                <th className="p-3 w-[120px] border-r border-slate-200 dark:border-slate-700">Type</th>
+                <th className="p-3 w-[100px] border-r border-slate-200 dark:border-slate-700">Size</th>
+                <th className="p-3 min-w-[200px] border-r border-slate-200 dark:border-slate-700">Source URL</th>
+                <th className="p-3 min-w-[150px]">Save Path</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-700/50">
               {visibleLinks.map((link) => (
-                <tr key={link.id} className="border-b border-[#1e1f22]/50 hover:bg-[#35373c]">
-                  <td className="border-r border-[#1e1f22]/50 p-1 text-center">
+                <tr key={link.id} className="hover:bg-white dark:hover:bg-slate-700/50 transition-colors">
+                  <td className="p-2 text-center border-r border-slate-200 dark:border-slate-700/50">
                     <input 
                       type="checkbox" 
                       checked={link.selected} 
                       onChange={(e) => toggleLink(link.id, e.target.checked)} 
-                      className="accent-[#0078d7]" 
+                      className="accent-brand-600 w-4 h-4 rounded" 
                     />
                   </td>
-                  <td className="border-r border-[#1e1f22]/50 p-1.5 flex items-center gap-1.5">
-                    <span className="text-white">📄</span>
-                    <span className="truncate" title={link.filename}>{link.filename}</span>
+                  <td className="p-2 border-r border-slate-200 dark:border-slate-700/50 flex items-center gap-2 font-medium text-slate-700 dark:text-slate-200">
+                    <Download size={14} className="text-slate-400" />
+                    <span className="truncate max-w-[250px]" title={link.filename}>{link.filename}</span>
                   </td>
-                  <td className="border-r border-[#1e1f22]/50 p-1.5 truncate" title={link.type}>
-                    {link.loading ? <span className="animate-pulse">Checking...</span> : link.type}
+                  <td className="p-2 border-r border-slate-200 dark:border-slate-700/50 text-slate-600 dark:text-slate-400">
+                    {link.loading ? <span className="flex items-center gap-1 opacity-70"><Loader2 size={12} className="animate-spin" /> Checking...</span> : 
+                     link.type === 'Failed to inspect' ? <span className="flex items-center gap-1 text-red-500"><AlertCircle size={12} /> Failed to inspect</span> : link.type}
                   </td>
-                  <td className="border-r border-[#1e1f22]/50 p-1.5 truncate">
-                    {link.size > 0 ? formatFileSize(link.size) : link.loading ? '' : 'Unknown'}
+                  <td className="p-2 border-r border-slate-200 dark:border-slate-700/50 text-slate-600 dark:text-slate-400">
+                    {link.size > 0 ? formatFileSize(link.size) : link.loading ? '' : '-'}
                   </td>
-                  <td className="border-r border-[#1e1f22]/50 p-1.5 truncate text-[#00b0f4]" title={link.url}>
-                    {link.url}
+                  <td className="p-2 border-r border-slate-200 dark:border-slate-700/50 text-brand-600 dark:text-brand-400 font-mono text-xs">
+                    <div className="truncate max-w-[250px]" title={link.url}>{link.url}</div>
                   </td>
-                  <td className="border-r border-[#1e1f22]/50 p-1.5 truncate" title={getSavePathForLink(link)}>
-                    {getSavePathForLink(link)}
-                  </td>
-                  <td className="p-1.5 truncate">
-                    {link.linkText}
+                  <td className="p-2 text-slate-500 dark:text-slate-400 font-mono text-xs">
+                    <div className="truncate max-w-[200px]" title={getSavePathForLink(link)}>{getSavePathForLink(link)}</div>
                   </td>
                 </tr>
               ))}
@@ -276,39 +306,30 @@ export function ImportLinksDialog() {
           </table>
         </div>
 
-        {/* Bottom Area */}
-        <div className="flex gap-4 mb-2">
-          {/* Save To Group */}
-          <fieldset className="flex-1 border border-[#404249] rounded-sm p-3 pt-2 max-w-[400px]">
-            <legend className="text-[12px] px-1 text-[#b5bac1]">Save To</legend>
-            <div className="space-y-3">
-              <label className="flex items-center gap-2 text-[12px] cursor-pointer text-white">
-                <input
-                  type="radio"
-                  name="importSaveMode"
-                  checked={saveMode === 'category'}
-                  onChange={() => setSaveMode('category')}
-                  className="accent-[#0078d7]"
-                />
-                Every file to the directory according to the category of the file
+        {/* Configuration Area */}
+        <div className="flex flex-shrink-0 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+          
+          {/* Save Target */}
+          <div className="flex-1 space-y-3">
+            <h3 className="text-sm font-medium text-slate-900 dark:text-white flex items-center gap-1.5">
+              <HardDrive size={16} className="text-slate-400" /> Save Location
+            </h3>
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-sm cursor-pointer text-slate-700 dark:text-slate-300">
+                <input type="radio" name="importSaveMode" checked={saveMode === 'category'} onChange={() => setSaveMode('category')} className="accent-brand-600" />
+                <Folder size={14} className="text-slate-400" /> By category
               </label>
               
-              <div className="flex items-center gap-2 pl-[22px]">
-                <label className="flex items-center gap-2 text-[12px] cursor-pointer text-white w-36">
-                  <input
-                    type="radio"
-                    name="importSaveMode"
-                    checked={saveMode === 'specific_category'}
-                    onChange={() => setSaveMode('specific_category')}
-                    className="accent-[#0078d7] -ml-[22px]"
-                  />
-                  All files to one category
+              <div className="flex items-center gap-3">
+                <label className="flex items-center gap-2 text-sm cursor-pointer text-slate-700 dark:text-slate-300 whitespace-nowrap min-w-[160px]">
+                  <input type="radio" name="importSaveMode" checked={saveMode === 'specific_category'} onChange={() => setSaveMode('specific_category')} className="accent-brand-600" />
+                  <Folder size={14} className="text-slate-400" /> One category
                 </label>
                 <select
                   disabled={saveMode !== 'specific_category'}
                   value={selectedCategoryId}
                   onChange={(e) => setSelectedCategoryId(e.target.value)}
-                  className="flex-1 bg-[#1e1f22] border border-[#1e1f22] text-[12px] p-1 text-white disabled:opacity-50 outline-none focus:border-[#0078d7]"
+                  className="w-64 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-sm py-1.5 px-2 rounded-md disabled:opacity-50 outline-none focus:border-brand-500 transition-colors"
                 >
                   {categories.map(c => (
                     <option key={c.id} value={c.id}>{c.name}</option>
@@ -316,89 +337,56 @@ export function ImportLinksDialog() {
                 </select>
               </div>
 
-              <div className="flex flex-col gap-1 pl-[22px]">
-                <label className="flex items-center gap-2 text-[12px] cursor-pointer text-white">
-                  <input
-                    type="radio"
-                    name="importSaveMode"
-                    checked={saveMode === 'specific_directory'}
-                    onChange={() => setSaveMode('specific_directory')}
-                    className="accent-[#0078d7] -ml-[22px]"
-                  />
-                  All files to one directory
+              <div className="flex items-center gap-3">
+                <label className="flex items-center gap-2 text-sm cursor-pointer text-slate-700 dark:text-slate-300 whitespace-nowrap min-w-[160px]">
+                  <input type="radio" name="importSaveMode" checked={saveMode === 'specific_directory'} onChange={() => setSaveMode('specific_directory')} className="accent-brand-600" />
+                  <FolderOpen size={14} className="text-slate-400" /> One directory
                 </label>
-                <div className="flex gap-1 mt-1">
+                <div className="flex w-64 gap-2">
                   <input
                     type="text"
                     disabled={saveMode !== 'specific_directory'}
                     value={selectedDirectory}
                     onChange={(e) => setSelectedDirectory(e.target.value)}
-                    className="flex-1 bg-[#1e1f22] border border-[#1e1f22] text-[12px] p-1 px-2 text-[#949ba4] disabled:opacity-50 outline-none focus:border-[#0078d7]"
+                    placeholder="Select a folder..."
+                    className="flex-1 min-w-0 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-sm py-1.5 px-2 rounded-md disabled:opacity-50 outline-none focus:border-brand-500 transition-colors"
                   />
                   <button
                     disabled={saveMode !== 'specific_directory'}
                     onClick={handleBrowse}
-                    className="px-3 bg-[#4e5058] hover:bg-[#6d6f78] text-white text-[12px] rounded-sm disabled:opacity-50 transition-colors"
+                    className="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 text-sm rounded-md disabled:opacity-50 transition-colors shadow-sm"
                   >
-                    Browse...
+                    Browse
                   </button>
                 </div>
               </div>
             </div>
-          </fieldset>
-
-          {/* Controls Group */}
-          <div className="flex-1 flex flex-col justify-between">
-            <div className="flex gap-2">
-              <button onClick={() => toggleAll(true)} className="flex-1 py-1 bg-[#4e5058] hover:bg-[#6d6f78] text-white text-[12px] rounded-sm transition-colors border border-transparent hover:border-[#8e9297]">
-                Check All
-              </button>
-              <button onClick={() => toggleAll(false)} className="flex-1 py-1 bg-[#4e5058] hover:bg-[#6d6f78] text-white text-[12px] rounded-sm transition-colors border border-transparent hover:border-[#8e9297]">
-                Uncheck All
-              </button>
-              <button className="flex-1 py-1 bg-[#4e5058] hover:bg-[#6d6f78] text-white text-[12px] rounded-sm transition-colors border border-transparent hover:border-[#8e9297] opacity-50 cursor-not-allowed">
-                Edit...
-              </button>
-            </div>
-            
-            <div className="space-y-3 pl-2 mt-4">
-              <label className="flex items-center gap-2 text-[12px] text-[#dbdee1] cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  checked={hideHtml} 
-                  onChange={(e) => setHideHtml(e.target.checked)} 
-                  className="accent-[#0078d7] w-3 h-3" 
-                />
-                Hide HTML files
-              </label>
-              <label className="flex items-center gap-2 text-[12px] text-[#dbdee1] cursor-pointer">
-                <input 
-                  type="checkbox" 
-                  checked={hideRepeated} 
-                  onChange={(e) => setHideRepeated(e.target.checked)} 
-                  className="accent-[#0078d7] w-3 h-3" 
-                />
-                Hide repeated files
-              </label>
-            </div>
-
-            <div className="flex justify-end gap-2 mt-auto">
-              <button
-                onClick={handleAdd}
-                disabled={adding || visibleLinks.filter(l => l.selected).length === 0}
-                className="w-24 py-1.5 bg-[#4e5058] hover:bg-[#6d6f78] text-white text-[12px] rounded-sm transition-colors disabled:opacity-50 border border-transparent hover:border-[#8e9297]"
-              >
-                OK
-              </button>
-              <button
-                onClick={handleClose}
-                className="w-24 py-1.5 bg-[#4e5058] hover:bg-[#6d6f78] text-white text-[12px] rounded-sm transition-colors border border-transparent hover:border-[#8e9297]"
-              >
-                Cancel
-              </button>
-            </div>
           </div>
         </div>
+
+        {/* Footer Actions */}
+        <div className="flex justify-between items-center mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 flex-shrink-0">
+          <div className="text-sm text-red-500 font-medium flex items-center gap-1.5">
+            {selectedCount === 0 && <><AlertCircle size={14} /> Select at least one link to continue.</>}
+            {saveModeError && selectedCount > 0 && <><AlertCircle size={14} /> Please configure the target save location.</>}
+          </div>
+          <div className="flex gap-3">
+            <button
+              onClick={handleClose}
+              className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleAdd}
+              disabled={!canAdd}
+              className="px-6 py-2 text-sm font-medium bg-brand-600 hover:bg-brand-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-sm"
+            >
+              {adding ? <><Loader2 size={16} className="animate-spin" /> Adding...</> : 'Add Links'}
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
   );

@@ -134,7 +134,11 @@ INSERT OR IGNORE INTO settings (key, value) VALUES
     ('clipboardMonitor', 'true'),
     ('proxyUrl', ''),
     ('antivirusEnabled', 'false'),
-    ('antivirusCmd', '');
+    ('antivirusCmd', ''),
+    ('ffmpegPath', ''),
+    ('autoExtractArchives', 'false'),
+    ('extractCmd', ''),
+    ('deleteArchiveAfterExtract', 'false');
 
 CREATE TABLE IF NOT EXISTS queues (
     id                TEXT PRIMARY KEY,
@@ -167,30 +171,50 @@ INSERT OR IGNORE INTO queues (id, name, type) VALUES
     ('sync', 'Synchronization queue', 'sync');
 `;
 
+/**
+ * Ordered schema migrations. Each runs exactly once; `PRAGMA user_version`
+ * tracks how many have been applied, so upgrades are deterministic instead of
+ * relying on try/catch ALTER blocks. Append new migrations — never reorder or
+ * edit an already-shipped one.
+ */
+const MIGRATIONS: Array<(d: DatabaseSync) => void> = [
+  // v1: columns added after the initial release.
+  (d) => {
+    const addColumn = (sql: string) => {
+      try { d.exec(sql); } catch { /* column already exists */ }
+    };
+    addColumn("ALTER TABLE downloads ADD COLUMN queue_id TEXT DEFAULT 'main'");
+    addColumn('ALTER TABLE categories ADD COLUMN extensions TEXT');
+    addColumn('ALTER TABLE categories ADD COLUMN save_last_folder INTEGER DEFAULT 0');
+    addColumn('ALTER TABLE categories ADD COLUMN sites TEXT');
+    addColumn('ALTER TABLE categories ADD COLUMN sites_enabled INTEGER DEFAULT 0');
+  },
+  // v2: indexes for the hot query paths (download list filter + chunk loads).
+  (d) => {
+    d.exec('CREATE INDEX IF NOT EXISTS idx_downloads_status ON downloads(status)');
+    d.exec('CREATE INDEX IF NOT EXISTS idx_chunks_download_id ON chunks(download_id)');
+  },
+];
+
+function runMigrations(d: DatabaseSync): void {
+  const row = d.prepare('PRAGMA user_version').get() as { user_version: number } | undefined;
+  let version = row?.user_version ?? 0;
+
+  for (let i = version; i < MIGRATIONS.length; i++) {
+    MIGRATIONS[i](d);
+    version = i + 1;
+    // PRAGMA does not accept bound parameters; version is a trusted integer.
+    d.exec(`PRAGMA user_version = ${version}`);
+  }
+}
+
 export async function initDatabase(): Promise<void> {
   const dbPath = join(app.getPath('userData'), DB_FILENAME);
   db = new DatabaseSync(dbPath);
   db.exec('PRAGMA journal_mode = WAL;');
   db.exec('PRAGMA busy_timeout = 5000;');
+  db.exec('PRAGMA foreign_keys = ON;');
   db.exec(SCHEMA);
 
-  try {
-    db.exec("ALTER TABLE downloads ADD COLUMN queue_id TEXT DEFAULT 'main'");
-  } catch (e) {
-    // Column might already exist
-  }
-
-  try {
-    db.exec("ALTER TABLE categories ADD COLUMN extensions TEXT");
-    db.exec("ALTER TABLE categories ADD COLUMN save_last_folder INTEGER DEFAULT 0");
-  } catch (e) {
-    // Columns might already exist
-  }
-
-  try {
-    db.exec("ALTER TABLE categories ADD COLUMN sites TEXT");
-    db.exec("ALTER TABLE categories ADD COLUMN sites_enabled INTEGER DEFAULT 0");
-  } catch (e) {
-    // Columns might already exist
-  }
+  runMigrations(db);
 }

@@ -3,6 +3,7 @@ import type { Download, DownloadOptions, Category, QueueStatus, PluginInstance, 
 export interface RdmApi {
   download: {
     getFileInfo(url: string): Promise<{ fileSize: number; supportsRange: boolean; preId?: string }>;
+    getFileInfoBasic(url: string): Promise<{ fileSize: number; supportsRange: boolean; contentType: string }>;
     discardPre(preId: string): Promise<boolean>;
     add(options: DownloadOptions): Promise<Download>;
     getAll(): Promise<Download[]>;
@@ -12,6 +13,7 @@ export interface RdmApi {
     cancel(id: string): Promise<boolean>;
     remove(id: string): Promise<boolean>;
     clearCompleted(): Promise<boolean>;
+    move(id: string, newPath: string): Promise<boolean>;
     setSpeedLimit(id: string, limit: number): Promise<boolean>;
     setConnections(id: string, count: number): Promise<boolean>;
     openFile(id: string): Promise<boolean>;
@@ -24,6 +26,13 @@ export interface RdmApi {
     onError(callback: (download: Download) => void): () => void;
   };
   queue: {
+    getAll(): Promise<import('@rdm/shared').QueueSettings[]>;
+    get(id: string): Promise<import('@rdm/shared').QueueSettings | undefined>;
+    create(queue: Omit<import('@rdm/shared').QueueSettings, 'id' | 'type'>): Promise<import('@rdm/shared').QueueSettings>;
+    update(queue: import('@rdm/shared').QueueSettings): Promise<boolean>;
+    delete(id: string): Promise<boolean>;
+    start(id: string): Promise<boolean>;
+    stop(id: string): Promise<boolean>;
     startAll(): Promise<boolean>;
     pauseAll(): Promise<boolean>;
     setConcurrency(n: number): Promise<boolean>;
@@ -61,6 +70,7 @@ export interface RdmApi {
     close(): void;
   };
   clipboard: {
+    readText(): Promise<string>;
     onUrlDetected(callback: (url: string) => void): () => void;
   };
   plugins: {
@@ -73,6 +83,10 @@ export interface RdmApi {
   grabber: {
     detectVideos(url: string): Promise<GrabResult[]>;
     crawlSite(url: string): Promise<GrabResult[]>;
+  };
+  system: {
+    selectSavePath(defaultPath?: string): Promise<string | null>;
+    showOpenDialog(options: any): Promise<string[]>;
   };
 }
 

@@ -7,7 +7,8 @@ export type DownloadStatus =
   | 'error'
   | 'cancelled'
   | 'merging'
-  | 'scanning';
+  | 'scanning'
+  | 'processing';
 
 export type DownloadPriority = 'low' | 'normal' | 'high' | 'immediate';
 

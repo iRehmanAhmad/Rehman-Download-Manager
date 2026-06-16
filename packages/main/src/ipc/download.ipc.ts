@@ -9,6 +9,7 @@ import { getDatabase } from '../storage/database';
 import http from 'node:http';
 import https from 'node:https';
 import path from 'node:path';
+import fs from 'node:fs';
 import { URL } from 'node:url';
 
 let engine: DownloadEngine | null = null;
@@ -112,6 +113,10 @@ export function registerDownloadIpc(): void {
     };
 
     eng.add(download);
+    // Notify sandboxed plugins that a download was added (download:intercept).
+    import('../plugins/loader')
+      .then(({ emitPluginEvent }) => emitPluginEvent('download:intercept', { url: download.url, id: download.id }))
+      .catch(() => {});
     sendToRenderer(IPC_CHANNELS.DOWNLOAD_ADDED, eng.getDownload(id) || download);
     emitQueueStatus();
     return eng.getDownload(id) || download;

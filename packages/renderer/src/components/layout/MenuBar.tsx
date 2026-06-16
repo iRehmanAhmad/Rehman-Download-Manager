@@ -1,9 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useDownloadStore } from '../../stores/download-store';
 
 export function MenuBar() {
-  const { t } = useTranslation();
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [queues, setQueues] = useState<import('@rdm/shared').QueueSettings[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -45,14 +43,22 @@ export function MenuBar() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const menus = [
+  type MenuItem = {
+    label?: string;
+    action?: () => void;
+    disabled?: boolean;
+    divider?: boolean;
+    subItems?: { label: string; action?: () => void }[];
+  };
+
+  const menus: { id: string; label: string; items: MenuItem[] }[] = [
     {
       id: 'actions',
       label: 'Actions',
       items: [
-        { label: 'Add new download', action: () => window.dispatchEvent(new CustomEvent('open-add-url-dialog', { detail: '' })) },
-        { label: 'Add batch download', action: () => window.dispatchEvent(new CustomEvent('open-batch-download-dialog', { detail: '' })) },
-        { label: 'Add batch download from clipboard', action: async () => {
+        { label: 'Add download', action: () => window.dispatchEvent(new CustomEvent('open-add-url-dialog', { detail: '' })) },
+        { label: 'Import batch links', action: () => window.dispatchEvent(new CustomEvent('open-batch-download-dialog', { detail: '' })) },
+        { label: 'Import links from clipboard', action: async () => {
           try {
             const text = await navigator.clipboard.readText();
             window.dispatchEvent(new CustomEvent('open-batch-download-dialog', { detail: text }));
@@ -60,16 +66,15 @@ export function MenuBar() {
             window.dispatchEvent(new CustomEvent('open-batch-download-dialog', { detail: '' }));
           }
         }},
-        { label: 'Run site grabber', action: () => window.location.hash = '#/grabber' },
+        { label: 'Scan page for media', action: () => window.location.hash = '#/grabber' },
         { divider: true },
-        { label: 'Show drop target', action: () => {} },
-        { divider: true },
-        { label: 'Export', subItems: [
-          { label: 'To RDM export file', action: () => window.dispatchEvent(new CustomEvent('open-export-dialog', { detail: 'ef2' })) },
+        { label: 'Export downloads', subItems: [
+          { label: 'To RDM file', action: () => window.dispatchEvent(new CustomEvent('open-export-dialog', { detail: 'ef2' })) },
           { label: 'To text file', action: () => window.dispatchEvent(new CustomEvent('open-export-dialog', { detail: 'txt' })) }
         ]},
-        { label: 'Import', subItems: [
-          { label: 'From RDM export file', action: async () => {
+        { divider: true },
+        { label: 'Import downloads', subItems: [
+          { label: 'From RDM file', action: async () => {
             try {
               const text = await window.api.download.import('ef2');
               if (text && text !== 'success') {
@@ -103,7 +108,7 @@ export function MenuBar() {
           }}
         ]},
         { divider: true },
-        { label: 'Exit', action: () => window.api.app.close() },
+        { label: 'Quit RDM', action: () => window.api.app.close() },
       ],
     },
     {
@@ -111,7 +116,7 @@ export function MenuBar() {
       label: 'File',
       items: [
         { label: 'Pause Download', disabled: !canPause, action: () => selectedIds.forEach(id => window.api.download.pause(id)) },
-        { label: 'Delete Download', disabled: !canDelete, action: () => selectedIds.forEach(id => window.api.download.delete(id)) },
+        { label: 'Delete Download', disabled: !canDelete, action: () => selectedIds.forEach(id => window.api.download.remove(id)) },
         { label: 'Resume Download', disabled: !canResume, action: () => selectedIds.forEach(id => window.api.download.resume(id)) },
         { label: 'Restart Download', disabled: !canRestart, action: () => selectedIds.forEach(id => window.api.download.restart(id)) },
       ],
@@ -121,7 +126,14 @@ export function MenuBar() {
       label: 'Downloads',
       items: [
         { label: 'Pause All Downloads', disabled: !canPauseAll, action: () => window.api.queue.pauseAll() },
-        { label: 'Stop All Downloads', disabled: !canPauseAll, action: () => window.api.queue.pauseAll() },
+        { label: 'Stop All Downloads', disabled: !canPauseAll, action: async () => {
+          for (const dl of Array.from(downloads.values())) {
+            if (dl.status === 'downloading' || dl.status === 'queued' || dl.status === 'paused') {
+              await window.api.download.cancel(dl.id);
+              useDownloadStore.getState().updateDownload(dl.id, { status: 'cancelled' });
+            }
+          }
+        }},
         { divider: true },
         { label: 'Clear Completed Downloads', disabled: !canClearCompleted, action: async () => {
           await window.api.download.clearCompleted();

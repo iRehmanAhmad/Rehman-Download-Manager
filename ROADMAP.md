@@ -166,6 +166,32 @@ To successfully implement all of IDM's legendary features, we are executing a ph
 - IDM Menu items configuration dialog
 - Refactored settings to accurately mimic classic IDM experience while maintaining modern React/Tailwind base
 
+### ✅ Phase 12: Reliability & Security Hardening
+**Status: In progress (uncommitted)**
+
+Engine correctness:
+- Fixed `activeCount++` write to a getter (crashed pre-download promotion)
+- Partial chunks moved from OS temp → `userData/partials`; chunk progress now reconciled against real on-disk bytes on resume (`reconcileChunksFromDisk`) to prevent silent truncation/corruption
+- Restored `queued` downloads re-enter the queue and auto-resume after restart
+- Per-chunk retry with backoff (`handleChunkFailure`) instead of failing the whole download on one bad range
+- Fixed pre-existing missing `fs` import in the `DOWNLOAD_MOVE` IPC handler
+
+Security:
+- Browser-bridge TCP server now requires a per-install token (shared with the native-messaging host via `userData/bridge-token`)
+- Plugins run in isolated `utilityProcess` sandboxes (`plugins/plugin-host.ts`) with a permission-checked message API; enabled plugins auto-load on startup and are killed on quit
+- Antivirus hook uses `spawn(cmd, [path])` (shell:false) — no command injection
+- SSRF guard (`net/ssrf-guard.ts`, DNS-resolving) on grabber + bridge fetches
+- Renderer `sandbox: true` re-enabled
+
+Maintainability:
+- Versioned migration runner (`PRAGMA user_version`); indexes on `downloads(status)` / `chunks(download_id)`; `foreign_keys=ON`
+- Crash logs moved to `userData/logs/crash.log`; debug probes gated behind dev flag
+- Multi-algorithm checksum verification (MD5/SHA-1/SHA-256/SHA-512, auto-detected by length)
+
+Features:
+- Post-completion pipeline (`postprocess/index.ts`): FFmpeg conversion + archive auto-extraction, fail-safe, spawned without a shell
+- (Drag-and-drop URLs were already implemented in `App.tsx`)
+
 ---
 
 ## Database Schema (7 tables)

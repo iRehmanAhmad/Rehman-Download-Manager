@@ -1,5 +1,7 @@
+import { useState } from 'react';
 import {
   Plus,
+  ClipboardPaste,
   Play,
   Pause,
   PauseCircle,
@@ -8,6 +10,7 @@ import {
   Trash,
   Settings,
   Clock,
+  MoreVertical
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useDownloadStore } from '../../stores/download-store';
@@ -22,6 +25,21 @@ export function TopToolbar() {
   const handleAddUrl = () => {
     window.dispatchEvent(new CustomEvent('open-add-url-dialog'));
   };
+
+  const handlePasteUrl = async () => {
+    try {
+      const clipText = await window.api.clipboard.readText();
+      if (clipText && (clipText.startsWith('http://') || clipText.startsWith('https://') || clipText.startsWith('ftp://'))) {
+        window.dispatchEvent(new CustomEvent('open-add-url-dialog', { detail: { url: clipText.trim() } }));
+      } else {
+        window.dispatchEvent(new CustomEvent('open-add-url-dialog'));
+      }
+    } catch (err) {
+      window.dispatchEvent(new CustomEvent('open-add-url-dialog'));
+    }
+  };
+
+  const [showMore, setShowMore] = useState(false);
 
   const handleResumeSelected = async () => {
     for (const id of selectedIds) {
@@ -75,20 +93,49 @@ export function TopToolbar() {
   };
 
   return (
-    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-surface-hover/50 backdrop-blur-md border-b border-surface-border overflow-x-auto whitespace-nowrap">
+    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-surface-hover/50 backdrop-blur-md border-b border-surface-border overflow-visible whitespace-nowrap">
       <ToolbarButton icon={Plus} label="Add URL" onClick={handleAddUrl} primary />
+      <ToolbarButton icon={ClipboardPaste} label="Paste URL" onClick={handlePasteUrl} />
       <div className="w-px h-6 bg-slate-300 dark:bg-white/10 mx-1 flex-shrink-0" />
       <ToolbarButton icon={Play} label="Resume" onClick={handleResumeSelected} disabled={selectedIds.size === 0} />
       <ToolbarButton icon={Pause} label="Pause" onClick={handlePauseSelected} disabled={selectedIds.size === 0} />
       <ToolbarButton icon={PauseCircle} label="Pause All" onClick={handlePauseAll} />
       <ToolbarButton icon={StopCircle} label="Stop All" onClick={handleStopAll} />
       <div className="w-px h-6 bg-slate-300 dark:bg-white/10 mx-1 flex-shrink-0" />
-      <ToolbarButton icon={Trash2} label="Delete" onClick={handleDeleteSelected} disabled={selectedIds.size === 0} />
-      <ToolbarButton icon={Trash} label="Clear Completed" onClick={handleClearCompleted} />
-      <div className="w-px h-6 bg-slate-300 dark:bg-white/10 mx-1 flex-shrink-0" />
-      <ToolbarButton icon={Clock} label="Scheduler" onClick={() => navigate('/scheduler')} />
-      <ToolbarButton icon={Settings} label="Settings" onClick={() => navigate('/settings')} />
+      
+      <div className="relative">
+        <ToolbarButton icon={MoreVertical} label="More Actions" onClick={() => setShowMore(!showMore)} />
+        {showMore && (
+          <>
+            <div className="fixed inset-0 z-40" onClick={() => setShowMore(false)} />
+            <div className="absolute left-0 top-full mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-md shadow-lg z-50 py-1 min-w-[180px] flex flex-col items-start overflow-hidden">
+              <DropdownItem icon={Trash2} label="Delete Selected" onClick={() => { handleDeleteSelected(); setShowMore(false); }} disabled={selectedIds.size === 0} />
+              <DropdownItem icon={Trash} label="Clear Completed" onClick={() => { handleClearCompleted(); setShowMore(false); }} />
+              <div className="w-full h-px bg-slate-200 dark:bg-slate-700 my-1" />
+              <DropdownItem icon={Clock} label="Scheduler" onClick={() => { navigate('/scheduler'); setShowMore(false); }} />
+              <DropdownItem icon={Settings} label="Settings" onClick={() => { navigate('/settings'); setShowMore(false); }} />
+            </div>
+          </>
+        )}
+      </div>
     </div>
+  );
+}
+
+function DropdownItem({ icon: Icon, label, onClick, disabled = false }: { icon: any, label: string, onClick: () => void, disabled?: boolean }) {
+  return (
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`w-full flex items-center gap-2 px-3 py-1.5 text-xs text-left ${
+        disabled 
+          ? 'opacity-50 cursor-not-allowed text-slate-400' 
+          : 'hover:bg-brand-500 hover:text-white text-slate-700 dark:text-slate-200'
+      }`}
+    >
+      <Icon size={14} />
+      {label}
+    </button>
   );
 }
 

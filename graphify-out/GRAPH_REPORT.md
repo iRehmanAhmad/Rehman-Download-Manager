@@ -1,88 +1,93 @@
-# Graph Report - .  (2026-06-15)
+# Graph Report - .  (2026-06-16)
 
 ## Corpus Check
-- cluster-only mode — file stats not available
+- 41 files · ~44,906 words
+- Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 238 nodes · 368 edges · 57 communities (7 shown, 50 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 7 edges (avg confidence: 0.95)
-- Token cost: 0 input · 0 output
-
-## Graph Freshness
-- Built from commit: `1228deba`
-- Run `git rev-parse HEAD` and compare to check if the graph is stale.
-- Run `graphify update .` after code changes (no API cost).
+- 419 nodes · 664 edges · 67 communities (17 shown, 50 thin omitted)
+- Extraction: 95% EXTRACTED · 5% INFERRED · 0% AMBIGUOUS · INFERRED: 31 edges (avg confidence: 0.88)
+- Token cost: 3,500 input · 2,200 output
 
 ## Community Hubs (Navigation)
-- [[_COMMUNITY_Community 0|Community 0]]
-- [[_COMMUNITY_Community 1|Community 1]]
-- [[_COMMUNITY_Community 2|Community 2]]
-- [[_COMMUNITY_Community 3|Community 3]]
-- [[_COMMUNITY_Community 4|Community 4]]
-- [[_COMMUNITY_Community 5|Community 5]]
-- [[_COMMUNITY_Community 6|Community 6]]
-- [[_COMMUNITY_Community 7|Community 7]]
-- [[_COMMUNITY_Community 8|Community 8]]
-- [[_COMMUNITY_Community 9|Community 9]]
-- [[_COMMUNITY_Community 10|Community 10]]
-- [[_COMMUNITY_Community 11|Community 11]]
-- [[_COMMUNITY_Community 12|Community 12]]
-- [[_COMMUNITY_Community 13|Community 13]]
-- [[_COMMUNITY_Community 14|Community 14]]
-- [[_COMMUNITY_Community 15|Community 15]]
-- [[_COMMUNITY_Community 16|Community 16]]
-- [[_COMMUNITY_Community 17|Community 17]]
-- [[_COMMUNITY_Community 18|Community 18]]
-- [[_COMMUNITY_Community 19|Community 19]]
-- [[_COMMUNITY_Community 20|Community 20]]
-- [[_COMMUNITY_Community 21|Community 21]]
-- [[_COMMUNITY_Community 22|Community 22]]
-- [[_COMMUNITY_Community 23|Community 23]]
-- [[_COMMUNITY_Community 24|Community 24]]
-- [[_COMMUNITY_Community 25|Community 25]]
-- [[_COMMUNITY_Community 26|Community 26]]
-- [[_COMMUNITY_Community 27|Community 27]]
-- [[_COMMUNITY_Community 28|Community 28]]
-- [[_COMMUNITY_Community 29|Community 29]]
-- [[_COMMUNITY_Community 30|Community 30]]
-- [[_COMMUNITY_Community 31|Community 31]]
-- [[_COMMUNITY_Community 32|Community 32]]
-- [[_COMMUNITY_Community 33|Community 33]]
-- [[_COMMUNITY_Community 34|Community 34]]
-- [[_COMMUNITY_Community 35|Community 35]]
-- [[_COMMUNITY_Community 36|Community 36]]
-- [[_COMMUNITY_Community 37|Community 37]]
-- [[_COMMUNITY_Community 38|Community 38]]
-- [[_COMMUNITY_Community 39|Community 39]]
-- [[_COMMUNITY_Community 40|Community 40]]
-- [[_COMMUNITY_Community 41|Community 41]]
-- [[_COMMUNITY_Community 42|Community 42]]
-- [[_COMMUNITY_Community 43|Community 43]]
-- [[_COMMUNITY_Community 44|Community 44]]
-- [[_COMMUNITY_Community 45|Community 45]]
-- [[_COMMUNITY_Community 46|Community 46]]
-- [[_COMMUNITY_Community 47|Community 47]]
-- [[_COMMUNITY_Community 48|Community 48]]
-- [[_COMMUNITY_Community 49|Community 49]]
-- [[_COMMUNITY_Community 50|Community 50]]
-- [[_COMMUNITY_Community 51|Community 51]]
-- [[_COMMUNITY_Community 52|Community 52]]
-- [[_COMMUNITY_Community 53|Community 53]]
-- [[_COMMUNITY_Community 54|Community 54]]
-- [[_COMMUNITY_Community 55|Community 55]]
-- [[_COMMUNITY_Community 56|Community 56]]
+- [[_COMMUNITY_Download Engine (Chunked + Resume)|Download Engine (Chunked + Resume)]]
+- [[_COMMUNITY_Main IPC & Background Services|Main IPC & Background Services]]
+- [[_COMMUNITY_Renderer UI Pages & Layout|Renderer UI Pages & Layout]]
+- [[_COMMUNITY_Roadmap & Monetization Strategy|Roadmap & Monetization Strategy]]
+- [[_COMMUNITY_Settings Dialogs|Settings Dialogs]]
+- [[_COMMUNITY_Plugin Loader & Queue Repository|Plugin Loader & Queue Repository]]
+- [[_COMMUNITY_Grabber & SSRF Guard|Grabber & SSRF Guard]]
+- [[_COMMUNITY_Shared Types & Preload Bridge|Shared Types & Preload Bridge]]
+- [[_COMMUNITY_Native Messaging Host|Native Messaging Host]]
+- [[_COMMUNITY_Plugin Sandbox Host|Plugin Sandbox Host]]
+- [[_COMMUNITY_Post-Processing Pipeline|Post-Processing Pipeline]]
+- [[_COMMUNITY_Roadmap Browser Integration|Roadmap: Browser Integration]]
+- [[_COMMUNITY_Roadmap Plugin System|Roadmap: Plugin System]]
+- [[_COMMUNITY_App Icon (SVG)|App Icon (SVG)]]
+- [[_COMMUNITY_Roadmap Browser Extension|Roadmap: Browser Extension]]
+- [[_COMMUNITY_Tech Stack|Tech Stack]]
+- [[_COMMUNITY_Browser Extension Popups|Browser Extension Popups]]
+- [[_COMMUNITY_App ConstantsDefaults|App Constants/Defaults]]
+- [[_COMMUNITY_Roadmap Clipboard & Notifications|Roadmap: Clipboard & Notifications]]
+- [[_COMMUNITY_Roadmap Scheduler & Cron|Roadmap: Scheduler & Cron]]
+- [[_COMMUNITY_Readme Project|Readme Project]]
+- [[_COMMUNITY_Readme Rdm|Readme Rdm]]
+- [[_COMMUNITY_Automation Evaluator|Automation Evaluator]]
+- [[_COMMUNITY_Automation Index|Automation Index]]
+- [[_COMMUNITY_Clipboard Index|Clipboard Index]]
+- [[_COMMUNITY_Electron Builder|Electron Builder]]
+- [[_COMMUNITY_Notifications Index|Notifications Index]]
+- [[_COMMUNITY_Pnpm Workspace|Pnpm Workspace]]
+- [[_COMMUNITY_Rdm Roadmap|Rdm Roadmap]]
+- [[_COMMUNITY_Rdm Roadmap|Rdm Roadmap]]
+- [[_COMMUNITY_Rdm Roadmap|Rdm Roadmap]]
+- [[_COMMUNITY_Rdm Roadmap|Rdm Roadmap]]
+- [[_COMMUNITY_Rdm Roadmap|Rdm Roadmap]]
+- [[_COMMUNITY_Rdm Roadmap|Rdm Roadmap]]
+- [[_COMMUNITY_Rdm Roadmap|Rdm Roadmap]]
+- [[_COMMUNITY_Rdm Screenshot|Rdm Screenshot]]
+- [[_COMMUNITY_Renderer Index|Renderer Index]]
+- [[_COMMUNITY_Roadmap Database|Roadmap Database]]
+- [[_COMMUNITY_Roadmap Design|Roadmap Design]]
+- [[_COMMUNITY_Scheduler Cron|Scheduler Cron]]
+- [[_COMMUNITY_Scheduler Cron|Scheduler Cron]]
+- [[_COMMUNITY_Scheduler Cron|Scheduler Cron]]
+- [[_COMMUNITY_Stores Ui|Stores Ui]]
+- [[_COMMUNITY_Taste Taste|Taste Taste]]
+- [[_COMMUNITY_Types Automation|Types Automation]]
+- [[_COMMUNITY_Types Automation|Types Automation]]
+- [[_COMMUNITY_Types Automation|Types Automation]]
+- [[_COMMUNITY_Types Cloud|Types Cloud]]
+- [[_COMMUNITY_Types Cloud|Types Cloud]]
+- [[_COMMUNITY_Types Cloud|Types Cloud]]
+- [[_COMMUNITY_Types Cloud|Types Cloud]]
+- [[_COMMUNITY_Types Plugin|Types Plugin]]
+- [[_COMMUNITY_Types Plugin|Types Plugin]]
+- [[_COMMUNITY_Types Plugin|Types Plugin]]
+- [[_COMMUNITY_Types Schedule|Types Schedule]]
+- [[_COMMUNITY_Utils Filesize|Utils Filesize]]
+- [[_COMMUNITY_Utils Filesize|Utils Filesize]]
+- [[_COMMUNITY_Utils Filesize|Utils Filesize]]
+- [[_COMMUNITY_Utils Path|Utils Path]]
+- [[_COMMUNITY_Utils Path|Utils Path]]
+- [[_COMMUNITY_Utils Path|Utils Path]]
+- [[_COMMUNITY_Utils Path|Utils Path]]
+- [[_COMMUNITY_Utils Url|Utils Url]]
+- [[_COMMUNITY_Utils Url|Utils Url]]
+- [[_COMMUNITY_Utils Url|Utils Url]]
+- [[_COMMUNITY_Utils Url|Utils Url]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `DownloadTask` - 34 edges
-2. `DownloadEngine` - 30 edges
-3. `Download` - 18 edges
-4. `getDatabase` - 13 edges
-5. `QueueSettings` - 10 edges
-6. `useDownloadStore` - 9 edges
-7. `getDownloadEngine` - 8 edges
-8. `registerAllIpc` - 7 edges
-9. `RdmApi` - 7 edges
-10. `QueueRepository` - 7 edges
+1. `DownloadTask` - 38 edges
+2. `DownloadEngine` - 33 edges
+3. `getDatabase` - 24 edges
+4. `Download` - 18 edges
+5. `useDownloadStore` - 17 edges
+6. `QueueSettings` - 10 edges
+7. `getDownloadEngine` - 9 edges
+8. `registerAllIpc` - 8 edges
+9. `RDM Pro Paid Tier` - 8 edges
+10. `crawlSite` - 7 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `RDM Roadmap` --semantically_similar_to--> `RDM`  [INFERRED] [semantically similar]
@@ -91,64 +96,105 @@
   ROADMAP.md → README.md
 - `Architecture` --semantically_similar_to--> `Project Structure`  [INFERRED] [semantically similar]
   ROADMAP.md → README.md
-- `Taste Tech Stack` --conceptually_related_to--> `Roadmap Tech Stack`  [INFERRED]
-  .commandcode/taste/taste.md → ROADMAP.md
-- `DownloadEngineEvents` --references--> `Download`  [EXTRACTED]
-  packages/main/src/download/engine.ts → packages/shared/src/types/download.ts
+- `Rehman Download Manager (RDM)` --semantically_similar_to--> `RDM — Reactive Download Manager`  [INFERRED] [semantically similar]
+  STRATEGY.md → ROADMAP.md
+- `Built-in Converter & Smart Unarchiver (Pro)` --semantically_similar_to--> `Built-in Media Converter (FFmpeg)`  [INFERRED] [semantically similar]
+  STRATEGY.md → ROADMAP.md
 
 ## Import Cycles
 - 1-file cycle: `packages/preload/src/index.ts -> packages/preload/src/index.ts`
 - 1-file cycle: `packages/main/src/index.ts -> packages/main/src/index.ts`
 
-## Communities (57 total, 50 thin omitted)
+## Hyperedges (group relationships)
+- **RDM Pro Premium Feature Set** — rdm_strategy_rdm_pro, rdm_strategy_social_mass_grabber, rdm_strategy_debrid_integration, rdm_strategy_converter_unarchiver, rdm_strategy_media_preview, rdm_strategy_virustotal_scanning [EXTRACTED 1.00]
+- **Phase 12 Reliability & Security Hardening** — rdm_roadmap_ssrf_guard, rdm_roadmap_plugin_host, rdm_roadmap_browser_bridge, rdm_roadmap_reconcile_chunks, rdm_roadmap_migration_runner [EXTRACTED 1.00]
+- **Browser Download Interception Flow** — rdm_roadmap_chrome_extension, rdm_roadmap_firefox_extension, rdm_roadmap_native_messaging_host, rdm_roadmap_browser_bridge [EXTRACTED 1.00]
 
-### Community 1 - "Community 1"
-Cohesion: 0.12
-Nodes (18): startBrowserBridge, stopBrowserBridge, startClipboardMonitor, ChunkStream, DownloadEngineEvents, SpeedSample, registerQueueHandlers(), initNotifications (+10 more)
+## Communities (67 total, 50 thin omitted)
 
-### Community 2 - "Community 2"
-Cohesion: 0.11
-Nodes (25): registerAutomationIpc, stopClipboardMonitor, crawlSite, detectVideos, registerCategoryIpc, emitQueueStatus(), getDownloadEngine, getQueueStatus() (+17 more)
+### Community 0 - "Download Engine (Chunked + Resume)"
+Cohesion: 0.06
+Nodes (4): DownloadEngine, DownloadTask, DownloadState, Download
 
-### Community 4 - "Community 4"
-Cohesion: 0.12
-Nodes (16): api, RdmApi, RdmApi, Window, ChunkInfo, DownloadOptions, DownloadPriority, DownloadStatus (+8 more)
+### Community 1 - "Main IPC & Background Services"
+Cohesion: 0.07
+Nodes (44): registerAutomationIpc, getBridgeToken(), startBrowserBridge, stopBrowserBridge, startClipboardMonitor, stopClipboardMonitor, ChunkStream, DownloadEngineEvents (+36 more)
 
-### Community 5 - "Community 5"
+### Community 2 - "Renderer UI Pages & Layout"
+Cohesion: 0.08
+Nodes (21): FindDialog(), MenuBar(), Sidebar(), formatSpeed(), StatusBar, TitleBar, TopToolbar, AutomationPage() (+13 more)
+
+### Community 3 - "Roadmap & Monetization Strategy"
+Cohesion: 0.06
+Nodes (36): Advanced Resume Capability, Antivirus Integration, Multi-algorithm Checksum Verification, Debrid / Premium Link Unshackler, DownloadEngine (engine.ts), DownloadManager, Dynamic Segmentation Engine, electron-vite Build (+28 more)
+
+### Community 4 - "Settings Dialogs"
+Cohesion: 0.07
+Nodes (17): SettingsPage(), SOUND_EVENTS, TABS, AddressExceptionsDialog(), AddressExceptionsDialogProps, CategoryDialog(), CategoryDialogProps, ConnectionException (+9 more)
+
+### Community 5 - "Plugin Loader & Queue Repository"
+Cohesion: 0.13
+Nodes (23): registerCategoryIpc, disablePlugin, emitPluginEvent(), enablePlugin, getHostPath(), getLoadedPlugins, getPluginDir, getPluginInstance (+15 more)
+
+### Community 6 - "Grabber & SSRF Guard"
 Cohesion: 0.17
-Nodes (14): FindDialog(), MenuBar(), StatusBar, TitleBar, TopToolbar, SchedulerPage(), SettingsPage(), HelpDialog() (+6 more)
+Nodes (17): handleBridgeMessage(), sendBridgeResponse(), ARCHIVE_EXTS, AUDIO_EXTS, crawlSite, detectType(), detectVideos, extractFilename() (+9 more)
 
-### Community 6 - "Community 6"
-Cohesion: 0.18
-Nodes (3): TABS, DownloadPanelsDialog(), DownloadPanelsDialogProps
+### Community 7 - "Shared Types & Preload Bridge"
+Cohesion: 0.13
+Nodes (14): api, RdmApi, RdmApi, Window, ChunkInfo, DownloadOptions, DownloadPriority, DownloadStatus (+6 more)
 
-### Community 8 - "Community 8"
+### Community 8 - "Native Messaging Host"
+Cohesion: 0.31
+Nodes (8): { createConnection }, getBridgeToken(), handleMessage(), { join }, messageBuffer, { readFileSync }, readMessage(), sendResponse()
+
+### Community 9 - "Plugin Sandbox Host"
+Cohesion: 0.22
+Nodes (5): eventHandlers, HostMessage, InitMessage, pending, permissions
+
+### Community 10 - "Post-Processing Pipeline"
+Cohesion: 0.36
+Nodes (7): ARCHIVE_EXTS, GetSetting, isArchive(), PostProcessResult, replaceExt(), runPostProcessing(), runProcess()
+
+### Community 11 - "Roadmap: Browser Integration"
+Cohesion: 0.29
+Nodes (7): Browser Bridge TCP Server, Chrome Extension (manifest v3), Firefox Extension (manifest v2), The Grabber (Web Spidering), Grabber Video Detection Engine, Native Messaging Host (TCP bridge), SSRF Guard (net/ssrf-guard.ts)
+
+### Community 12 - "Roadmap: Plugin System"
+Cohesion: 0.50
+Nodes (4): Sandboxed Plugin API, Plugin Host (utilityProcess sandbox), Plugin Loader, YouTube Extractor Plugin
+
+### Community 13 - "App Icon (SVG)"
 Cohesion: 0.67
 Nodes (3): App Icon, Download Arrow, Background Gradient
 
-### Community 9 - "Community 9"
+### Community 14 - "Roadmap: Browser Extension"
+Cohesion: 0.67
+Nodes (3): Browser Extension, Download All Feature, Native Messaging Bridge
+
+### Community 15 - "Tech Stack"
 Cohesion: 0.67
 Nodes (3): Tech Stack, Roadmap Tech Stack, Taste Tech Stack
 
 ## Knowledge Gaps
-- **91 isolated node(s):** `evaluateRules`, `getRules`, `registerAutomationIpc`, `startBrowserBridge`, `stopBrowserBridge` (+86 more)
+- **134 isolated node(s):** `evaluateRules`, `getRules`, `registerAutomationIpc`, `isClipboardMonitorRunning`, `GrabResult` (+129 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **50 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `DownloadTask` connect `Community 0` to `Community 1`, `Community 3`?**
-  _High betweenness centrality (0.144) - this node is a cross-community bridge._
-- **Why does `Download` connect `Community 0` to `Community 1`, `Community 2`, `Community 3`, `Community 4`, `Community 5`?**
-  _High betweenness centrality (0.141) - this node is a cross-community bridge._
-- **Why does `DownloadEngine` connect `Community 3` to `Community 0`, `Community 1`, `Community 2`?**
-  _High betweenness centrality (0.129) - this node is a cross-community bridge._
+- **Why does `DownloadTask` connect `Download Engine (Chunked + Resume)` to `Main IPC & Background Services`?**
+  _High betweenness centrality (0.103) - this node is a cross-community bridge._
+- **Why does `Download` connect `Download Engine (Chunked + Resume)` to `Main IPC & Background Services`, `Renderer UI Pages & Layout`, `Shared Types & Preload Bridge`?**
+  _High betweenness centrality (0.093) - this node is a cross-community bridge._
+- **Why does `DownloadEngine` connect `Download Engine (Chunked + Resume)` to `Main IPC & Background Services`?**
+  _High betweenness centrality (0.072) - this node is a cross-community bridge._
 - **What connects `evaluateRules`, `getRules`, `registerAutomationIpc` to the rest of the system?**
-  _92 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Community 0` be split into smaller, more focused modules?**
-  _Cohesion score 0.1111111111111111 - nodes in this community are weakly interconnected._
-- **Should `Community 1` be split into smaller, more focused modules?**
-  _Cohesion score 0.11931818181818182 - nodes in this community are weakly interconnected._
-- **Should `Community 2` be split into smaller, more focused modules?**
-  _Cohesion score 0.10541310541310542 - nodes in this community are weakly interconnected._
+  _140 weakly-connected nodes found - possible documentation gaps or missing edges._
+- **Should `Download Engine (Chunked + Resume)` be split into smaller, more focused modules?**
+  _Cohesion score 0.06286748077792854 - nodes in this community are weakly interconnected._
+- **Should `Main IPC & Background Services` be split into smaller, more focused modules?**
+  _Cohesion score 0.0711864406779661 - nodes in this community are weakly interconnected._
+- **Should `Renderer UI Pages & Layout` be split into smaller, more focused modules?**
+  _Cohesion score 0.07678075855689177 - nodes in this community are weakly interconnected._

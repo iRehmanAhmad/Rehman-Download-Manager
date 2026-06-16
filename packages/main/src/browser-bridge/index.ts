@@ -1,9 +1,34 @@
 import { createServer, Socket } from 'node:net';
+import { randomBytes } from 'node:crypto';
+import { writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { app } from 'electron';
 import { DownloadEngine } from '../download/engine';
-import { extractFilename } from '@rdm/shared';
+import { extractFilename, SETTINGS_KEY } from '@rdm/shared';
 import { v4 as uuid } from 'uuid';
+import { getDatabase } from '../storage/database';
+import { isPublicHttpUrl } from '../net/ssrf-guard';
 
 let bridgeServer: ReturnType<typeof createServer> | null = null;
+
+/**
+ * Return the bridge auth token, generating and persisting one on first run.
+ * The native-messaging host reads the same token from settings so legitimate
+ * extension traffic authenticates while arbitrary local processes cannot.
+ */
+export function getBridgeToken(): string {
+  const db = getDatabase();
+  const row = db
+    .prepare('SELECT value FROM settings WHERE key = ?')
+    .get(SETTINGS_KEY.BRIDGE_TOKEN) as { value: string } | undefined;
+  if (row?.value) return row.value;
+
+  const token = randomBytes(32).toString('hex');
+  db.prepare(
+    'INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value',
+  ).run(SETTINGS_KEY.BRIDGE_TOKEN, token);
+  return token;
+}
 
 export function startBrowserBridge(engine: DownloadEngine): void {
   if (bridgeServer) return;
@@ -33,7 +58,9 @@ export function startBrowserBridge(engine: DownloadEngine): void {
             continue;
           }
 
-          handleBridgeMessage(socket, message, engine);
+          handleBridgeMessage(socket, message, engine).catch(() => {
+            try { sendBridgeResponse(socket, { status: 'error', error: 'Internal error' }); } catch {}
+          });
           continue;
         }
 
@@ -50,6 +77,14 @@ export function startBrowserBridge(engine: DownloadEngine): void {
     });
   });
 
+  // Persist the token to a file the native-messaging host can read, so it can
+  // attach it to messages it forwards from the browser extension.
+  try {
+    writeFileSync(join(app.getPath('userData'), 'bridge-token'), getBridgeToken(), 'utf-8');
+  } catch (err) {
+    console.error('[browser-bridge] Failed to write token file:', err);
+  }
+
   bridgeServer.listen(19527, '127.0.0.1', () => {
     console.log('[browser-bridge] TCP server listening on 127.0.0.1:19527');
   });
@@ -63,11 +98,20 @@ export function stopBrowserBridge(): void {
   }
 }
 
-function handleBridgeMessage(socket: Socket, message: Record<string, unknown>, engine: DownloadEngine): void {
+async function handleBridgeMessage(socket: Socket, message: Record<string, unknown>, engine: DownloadEngine): Promise<void> {
   const { action } = message;
 
+  // ping is unauthenticated so the extension can detect RDM is running.
   if (action === 'ping') {
     sendBridgeResponse(socket, { status: 'ok', version: '0.1.0' });
+    return;
+  }
+
+  // Every other action requires the shared secret. Reject otherwise so a
+  // random local process cannot drive the download engine.
+  const token = String(message.token || '');
+  if (!token || token !== getBridgeToken()) {
+    sendBridgeResponse(socket, { status: 'error', error: 'Unauthorized' });
     return;
   }
 
@@ -75,6 +119,11 @@ function handleBridgeMessage(socket: Socket, message: Record<string, unknown>, e
     const url = String(message.url || '');
     if (!url) {
       sendBridgeResponse(socket, { status: 'error', error: 'No URL provided' });
+      return;
+    }
+
+    if (!(await isPublicHttpUrl(url))) {
+      sendBridgeResponse(socket, { status: 'error', error: 'URL not allowed' });
       return;
     }
 

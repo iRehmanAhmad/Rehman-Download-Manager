@@ -543,5 +543,555 @@
     "mtime": 1781536478.1891565,
     "ast_hash": "f843e447af6f08d9880b8b1bf2af7512",
     "semantic_hash": "f843e447af6f08d9880b8b1bf2af7512"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\electron.vite.config.ts": {
+    "mtime": 1781622118.311676,
+    "ast_hash": "d41580e9ce3242a187ff32a27b071eda",
+    "semantic_hash": "d41580e9ce3242a187ff32a27b071eda"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\package.json": {
+    "mtime": 1781458381.5791187,
+    "ast_hash": "98512fc644f1985e06c23585655af858",
+    "semantic_hash": "98512fc644f1985e06c23585655af858"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\browser-extensions\\chrome\\background.js": {
+    "mtime": 1781442825.6413987,
+    "ast_hash": "f7182f81abb5dd088b89f30e66c2874f",
+    "semantic_hash": "f7182f81abb5dd088b89f30e66c2874f"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\browser-extensions\\chrome\\content.js": {
+    "mtime": 1781458092.4912388,
+    "ast_hash": "c815912acc1848d3e1d079cc79e2c0a8",
+    "semantic_hash": "c815912acc1848d3e1d079cc79e2c0a8"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\browser-extensions\\chrome\\manifest.json": {
+    "mtime": 1781442812.4288433,
+    "ast_hash": "a9b98ceb132c051f8fcd193b393c25da",
+    "semantic_hash": "a9b98ceb132c051f8fcd193b393c25da"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\browser-extensions\\chrome\\popup.js": {
+    "mtime": 1781442866.2387366,
+    "ast_hash": "390fca66d94c8eebb610cebf8eb6d540",
+    "semantic_hash": "390fca66d94c8eebb610cebf8eb6d540"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\browser-extensions\\firefox\\background.js": {
+    "mtime": 1781442937.318413,
+    "ast_hash": "83374a165ad8b4667ba7ef1922e2a084",
+    "semantic_hash": "83374a165ad8b4667ba7ef1922e2a084"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\browser-extensions\\firefox\\content.js": {
+    "mtime": 1781458098.589294,
+    "ast_hash": "d0d7447296b208e65d90a8e370f4286a",
+    "semantic_hash": "d0d7447296b208e65d90a8e370f4286a"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\browser-extensions\\firefox\\manifest.json": {
+    "mtime": 1781442921.3102064,
+    "ast_hash": "d1cd136bb1b3d85c5e5e4505b1396d65",
+    "semantic_hash": "d1cd136bb1b3d85c5e5e4505b1396d65"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\browser-extensions\\firefox\\popup.js": {
+    "mtime": 1781442997.6929047,
+    "ast_hash": "d5961a2b7e448de1475b2cd30c0643bb",
+    "semantic_hash": "d5961a2b7e448de1475b2cd30c0643bb"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\package.json": {
+    "mtime": 1781451745.4037495,
+    "ast_hash": "9f59ab69c43388585720ffe63c526aac",
+    "semantic_hash": "9f59ab69c43388585720ffe63c526aac"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\automation\\evaluator.ts": {
+    "mtime": 1781458919.3835883,
+    "ast_hash": "49c6b1f1858a8d014b3bb732f93ff75e",
+    "semantic_hash": "49c6b1f1858a8d014b3bb732f93ff75e"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\automation\\index.ts": {
+    "mtime": 1781458935.0892212,
+    "ast_hash": "dbe15c469d012b3e49b830623a7e7915",
+    "semantic_hash": "dbe15c469d012b3e49b830623a7e7915"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\browser-bridge\\index.ts": {
+    "mtime": 1781621908.293844,
+    "ast_hash": "0afe15f55f34e042092cd5235c0bb9e6",
+    "semantic_hash": "0afe15f55f34e042092cd5235c0bb9e6"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\clipboard\\index.ts": {
+    "mtime": 1781443526.2820404,
+    "ast_hash": "847220d39ab964c86ad361cffcd0b6fa",
+    "semantic_hash": "847220d39ab964c86ad361cffcd0b6fa"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\download\\engine.ts": {
+    "mtime": 1781627047.5250397,
+    "ast_hash": "53d1820a53e6c47e7e5ebaaf488f6912",
+    "semantic_hash": "53d1820a53e6c47e7e5ebaaf488f6912"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\grabber\\index.ts": {
+    "mtime": 1781620461.059087,
+    "ast_hash": "d0e2e282ad17129172b32dad0785c2f5",
+    "semantic_hash": "d0e2e282ad17129172b32dad0785c2f5"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\index.ts": {
+    "mtime": 1781626772.1689184,
+    "ast_hash": "05de370a4af3db5f8b5a14e8bdc5cb97",
+    "semantic_hash": "05de370a4af3db5f8b5a14e8bdc5cb97"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\ipc\\category.ipc.ts": {
+    "mtime": 1781591967.8018188,
+    "ast_hash": "2e2d973dc787caddfa3662bd4e6c6330",
+    "semantic_hash": "2e2d973dc787caddfa3662bd4e6c6330"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\ipc\\download.ipc.ts": {
+    "mtime": 1781626627.834117,
+    "ast_hash": "e03492ce57feb7f5dd365b3614d70c7c",
+    "semantic_hash": "e03492ce57feb7f5dd365b3614d70c7c"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\ipc\\index.ts": {
+    "mtime": 1781539528.2291906,
+    "ast_hash": "0ec812320a1343867ded99dfb602caab",
+    "semantic_hash": "0ec812320a1343867ded99dfb602caab"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\ipc\\queue.ipc.ts": {
+    "mtime": 1781538365.4918404,
+    "ast_hash": "aa7a3e03ed8316cb410e451308423371",
+    "semantic_hash": "aa7a3e03ed8316cb410e451308423371"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\ipc\\settings.ipc.ts": {
+    "mtime": 1781443652.957738,
+    "ast_hash": "a0a37788b796e3b0721f7e4b384931e3",
+    "semantic_hash": "a0a37788b796e3b0721f7e4b384931e3"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\net\\ssrf-guard.test.ts": {
+    "mtime": 1781627132.4099455,
+    "ast_hash": "cfa10eb62560ba2e247878bfb8f21548",
+    "semantic_hash": "cfa10eb62560ba2e247878bfb8f21548"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\net\\ssrf-guard.ts": {
+    "mtime": 1781620121.7895296,
+    "ast_hash": "5be3095fc640ae5ae9a410c2e4ee491f",
+    "semantic_hash": "5be3095fc640ae5ae9a410c2e4ee491f"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\notifications\\index.ts": {
+    "mtime": 1781443543.6278312,
+    "ast_hash": "7172abf9e1aee0b2a579734ea4fcd5be",
+    "semantic_hash": "7172abf9e1aee0b2a579734ea4fcd5be"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\plugins\\loader.ts": {
+    "mtime": 1781626661.8432226,
+    "ast_hash": "dd091927795a278da8a0e5bc127b89cd",
+    "semantic_hash": "dd091927795a278da8a0e5bc127b89cd"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\plugins\\plugin-host.ts": {
+    "mtime": 1781622162.8727396,
+    "ast_hash": "c1c6425e5b7cf53beb015ccb7b323b9c",
+    "semantic_hash": "c1c6425e5b7cf53beb015ccb7b323b9c"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\postprocess\\index.ts": {
+    "mtime": 1781627014.102487,
+    "ast_hash": "28c26a3702188e03d4fe8b241d1f62a0",
+    "semantic_hash": "28c26a3702188e03d4fe8b241d1f62a0"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\queue\\queue.manager.ts": {
+    "mtime": 1781537839.498061,
+    "ast_hash": "6498d0de46fb62d6f36081da951eff0d",
+    "semantic_hash": "6498d0de46fb62d6f36081da951eff0d"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\queue\\queue.repository.ts": {
+    "mtime": 1781536734.8423812,
+    "ast_hash": "2a51d82bf0628dcaf2753364b4499391",
+    "semantic_hash": "2a51d82bf0628dcaf2753364b4499391"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\scheduler\\cron.ts": {
+    "mtime": 1781437025.9056964,
+    "ast_hash": "37eb1a844f6ee430315e6ebddf0ce190",
+    "semantic_hash": "37eb1a844f6ee430315e6ebddf0ce190"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\scheduler\\index.ts": {
+    "mtime": 1781437038.841723,
+    "ast_hash": "fe94f536c4d51b9a6161b5e626f882a6",
+    "semantic_hash": "fe94f536c4d51b9a6161b5e626f882a6"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\storage\\database.ts": {
+    "mtime": 1781627103.469964,
+    "ast_hash": "28e48d4d580412664808dd4c5bcb6baa",
+    "semantic_hash": "28e48d4d580412664808dd4c5bcb6baa"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\storage\\download.repository.ts": {
+    "mtime": 1781457524.5587687,
+    "ast_hash": "208441f25c8f4bd80198ef086f255f90",
+    "semantic_hash": "208441f25c8f4bd80198ef086f255f90"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\src\\storage\\migrations\\001-initial.sql": {
+    "mtime": 1781458460.536888,
+    "ast_hash": "aa97583f0773cfddb681cea6745adb88",
+    "semantic_hash": "aa97583f0773cfddb681cea6745adb88"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\main\\tsconfig.json": {
+    "mtime": 1781435281.0615494,
+    "ast_hash": "6e28fc3321aff8fb27dc46610e6a0ae4",
+    "semantic_hash": "6e28fc3321aff8fb27dc46610e6a0ae4"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\preload\\package.json": {
+    "mtime": 1781434916.4142134,
+    "ast_hash": "b34b71148c1f616d4da2f8c43ef8267f",
+    "semantic_hash": "b34b71148c1f616d4da2f8c43ef8267f"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\preload\\src\\index.ts": {
+    "mtime": 1781539528.0793068,
+    "ast_hash": "c4a255114cfa26aa69dfbfb6fae35af1",
+    "semantic_hash": "c4a255114cfa26aa69dfbfb6fae35af1"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\preload\\tsconfig.json": {
+    "mtime": 1781435328.6630664,
+    "ast_hash": "6e28fc3321aff8fb27dc46610e6a0ae4",
+    "semantic_hash": "6e28fc3321aff8fb27dc46610e6a0ae4"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\package.json": {
+    "mtime": 1781459049.8287718,
+    "ast_hash": "6755b37be23c1a66cc92fd34aeee04c2",
+    "semantic_hash": "6755b37be23c1a66cc92fd34aeee04c2"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\App.tsx": {
+    "mtime": 1781596269.5259287,
+    "ast_hash": "f37ace525151b2bfccd796f1bde8fba4",
+    "semantic_hash": "f37ace525151b2bfccd796f1bde8fba4"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\components\\layout\\FindDialog.tsx": {
+    "mtime": 1781606384.471341,
+    "ast_hash": "c1c1587934ae956a0bfb1bfb7cc38f3a",
+    "semantic_hash": "c1c1587934ae956a0bfb1bfb7cc38f3a"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\components\\layout\\MenuBar.tsx": {
+    "mtime": 1781604568.4740496,
+    "ast_hash": "78102aa9bc366cb47f1e82e67a8c4730",
+    "semantic_hash": "78102aa9bc366cb47f1e82e67a8c4730"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\components\\layout\\Sidebar.tsx": {
+    "mtime": 1781603844.212195,
+    "ast_hash": "5b3f3142a5e44f87172f017d2397f984",
+    "semantic_hash": "5b3f3142a5e44f87172f017d2397f984"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\components\\layout\\StatusBar.tsx": {
+    "mtime": 1781603834.7661877,
+    "ast_hash": "e7b242f9579f7aeb7678fcac36cd5660",
+    "semantic_hash": "e7b242f9579f7aeb7678fcac36cd5660"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\components\\layout\\TitleBar.tsx": {
+    "mtime": 1781597222.351551,
+    "ast_hash": "706c6d7512e0698365fa2855a30acc10",
+    "semantic_hash": "706c6d7512e0698365fa2855a30acc10"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\components\\layout\\TopToolbar.tsx": {
+    "mtime": 1781603400.9973998,
+    "ast_hash": "62f327b60b6d6ced880e2898a7e5b93e",
+    "semantic_hash": "62f327b60b6d6ced880e2898a7e5b93e"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\components\\scheduler\\HelpDialog.tsx": {
+    "mtime": 1781607067.1327167,
+    "ast_hash": "681374b7e8d76f3d02824d3d3445342d",
+    "semantic_hash": "681374b7e8d76f3d02824d3d3445342d"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\components\\scheduler\\NewQueueDialog.tsx": {
+    "mtime": 1781607067.103788,
+    "ast_hash": "28eb74d6d5071c2905dcd8af75fe07fe",
+    "semantic_hash": "28eb74d6d5071c2905dcd8af75fe07fe"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\components\\settings\\AddressExceptionsDialog.tsx": {
+    "mtime": 1781600340.199102,
+    "ast_hash": "a8c349243f8ef02a7d4ed702aca191cd",
+    "semantic_hash": "a8c349243f8ef02a7d4ed702aca191cd"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\components\\settings\\CategoryDialog.tsx": {
+    "mtime": 1781600346.626244,
+    "ast_hash": "89304cc751eb91ea39a9609ef662e67d",
+    "semantic_hash": "89304cc751eb91ea39a9609ef662e67d"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\components\\settings\\ConnectionExceptionsDialog.tsx": {
+    "mtime": 1781600350.744722,
+    "ast_hash": "fb657a933b4dcce7be201776619e4925",
+    "semantic_hash": "fb657a933b4dcce7be201776619e4925"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\components\\settings\\DownloadPanelsDialog.tsx": {
+    "mtime": 1781600375.580338,
+    "ast_hash": "b3fd6e4fbafebb16d9860b1dd679b054",
+    "semantic_hash": "b3fd6e4fbafebb16d9860b1dd679b054"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\components\\settings\\SiteLoginDialog.tsx": {
+    "mtime": 1781600379.655648,
+    "ast_hash": "0409e73682d084a83a20d4d13e5e27d0",
+    "semantic_hash": "0409e73682d084a83a20d4d13e5e27d0"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\i18n.ts": {
+    "mtime": 1781459023.3617058,
+    "ast_hash": "0ee375af1115fd31ba0407d8a5ad001a",
+    "semantic_hash": "0ee375af1115fd31ba0407d8a5ad001a"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\main.tsx": {
+    "mtime": 1781458993.9000506,
+    "ast_hash": "772f47c9dc1605e2c2d52152d5088d10",
+    "semantic_hash": "772f47c9dc1605e2c2d52152d5088d10"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\pages\\AutomationPage.tsx": {
+    "mtime": 1781596398.2073739,
+    "ast_hash": "b995cec84d74592a5899aaac9e9da53f",
+    "semantic_hash": "b995cec84d74592a5899aaac9e9da53f"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\pages\\DownloadsPage.tsx": {
+    "mtime": 1781603470.1262262,
+    "ast_hash": "115ea91c5009d1cb9bd1a786bfbe5922",
+    "semantic_hash": "115ea91c5009d1cb9bd1a786bfbe5922"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\pages\\GrabberPage.tsx": {
+    "mtime": 1781604481.3688822,
+    "ast_hash": "e916c5c290c4babfdd50c1fdb1a3467d",
+    "semantic_hash": "e916c5c290c4babfdd50c1fdb1a3467d"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\pages\\PluginsPage.tsx": {
+    "mtime": 1781596398.1290972,
+    "ast_hash": "7cbfe3ab6da3b3eb485429d7d8b01b12",
+    "semantic_hash": "7cbfe3ab6da3b3eb485429d7d8b01b12"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\pages\\SchedulerPage.tsx": {
+    "mtime": 1781607422.2007406,
+    "ast_hash": "07c3882741d6abe20b2938626c4dd1e3",
+    "semantic_hash": "07c3882741d6abe20b2938626c4dd1e3"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\pages\\SettingsPage.tsx": {
+    "mtime": 1781600012.4282615,
+    "ast_hash": "c42190a399f1aa5e7ebaeef50eb62556",
+    "semantic_hash": "c42190a399f1aa5e7ebaeef50eb62556"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\preload.d.ts": {
+    "mtime": 1781603886.8589673,
+    "ast_hash": "e1931c721a941ef6e5bf835db02b9478",
+    "semantic_hash": "e1931c721a941ef6e5bf835db02b9478"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\stores\\download-store.ts": {
+    "mtime": 1781606356.1359828,
+    "ast_hash": "29d92c44e80d49b4670b590432f005a7",
+    "semantic_hash": "29d92c44e80d49b4670b590432f005a7"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\stores\\settings-store.ts": {
+    "mtime": 1781436960.297702,
+    "ast_hash": "ab9eb2321400d2cb001c58f651dc6343",
+    "semantic_hash": "ab9eb2321400d2cb001c58f651dc6343"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\stores\\ui-store.ts": {
+    "mtime": 1781435357.538612,
+    "ast_hash": "f1b0d672a06ed7499b92b7bbdffe55fb",
+    "semantic_hash": "f1b0d672a06ed7499b92b7bbdffe55fb"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\src\\styles\\css-modules.d.ts": {
+    "mtime": 1781435794.0635726,
+    "ast_hash": "659445fc750a09c5e618ea97d9533b83",
+    "semantic_hash": "659445fc750a09c5e618ea97d9533b83"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\tsconfig.json": {
+    "mtime": 1781435344.6392417,
+    "ast_hash": "107dd896da20706f7a2a0cc96fd169f7",
+    "semantic_hash": "107dd896da20706f7a2a0cc96fd169f7"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\package.json": {
+    "mtime": 1781434916.4137037,
+    "ast_hash": "9f672558279b5a5152bef85cb8e3550a",
+    "semantic_hash": "9f672558279b5a5152bef85cb8e3550a"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\constants\\defaults.ts": {
+    "mtime": 1781626982.7242699,
+    "ast_hash": "fd624a7476c61b597cebc05326715350",
+    "semantic_hash": "fd624a7476c61b597cebc05326715350"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\constants\\enums.ts": {
+    "mtime": 1781435264.0988445,
+    "ast_hash": "f668f22043b7a135e1dcc3db6883c9b0",
+    "semantic_hash": "f668f22043b7a135e1dcc3db6883c9b0"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\index.ts": {
+    "mtime": 1781536478.3150346,
+    "ast_hash": "db72ae9bdf8f68ac0fd024b6a5faeb6f",
+    "semantic_hash": "db72ae9bdf8f68ac0fd024b6a5faeb6f"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\types\\automation.ts": {
+    "mtime": 1781435246.0373683,
+    "ast_hash": "9dbf70681d144a01ebe5eb2624a5a407",
+    "semantic_hash": "9dbf70681d144a01ebe5eb2624a5a407"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\types\\cloud.ts": {
+    "mtime": 1781435246.0373683,
+    "ast_hash": "e08310884bcb4e03ffed1360ee8e687e",
+    "semantic_hash": "e08310884bcb4e03ffed1360ee8e687e"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\types\\download.test.ts": {
+    "mtime": 1781448136.7013958,
+    "ast_hash": "79e25678ab6b48d508ff9e4dc1d46e24",
+    "semantic_hash": "79e25678ab6b48d508ff9e4dc1d46e24"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\types\\download.ts": {
+    "mtime": 1781626991.46662,
+    "ast_hash": "2bb66046c0d669118c18d15e0393e32e",
+    "semantic_hash": "2bb66046c0d669118c18d15e0393e32e"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\types\\grabber.ts": {
+    "mtime": 1781447265.9054198,
+    "ast_hash": "ee9bf131db8e0f2f9cbc53f72b2d0f8e",
+    "semantic_hash": "ee9bf131db8e0f2f9cbc53f72b2d0f8e"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\types\\ipc.test.ts": {
+    "mtime": 1781448125.6289258,
+    "ast_hash": "3a433bc0f6f9c3a388ab05a34a8f780f",
+    "semantic_hash": "3a433bc0f6f9c3a388ab05a34a8f780f"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\types\\ipc.ts": {
+    "mtime": 1781539527.989757,
+    "ast_hash": "e638cdce429cc24a85b92bbdbd8930c6",
+    "semantic_hash": "e638cdce429cc24a85b92bbdbd8930c6"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\types\\plugin.ts": {
+    "mtime": 1781435246.0373683,
+    "ast_hash": "3edb82092ed62ffbc24170e3b5fdc61e",
+    "semantic_hash": "3edb82092ed62ffbc24170e3b5fdc61e"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\types\\queue.ts": {
+    "mtime": 1781536478.1891565,
+    "ast_hash": "f843e447af6f08d9880b8b1bf2af7512",
+    "semantic_hash": "f843e447af6f08d9880b8b1bf2af7512"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\types\\schedule.ts": {
+    "mtime": 1781435246.0373683,
+    "ast_hash": "bd9ede4e58eb60633769a8be4cf922cc",
+    "semantic_hash": "bd9ede4e58eb60633769a8be4cf922cc"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\types\\settings.ts": {
+    "mtime": 1781591953.042284,
+    "ast_hash": "0820aa7328893dfbf5def4eb73228abc",
+    "semantic_hash": "0820aa7328893dfbf5def4eb73228abc"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\utils\\filesize.test.ts": {
+    "mtime": 1781448190.804004,
+    "ast_hash": "329b50cca90aef259c4d639950ee5673",
+    "semantic_hash": "329b50cca90aef259c4d639950ee5673"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\utils\\filesize.ts": {
+    "mtime": 1781435264.0988445,
+    "ast_hash": "3253fdf538ea2bccf1554f4f43bd2e22",
+    "semantic_hash": "3253fdf538ea2bccf1554f4f43bd2e22"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\utils\\path.ts": {
+    "mtime": 1781435264.0988445,
+    "ast_hash": "0ea4a3d6b538af58b974d3ac1aab3c64",
+    "semantic_hash": "0ea4a3d6b538af58b974d3ac1aab3c64"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\utils\\url.test.ts": {
+    "mtime": 1781448176.7378602,
+    "ast_hash": "9c88d9776b1d52bc57a8f9f17adeedb2",
+    "semantic_hash": "9c88d9776b1d52bc57a8f9f17adeedb2"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\src\\utils\\url.ts": {
+    "mtime": 1781435264.0988445,
+    "ast_hash": "95a7306e22e2b8be72d24313e4849308",
+    "semantic_hash": "95a7306e22e2b8be72d24313e4849308"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\shared\\tsconfig.json": {
+    "mtime": 1781435270.2029037,
+    "ast_hash": "9ba8099724ff63ac9f79c0609f551f6c",
+    "semantic_hash": "9ba8099724ff63ac9f79c0609f551f6c"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\plugins\\youtube-extractor\\index.js": {
+    "mtime": 1781442226.2889702,
+    "ast_hash": "0bb6eba2c7b92c669c2e8b42d9761724",
+    "semantic_hash": "0bb6eba2c7b92c669c2e8b42d9761724"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\plugins\\youtube-extractor\\manifest.json": {
+    "mtime": 1781442214.5724814,
+    "ast_hash": "f37b6ecdfda79c87c3dc53c6575436f1",
+    "semantic_hash": "f37b6ecdfda79c87c3dc53c6575436f1"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\resources\\native-messaging\\com.rdm.native_messaging_host.json": {
+    "mtime": 1781442875.2341278,
+    "ast_hash": "81519a781a78c49d94420dfda11ef801",
+    "semantic_hash": "81519a781a78c49d94420dfda11ef801"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\resources\\native-messaging\\rdm-native-host.js": {
+    "mtime": 1781622001.4899168,
+    "ast_hash": "cdb93d3a6e773c037e48873374336272",
+    "semantic_hash": "cdb93d3a6e773c037e48873374336272"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\test-add.js": {
+    "mtime": 1781461467.6162522,
+    "ast_hash": "ec49fe3594b41d8aaa1b40929f0c8849",
+    "semantic_hash": "ec49fe3594b41d8aaa1b40929f0c8849"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\test-window.js": {
+    "mtime": 1781453271.3329165,
+    "ast_hash": "7e50a813ca2e6d8263a1e96391c74815",
+    "semantic_hash": "7e50a813ca2e6d8263a1e96391c74815"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\test-window2.js": {
+    "mtime": 1781454039.935676,
+    "ast_hash": "cb7830636384396e2db6c522ca7a36fb",
+    "semantic_hash": "cb7830636384396e2db6c522ca7a36fb"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\tsconfig.base.json": {
+    "mtime": 1781435758.9156053,
+    "ast_hash": "4459f4e677f1c072a33483c23ef5ee9a",
+    "semantic_hash": "4459f4e677f1c072a33483c23ef5ee9a"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\vitest.config.ts": {
+    "mtime": 1781434897.4214263,
+    "ast_hash": "fc5f7a94d97b96b24008cb3fcd9f5de5",
+    "semantic_hash": "fc5f7a94d97b96b24008cb3fcd9f5de5"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\.commandcode\\taste\\taste.md": {
+    "mtime": 1781443473.1037056,
+    "ast_hash": "dbed332ca166662e902fbacd4b570343",
+    "semantic_hash": "dbed332ca166662e902fbacd4b570343"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\README.md": {
+    "mtime": 1781461898.1041853,
+    "ast_hash": "76636059233c2d1dffb655604b8acbae",
+    "semantic_hash": "76636059233c2d1dffb655604b8acbae"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\ROADMAP.md": {
+    "mtime": 1781627204.173655,
+    "ast_hash": "eec25b51570fa6a0fc78fc223533947a",
+    "semantic_hash": "eec25b51570fa6a0fc78fc223533947a"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\STRATEGY.md": {
+    "mtime": 1781544217.5977855,
+    "ast_hash": "be1f11ecc43f3d134fa74a64e4820d91",
+    "semantic_hash": "be1f11ecc43f3d134fa74a64e4820d91"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\electron-builder.yml": {
+    "mtime": 1781434897.4214263,
+    "ast_hash": "fc66576a04548d60a89a3edc25a46231",
+    "semantic_hash": "fc66576a04548d60a89a3edc25a46231"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\browser-extensions\\chrome\\popup.html": {
+    "mtime": 1781442853.8038754,
+    "ast_hash": "ca0e19a3a4bcacbfb29511d505b05ffe",
+    "semantic_hash": "ca0e19a3a4bcacbfb29511d505b05ffe"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\browser-extensions\\firefox\\popup.html": {
+    "mtime": 1781442970.2730277,
+    "ast_hash": "49ef3d039f657543893acead50097212",
+    "semantic_hash": "49ef3d039f657543893acead50097212"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\packages\\renderer\\index.html": {
+    "mtime": 1781435344.653169,
+    "ast_hash": "c62d44fba172f124d5edcfdda7a2571d",
+    "semantic_hash": "c62d44fba172f124d5edcfdda7a2571d"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\pnpm-workspace.yaml": {
+    "mtime": 1781436340.3862214,
+    "ast_hash": "10298a1dd7737f79b47a2cd4b9d524bd",
+    "semantic_hash": "10298a1dd7737f79b47a2cd4b9d524bd"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\resources\\icons\\icon.svg": {
+    "mtime": 1781448046.5011456,
+    "ast_hash": "be58c60e5f0c4a9ea3ceb542b896c8ac",
+    "semantic_hash": "be58c60e5f0c4a9ea3ceb542b896c8ac"
+  },
+  "C:\\Users\\TOSHIBA\\Projects\\rdm\\screenshot.png": {
+    "mtime": 1781453282.1190484,
+    "ast_hash": "4c05e1a1d09552c683fe058e59a86e85",
+    "semantic_hash": "4c05e1a1d09552c683fe058e59a86e85"
   }
 }

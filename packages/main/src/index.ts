@@ -8,18 +8,32 @@ import { startBrowserBridge, stopBrowserBridge } from './browser-bridge';
 import { startClipboardMonitor, stopClipboardMonitor } from './clipboard';
 import { initNotifications } from './notifications';
 import { getQueueManager } from './queue/queue.manager';
+import { loadEnabledPlugins, unloadAllPlugins } from './plugins/loader';
 import { APP_NAME, SETTINGS_KEY, MAX_CONCURRENT_DOWNLOADS } from '@rdm/shared';
 
-const desktopPath = join(app.getPath('desktop'), 'rdm-crash-report.txt');
+const isDev = process.env.NODE_ENV === 'development' || !!process.env.ELECTRON_RENDERER_URL;
+
+// Write crash logs into the app's data dir (not the user's Desktop).
+function crashLogPath(): string {
+  const dir = join(app.getPath('userData'), 'logs');
+  try { fs.mkdirSync(dir, { recursive: true }); } catch { /* best effort */ }
+  return join(dir, 'crash.log');
+}
+
+function appendCrashLog(label: string, detail: string): void {
+  try {
+    fs.appendFileSync(crashLogPath(), `\n[${new Date().toISOString()}] ${label}:\n${detail}\n`);
+  } catch { /* best effort */ }
+}
 
 process.on('uncaughtException', (error) => {
   console.error('Uncaught Exception:', error);
-  try { fs.appendFileSync(desktopPath, `\n[${new Date().toISOString()}] Uncaught Exception:\n${error.stack || error.message}\n`); } catch(e) {}
+  appendCrashLog('Uncaught Exception', error.stack || error.message);
 });
 
 process.on('unhandledRejection', (reason, promise) => {
   console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-  try { fs.appendFileSync(desktopPath, `\n[${new Date().toISOString()}] Unhandled Rejection:\n${reason instanceof Error ? reason.stack : reason}\n`); } catch(e) {}
+  appendCrashLog('Unhandled Rejection', reason instanceof Error ? (reason.stack ?? reason.message) : String(reason));
 });
 
 // Disable hardware acceleration BEFORE app.on('ready') to fix black/invisible screen issues
@@ -45,7 +59,9 @@ function createWindow(): void {
       preload: join(__dirname, '../preload/index.js'),
       contextIsolation: true,
       nodeIntegration: false,
-      sandbox: false,
+      // Sandbox the renderer. The preload only uses electron's contextBridge/
+      // ipcRenderer (both sandbox-safe), so no Node APIs leak into the renderer.
+      sandbox: true,
     },
   });
 
@@ -54,17 +70,15 @@ function createWindow(): void {
     mainWindow?.focus();
   });
 
-  mainWindow.webContents.on('did-finish-load', () => {
-    console.log('[main] renderer loaded');
-    mainWindow?.webContents.executeJavaScript(`
-      console.log('[renderer] window.api exists:', !!window.api);
-      console.log('[renderer] document.getElementById("root"):', !!document.getElementById('root'));
-    `).catch(err => console.error('[main] executeJavaScript failed:', err));
-  });
+  if (isDev) {
+    mainWindow.webContents.on('did-finish-load', () => {
+      console.log('[main] renderer loaded');
+    });
 
-  mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
-    console.log(`[renderer console] ${message}`);
-  });
+    mainWindow.webContents.on('console-message', (_event, _level, message) => {
+      console.log(`[renderer console] ${message}`);
+    });
+  }
 
   mainWindow.on('closed', () => {
     mainWindow = null;
@@ -150,6 +164,7 @@ app.whenReady().then(async () => {
   if (getClipboardEnabled()) startClipboardMonitor();
   startBrowserBridge(engine);
   getQueueManager().start();
+  loadEnabledPlugins();
   createWindow();
   createTray();
 
@@ -171,6 +186,7 @@ app.on('window-all-closed', () => {
 app.on('before-quit', () => {
   stopClipboardMonitor();
   stopBrowserBridge();
+  unloadAllPlugins();
   tray?.destroy();
   tray = null;
 });

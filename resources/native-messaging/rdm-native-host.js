@@ -1,6 +1,26 @@
 const { createConnection } = require('node:net');
+const { readFileSync } = require('node:fs');
+const { join } = require('node:path');
 
 const SOCKET_PORT = 19527;
+
+// Read the shared bridge token that RDM writes to its userData directory.
+// Resolved per-platform to match Electron's default userData path for app 'rdm'.
+function getBridgeToken() {
+  let base;
+  if (process.platform === 'win32') {
+    base = process.env.APPDATA;
+  } else if (process.platform === 'darwin') {
+    base = join(process.env.HOME || '', 'Library', 'Application Support');
+  } else {
+    base = process.env.XDG_CONFIG_HOME || join(process.env.HOME || '', '.config');
+  }
+  try {
+    return readFileSync(join(base, 'rdm', 'bridge-token'), 'utf-8').trim();
+  } catch {
+    return '';
+  }
+}
 
 let messageBuffer = Buffer.alloc(0);
 let expectedLength = 0;
@@ -48,8 +68,11 @@ async function handleMessage(message) {
     return;
   }
 
+  // Attach the shared auth token to every forwarded message.
+  const authedMessage = { ...message, token: getBridgeToken() };
+
   const client = createConnection({ port: SOCKET_PORT }, () => {
-    const payload = JSON.stringify(message);
+    const payload = JSON.stringify(authedMessage);
     const header = Buffer.alloc(4);
     header.writeUInt32LE(Buffer.byteLength(payload), 0);
     client.write(Buffer.concat([header, Buffer.from(payload)]));

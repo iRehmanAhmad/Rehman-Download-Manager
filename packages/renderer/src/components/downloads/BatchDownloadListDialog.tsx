@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSettingsStore } from '../../stores/settings-store';
 import { formatFileSize, extractFilename } from '@rdm/shared';
+import { FolderOpen, X, Download, Folder, HardDrive, AlertCircle, Loader2, CheckCircle2 } from 'lucide-react';
 
 interface BatchLink {
   id: string;
@@ -10,7 +11,6 @@ interface BatchLink {
   size: number;
   selected: boolean;
   loading: boolean;
-  linkText: string;
 }
 
 export function BatchDownloadListDialog() {
@@ -53,7 +53,6 @@ export function BatchDownloadListDialog() {
           size: -1,
           selected: true,
           loading: true,
-          linkText: '',
         };
       });
 
@@ -61,7 +60,7 @@ export function BatchDownloadListDialog() {
       setPattern(initialPattern || '*.*');
       setShowDialog(true);
       
-      // Start background fetching (staggered slightly to avoid locking up renderer if many links)
+      // Start background fetching
       newLinks.forEach((link, idx) => {
         setTimeout(async () => {
           try {
@@ -69,13 +68,11 @@ export function BatchDownloadListDialog() {
             if (typeof window.api.download.getFileInfoBasic === 'function') {
               info = await window.api.download.getFileInfoBasic(link.url);
             } else {
-              // Fallback for hot-reload in dev mode
               info = await window.api.download.getFileInfo(link.url);
             }
             
-            // Map MIME to friendly name
             let friendlyType = 'Unknown File';
-            if (info.contentType) {
+            if ('contentType' in info && info.contentType) {
               const mime = info.contentType.toLowerCase();
               if (mime.includes('image/jpeg')) friendlyType = 'JPG File';
               else if (mime.includes('image/png')) friendlyType = 'PNG File';
@@ -127,11 +124,11 @@ export function BatchDownloadListDialog() {
 
   const handleBrowse = async () => {
     try {
-      const result = await window.api.system.selectSavePath({
+      const result = await window.api.system.showOpenDialog({
         properties: ['openDirectory', 'createDirectory']
       });
-      if (!result.canceled && result.filePaths.length > 0) {
-        setSelectedDirectory(result.filePaths[0]);
+      if (result && result.length > 0) {
+        setSelectedDirectory(result[0]);
         setSaveMode('specific_directory');
       }
     } catch (err) {
@@ -139,7 +136,6 @@ export function BatchDownloadListDialog() {
     }
   };
 
-  // Re-apply pattern to filenames when pattern changes
   const handlePatternChange = (newPattern: string) => {
     setPattern(newPattern);
     
@@ -165,16 +161,14 @@ export function BatchDownloadListDialog() {
     setAdding(true);
     
     try {
-      // Process sequentially to not slam the IPC 
       for (const link of selectedLinks) {
-        
         let targetCatId = undefined;
         let targetFilePath = undefined;
 
         if (saveMode === 'specific_category') {
           targetCatId = selectedCategoryId;
         } else if (saveMode === 'specific_directory') {
-          targetFilePath = selectedDirectory; // engine appends filename
+          targetFilePath = selectedDirectory;
         }
         
         await window.api.download.add({
@@ -195,76 +189,97 @@ export function BatchDownloadListDialog() {
 
   if (!showDialog) return null;
 
-  const allSelected = links.length > 0 && links.every(l => l.selected);
+  const selectedCount = links.filter(l => l.selected).length;
+  const loadedCount = links.filter(l => !l.loading).length;
+  const allSelected = links.length > 0 && selectedCount === links.length;
+  
+  // Validation
+  let saveModeError = false;
+  if (saveMode === 'specific_category' && !selectedCategoryId) saveModeError = true;
+  if (saveMode === 'specific_directory' && !selectedDirectory) saveModeError = true;
+
+  const canAdd = selectedCount > 0 && !saveModeError && !adding;
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-[110]" onMouseDown={handleClose}>
       <div
-        className="bg-[#2b2d31] border border-[#1e1f22] rounded-md p-4 w-full max-w-[850px] shadow-2xl text-[#dbdee1] font-sans flex flex-col h-[600px] relative"
+        className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-6 w-full max-w-4xl shadow-2xl text-slate-800 dark:text-slate-200 font-sans flex flex-col h-[70vh] min-h-[500px] relative"
         onMouseDown={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-[16px] text-white flex items-center gap-2">
-            <span className="w-5 h-5 bg-gradient-to-br from-blue-400 to-green-400 rounded-full flex items-center justify-center text-black text-[10px] font-bold shadow shadow-blue-500/50">⬇</span>
-            Batch download
-          </h2>
-          <div className="flex gap-2">
-            <button className="text-slate-400 hover:text-white leading-none">—</button>
-            <button className="text-slate-400 hover:text-white leading-none">□</button>
-            <button onClick={handleClose} className="text-slate-400 hover:text-red-400 leading-none">✕</button>
+        <div className="flex items-start justify-between mb-4 flex-shrink-0">
+          <div className="flex flex-col">
+            <h2 className="text-lg font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+              <span className="w-6 h-6 bg-brand-100 dark:bg-brand-500/20 text-brand-600 dark:text-brand-400 rounded-full flex items-center justify-center shadow-sm">
+                <CheckCircle2 size={14} />
+              </span>
+              Review Generated Links
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
+              Step 2 of 2: Review the {links.length} generated links, then confirm to add them to your queue.
+            </p>
+          </div>
+          <button onClick={handleClose} className="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Progress and Selection Summary */}
+        <div className="flex items-center justify-between mb-3 text-sm flex-shrink-0">
+          <div className="flex items-center gap-2">
+            <label className="flex items-center gap-2 cursor-pointer font-medium text-slate-700 dark:text-slate-300">
+              <input type="checkbox" checked={allSelected} onChange={(e) => toggleAll(e.target.checked)} className="accent-brand-600 w-4 h-4 rounded" />
+              {selectedCount} of {links.length} selected
+            </label>
+          </div>
+          <div className="flex items-center gap-2 text-slate-500">
+            {loadedCount < links.length ? (
+              <><Loader2 size={14} className="animate-spin" /> Checking files: {loadedCount} / {links.length}</>
+            ) : (
+              <><CheckCircle2 size={14} className="text-green-500" /> All {links.length} files checked</>
+            )}
           </div>
         </div>
 
-        <p className="text-[13px] text-[#b5bac1] leading-snug mb-4">
-          Please check the links, which you want to add to the download list of RDM, and click OK button.<br/>
-          You may wait until RDM checks and fills all file types.
-        </p>
-
         {/* Data Grid */}
-        <div className="flex-1 overflow-auto border border-[#1e1f22] bg-[#313338] mb-4 relative rounded-sm">
-          <table className="w-full text-left text-[12px] border-collapse">
-            <thead className="sticky top-0 bg-[#2b2d31] text-[#949ba4] border-b border-[#1e1f22] z-10">
+        <div className="flex-1 overflow-auto border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 mb-4 rounded-lg shadow-inner">
+          <table className="w-full text-left text-sm border-collapse whitespace-nowrap">
+            <thead className="sticky top-0 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700 z-10 text-xs uppercase tracking-wider font-semibold shadow-sm">
               <tr>
-                <th className="font-normal border-r border-[#1e1f22] p-1 w-8 text-center">
-                  <input type="checkbox" checked={allSelected} onChange={(e) => toggleAll(e.target.checked)} className="accent-[#0078d7]" />
-                </th>
-                <th className="font-normal border-r border-[#1e1f22] p-1.5 min-w-[120px]">File Name</th>
-                <th className="font-normal border-r border-[#1e1f22] p-1.5 w-[90px]">File Type</th>
-                <th className="font-normal border-r border-[#1e1f22] p-1.5 w-[80px]">Size</th>
-                <th className="font-normal border-r border-[#1e1f22] p-1.5 w-[200px]">Download from</th>
-                <th className="font-normal border-r border-[#1e1f22] p-1.5 w-[150px]">Save to</th>
-                <th className="font-normal p-1.5">Link Text</th>
+                <th className="p-3 w-10 text-center border-r border-slate-200 dark:border-slate-700"></th>
+                <th className="p-3 min-w-[200px] border-r border-slate-200 dark:border-slate-700">File Name</th>
+                <th className="p-3 w-[120px] border-r border-slate-200 dark:border-slate-700">Type</th>
+                <th className="p-3 w-[100px] border-r border-slate-200 dark:border-slate-700">Size</th>
+                <th className="p-3 min-w-[200px] border-r border-slate-200 dark:border-slate-700">Source URL</th>
+                <th className="p-3 min-w-[150px]">Save Path</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-slate-200 dark:divide-slate-700/50">
               {links.map((link) => (
-                <tr key={link.id} className="border-b border-[#1e1f22]/50 hover:bg-[#35373c]">
-                  <td className="border-r border-[#1e1f22]/50 p-1 text-center">
+                <tr key={link.id} className="hover:bg-white dark:hover:bg-slate-700/50 transition-colors">
+                  <td className="p-2 text-center border-r border-slate-200 dark:border-slate-700/50">
                     <input 
                       type="checkbox" 
                       checked={link.selected} 
                       onChange={(e) => toggleLink(link.id, e.target.checked)} 
-                      className="accent-[#0078d7]" 
+                      className="accent-brand-600 w-4 h-4 rounded" 
                     />
                   </td>
-                  <td className="border-r border-[#1e1f22]/50 p-1.5 flex items-center gap-1.5">
-                    <span className="text-white">📄</span>
-                    <span className="truncate" title={link.filename}>{link.filename}</span>
+                  <td className="p-2 border-r border-slate-200 dark:border-slate-700/50 flex items-center gap-2 font-medium text-slate-700 dark:text-slate-200">
+                    <Download size={14} className="text-slate-400" />
+                    <span className="truncate max-w-[250px]" title={link.filename}>{link.filename}</span>
                   </td>
-                  <td className="border-r border-[#1e1f22]/50 p-1.5 truncate" title={link.type}>
-                    {link.loading ? <span className="animate-pulse">Checking...</span> : link.type}
+                  <td className="p-2 border-r border-slate-200 dark:border-slate-700/50 text-slate-600 dark:text-slate-400">
+                    {link.loading ? <span className="flex items-center gap-1 opacity-70"><Loader2 size={12} className="animate-spin" /> Checking...</span> : 
+                     link.type === 'Error' ? <span className="flex items-center gap-1 text-red-500"><AlertCircle size={12} /> Error</span> : link.type}
                   </td>
-                  <td className="border-r border-[#1e1f22]/50 p-1.5 truncate">
-                    {link.size > 0 ? formatFileSize(link.size) : link.loading ? '' : 'Unknown'}
+                  <td className="p-2 border-r border-slate-200 dark:border-slate-700/50 text-slate-600 dark:text-slate-400">
+                    {link.size > 0 ? formatFileSize(link.size) : link.loading ? '' : '-'}
                   </td>
-                  <td className="border-r border-[#1e1f22]/50 p-1.5 truncate text-[#00b0f4]" title={link.url}>
-                    {link.url}
+                  <td className="p-2 border-r border-slate-200 dark:border-slate-700/50 text-brand-600 dark:text-brand-400 font-mono text-xs">
+                    <div className="truncate max-w-[250px]" title={link.url}>{link.url}</div>
                   </td>
-                  <td className="border-r border-[#1e1f22]/50 p-1.5 truncate" title={getSavePathForLink(link)}>
-                    {getSavePathForLink(link)}
-                  </td>
-                  <td className="p-1.5 truncate">
-                    {link.linkText}
+                  <td className="p-2 text-slate-500 dark:text-slate-400 font-mono text-xs">
+                    <div className="truncate max-w-[200px]" title={getSavePathForLink(link)}>{getSavePathForLink(link)}</div>
                   </td>
                 </tr>
               ))}
@@ -272,39 +287,30 @@ export function BatchDownloadListDialog() {
           </table>
         </div>
 
-        {/* Bottom Area */}
-        <div className="flex gap-4 mb-2">
-          {/* Save To Group */}
-          <fieldset className="flex-1 border border-[#404249] rounded-sm p-3 pt-2">
-            <legend className="text-[12px] px-1 text-[#b5bac1]">Save to directory/category</legend>
-            <div className="space-y-3">
-              <label className="flex items-center gap-2 text-[12px] cursor-pointer text-white">
-                <input
-                  type="radio"
-                  name="saveMode"
-                  checked={saveMode === 'category'}
-                  onChange={() => setSaveMode('category')}
-                  className="accent-[#0078d7]"
-                />
-                Every file to the directory according to the category of the file
+        {/* Configuration Area */}
+        <div className="flex gap-6 flex-shrink-0 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-lg border border-slate-200 dark:border-slate-700">
+          
+          {/* Save Target */}
+          <div className="flex-1 space-y-3">
+            <h3 className="text-sm font-medium text-slate-900 dark:text-white flex items-center gap-1.5">
+              <HardDrive size={16} className="text-slate-400" /> Save Location
+            </h3>
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-sm cursor-pointer text-slate-700 dark:text-slate-300">
+                <input type="radio" name="saveMode" checked={saveMode === 'category'} onChange={() => setSaveMode('category')} className="accent-brand-600" />
+                <Folder size={14} className="text-slate-400" /> By Category (Auto-detect)
               </label>
               
-              <div className="flex items-center gap-2">
-                <label className="flex items-center gap-2 text-[12px] cursor-pointer text-white w-44">
-                  <input
-                    type="radio"
-                    name="saveMode"
-                    checked={saveMode === 'specific_category'}
-                    onChange={() => setSaveMode('specific_category')}
-                    className="accent-[#0078d7]"
-                  />
-                  All files to one category
+              <div className="flex items-center gap-3">
+                <label className="flex items-center gap-2 text-sm cursor-pointer text-slate-700 dark:text-slate-300 whitespace-nowrap min-w-[160px]">
+                  <input type="radio" name="saveMode" checked={saveMode === 'specific_category'} onChange={() => setSaveMode('specific_category')} className="accent-brand-600" />
+                  <Folder size={14} className="text-slate-400" /> Single Category
                 </label>
                 <select
                   disabled={saveMode !== 'specific_category'}
                   value={selectedCategoryId}
                   onChange={(e) => setSelectedCategoryId(e.target.value)}
-                  className="flex-1 bg-[#1e1f22] border border-[#1e1f22] text-[12px] p-1 text-white disabled:opacity-50 outline-none focus:border-[#0078d7]"
+                  className="flex-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-sm py-1.5 px-2 rounded-md disabled:opacity-50 outline-none focus:border-brand-500 transition-colors"
                 >
                   {categories.map(c => (
                     <option key={c.id} value={c.id}>{c.name}</option>
@@ -312,66 +318,77 @@ export function BatchDownloadListDialog() {
                 </select>
               </div>
 
-              <div className="flex items-center gap-2">
-                <label className="flex items-center gap-2 text-[12px] cursor-pointer text-white w-44">
-                  <input
-                    type="radio"
-                    name="saveMode"
-                    checked={saveMode === 'specific_directory'}
-                    onChange={() => setSaveMode('specific_directory')}
-                    className="accent-[#0078d7]"
-                  />
-                  All files to one directory
+              <div className="flex items-center gap-3">
+                <label className="flex items-center gap-2 text-sm cursor-pointer text-slate-700 dark:text-slate-300 whitespace-nowrap min-w-[160px]">
+                  <input type="radio" name="saveMode" checked={saveMode === 'specific_directory'} onChange={() => setSaveMode('specific_directory')} className="accent-brand-600" />
+                  <FolderOpen size={14} className="text-slate-400" /> Custom Directory
                 </label>
-                <div className="flex flex-1 gap-1">
+                <div className="flex flex-1 gap-2">
                   <input
                     type="text"
                     disabled={saveMode !== 'specific_directory'}
                     value={selectedDirectory}
                     onChange={(e) => setSelectedDirectory(e.target.value)}
-                    className="flex-1 bg-[#1e1f22] border border-[#1e1f22] text-[12px] p-1 px-2 text-[#949ba4] disabled:opacity-50 outline-none focus:border-[#0078d7]"
+                    placeholder="Select a folder..."
+                    className="flex-1 bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-sm py-1.5 px-2 rounded-md disabled:opacity-50 outline-none focus:border-brand-500 transition-colors"
                   />
                   <button
                     disabled={saveMode !== 'specific_directory'}
                     onClick={handleBrowse}
-                    className="px-3 bg-[#4e5058] hover:bg-[#6d6f78] text-white text-[12px] rounded-sm disabled:opacity-50 transition-colors"
+                    className="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 text-sm rounded-md disabled:opacity-50 transition-colors shadow-sm"
                   >
-                    Browse...
+                    Browse
                   </button>
                 </div>
               </div>
             </div>
-          </fieldset>
+          </div>
 
-          {/* Replace Pattern Group */}
-          <div className="w-[300px] flex flex-col justify-end gap-1">
-            <label className="text-[12px] text-[#b5bac1] leading-snug">
-              Replace file names using asterisk wildcard for the file name pattern:
-            </label>
-            <input
-              type="text"
-              value={pattern}
-              onChange={(e) => handlePatternChange(e.target.value)}
-              className="w-full bg-[#1e1f22] border border-[#1e1f22] text-[12px] p-1 px-2 text-white outline-none focus:border-[#0078d7]"
-            />
-            
-            <div className="flex justify-end gap-2 mt-4">
-              <button
-                onClick={handleAdd}
-                disabled={adding || links.filter(l => l.selected).length === 0}
-                className="w-20 py-1 bg-[#4e5058] hover:bg-[#6d6f78] text-white text-[12px] rounded-sm transition-colors disabled:opacity-50"
-              >
-                OK
-              </button>
-              <button
-                onClick={handleClose}
-                className="w-20 py-1 bg-[#4e5058] hover:bg-[#6d6f78] text-white text-[12px] rounded-sm transition-colors"
-              >
-                Cancel
-              </button>
+          {/* Pattern Rewrite */}
+          <div className="w-[300px] space-y-3 flex flex-col">
+            <h3 className="text-sm font-medium text-slate-900 dark:text-white flex items-center gap-1.5">
+              <Download size={16} className="text-slate-400" /> Filename Pattern
+            </h3>
+            <div>
+              <input
+                type="text"
+                value={pattern}
+                onChange={(e) => handlePatternChange(e.target.value)}
+                placeholder="e.g. image_*.jpg"
+                className="w-full bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-600 text-sm py-1.5 px-3 rounded-md outline-none focus:border-brand-500 transition-colors mb-2"
+              />
+              <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-2">
+                Use <code className="bg-slate-200 dark:bg-slate-700 px-1 rounded text-slate-700 dark:text-slate-300 font-mono">*</code> as a wildcard for the index. <br/>
+                Example output: <span className="font-mono text-brand-600 dark:text-brand-400 font-medium">{links[0]?.filename || 'N/A'}</span>
+              </p>
             </div>
           </div>
+
         </div>
+
+        {/* Footer Actions */}
+        <div className="flex justify-between items-center mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 flex-shrink-0">
+          <div className="text-sm text-red-500 font-medium flex items-center gap-1.5">
+            {selectedCount === 0 && <><AlertCircle size={14} /> Select at least one link to continue.</>}
+            {saveModeError && selectedCount > 0 && <><AlertCircle size={14} /> Please configure the target save location.</>}
+          </div>
+          <div className="flex gap-3">
+            <button
+              onClick={handleClose}
+              className="px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleAdd}
+              disabled={!canAdd}
+              className="px-6 py-2 text-sm font-medium bg-brand-600 hover:bg-brand-700 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 shadow-sm"
+            >
+              {adding ? <><Loader2 size={16} className="animate-spin" /> Adding...</> : 'Confirm & Add Links'}
+            </button>
+          </div>
+        </div>
+
       </div>
     </div>
   );

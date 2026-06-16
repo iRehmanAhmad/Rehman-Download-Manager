@@ -15,14 +15,18 @@ interface DownloadState {
   clearCompletedDownloads: () => void;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
+  activeMatchId: string | null;
+  setActiveMatchId: (id: string | null) => void;
 }
 
 export const useDownloadStore = create<DownloadState>((set, get) => ({
   downloads: new Map(),
   selectedIds: new Set(),
   searchQuery: '',
+  activeMatchId: null,
 
   setSearchQuery: (query) => set({ searchQuery: query }),
+  setActiveMatchId: (id) => set({ activeMatchId: id }),
 
   addDownload: (download) =>
     set((state) => {

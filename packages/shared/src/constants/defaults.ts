@@ -25,4 +25,9 @@ export const SETTINGS_KEY = {
   PROXY_URL: 'proxyUrl',
   ANTIVIRUS_ENABLED: 'antivirusEnabled',
   ANTIVIRUS_CMD: 'antivirusCmd',
+  BRIDGE_TOKEN: 'bridgeToken',
+  FFMPEG_PATH: 'ffmpegPath',
+  AUTO_EXTRACT_ARCHIVES: 'autoExtractArchives',
+  EXTRACT_CMD: 'extractCmd',
+  DELETE_ARCHIVE_AFTER_EXTRACT: 'deleteArchiveAfterExtract',
 } as const;

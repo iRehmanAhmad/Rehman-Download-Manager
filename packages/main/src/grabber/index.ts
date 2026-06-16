@@ -1,6 +1,7 @@
 import http from 'node:http';
 import https from 'node:https';
 import { URL } from 'node:url';
+import { isPublicHttpUrl } from '../net/ssrf-guard';
 
 export interface GrabResult {
   url: string;
@@ -27,6 +28,11 @@ const SRC_PATTERN = /src=["'](https?:\/\/[^"']+)["']/gi;
 export async function detectVideos(url: string): Promise<GrabResult[]> {
   const results: GrabResult[] = [];
   const seen = new Set<string>();
+
+  if (!(await isPublicHttpUrl(url))) {
+    console.warn(`[grabber] Blocked non-public URL: ${url}`);
+    return results;
+  }
 
   try {
     const parsedUrl = new URL(url);
@@ -59,6 +65,11 @@ export async function detectVideos(url: string): Promise<GrabResult[]> {
 export async function crawlSite(url: string): Promise<GrabResult[]> {
   const results: GrabResult[] = [];
   const seen = new Set<string>();
+
+  if (!(await isPublicHttpUrl(url))) {
+    console.warn(`[grabber] Blocked non-public URL: ${url}`);
+    return results;
+  }
 
   try {
     const parsedUrl = new URL(url);

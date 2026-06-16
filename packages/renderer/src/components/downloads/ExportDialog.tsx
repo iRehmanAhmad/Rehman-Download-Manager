@@ -41,7 +41,7 @@ export function ExportDialog() {
         
         {/* Title Bar */}
         <div className="flex items-center justify-between px-3 py-1.5 bg-white border-b border-gray-300 select-none">
-          <div className="text-sm">Export download list</div>
+          <div className="text-sm">Export downloads</div>
           <button 
             onClick={() => setShow(false)}
             className="hover:bg-[#e81123] hover:text-white p-1 rounded-sm transition-colors"
@@ -65,7 +65,7 @@ export function ExportDialog() {
                 onChange={(e) => setMode(e.target.value as any)}
                 className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300"
               />
-              <span className="text-[13px]">Export download queue</span>
+              <span className="text-[13px]">Export queue</span>
             </label>
             
             <label className={`flex items-center gap-2 ${!hasSelection ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
@@ -78,7 +78,7 @@ export function ExportDialog() {
                 onChange={(e) => setMode(e.target.value as any)}
                 className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 disabled:cursor-not-allowed"
               />
-              <span className="text-[13px]">Export selected files</span>
+              <span className="text-[13px]">Export selected</span>
             </label>
             
             <label className="flex items-center gap-2 cursor-pointer">
@@ -90,7 +90,7 @@ export function ExportDialog() {
                 onChange={(e) => setMode(e.target.value as any)}
                 className="w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300"
               />
-              <span className="text-[13px]">Export all files</span>
+              <span className="text-[13px]">Export all</span>
             </label>
           </div>
           
@@ -99,7 +99,7 @@ export function ExportDialog() {
               onClick={handleExport}
               className="px-4 py-1 bg-white border border-blue-500 rounded text-sm hover:bg-blue-50 active:bg-blue-100 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
             >
-              OK
+              Export
             </button>
             <button 
               onClick={() => setShow(false)}

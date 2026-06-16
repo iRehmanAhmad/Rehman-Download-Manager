@@ -11,7 +11,6 @@ interface DownloadPropertiesDialogProps {
 }
 
 export function DownloadPropertiesDialog({ download, onClose, onOpen }: DownloadPropertiesDialogProps) {
-  const [description, setDescription] = useState(download.metadata?.description || '');
 
   const handleMove = async () => {
     // Only attempt to move if the download is complete, otherwise we just update the target directory
@@ -47,14 +46,14 @@ export function DownloadPropertiesDialog({ download, onClose, onOpen }: Download
         <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 animate-in fade-in duration-200" />
         <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg bg-slate-100 rounded-lg shadow-2xl z-50 text-slate-900 border border-slate-300">
           
-          <div className="flex items-center justify-between px-4 py-2 bg-slate-200 rounded-t-lg border-b border-slate-300">
-            <Dialog.Title className="text-sm font-semibold flex items-center gap-2">
-              <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230ea5e9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 2v20'/%3E%3Cpath d='M2 12h20'/%3E%3C/svg%3E" alt="icon" className="w-4 h-4" />
+          <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-slate-200">
+            <Dialog.Title className="text-sm font-semibold flex items-center gap-2 text-slate-800">
+              <FileText className="w-4 h-4 text-brand-500" />
               File Properties
             </Dialog.Title>
             <Dialog.Close asChild>
-              <button className="p-1 hover:bg-slate-300 rounded transition-colors" title="Close">
-                <X size={16} className="text-slate-600" />
+              <button className="p-1 hover:bg-slate-100 rounded transition-colors" title="Close">
+                <X size={16} className="text-slate-500 hover:text-slate-700" />
               </button>
             </Dialog.Close>
           </div>
@@ -79,52 +78,66 @@ export function DownloadPropertiesDialog({ download, onClose, onOpen }: Download
             </div>
 
             {/* Save To */}
-            <div className="flex items-center gap-3">
-              <span className="text-slate-600 w-[88px]">Save To:</span>
+            <div className="flex items-center gap-2">
+              <span className="text-slate-600 w-[70px]">Save To:</span>
               <input 
                 type="text" 
                 value={download.filepath} 
                 readOnly 
-                className="flex-1 bg-white border border-slate-300 px-2 py-1 rounded text-slate-800 focus:outline-none focus:border-brand-500 selection:bg-brand-500 selection:text-white"
+                className="flex-1 bg-white border border-slate-300 px-2 py-1.5 rounded text-slate-800 focus:outline-none focus:border-brand-500 selection:bg-brand-500 selection:text-white truncate"
               />
+              <button
+                onClick={() => navigator.clipboard.writeText(download.filepath)}
+                className="px-3 py-1.5 bg-slate-100 border border-slate-300 rounded hover:bg-slate-200 text-slate-700 transition-colors"
+                title="Copy Save Path"
+              >
+                Copy
+              </button>
               <button 
                 onClick={handleMove}
-                className="px-4 py-1 bg-slate-200 border border-slate-300 rounded hover:bg-slate-300 text-slate-800 transition-colors"
+                className="px-3 py-1.5 bg-slate-100 border border-slate-300 rounded hover:bg-slate-200 text-slate-700 transition-colors whitespace-nowrap"
               >
-                Move
+                Change path
               </button>
             </div>
 
             {/* Address */}
-            <div className="flex items-center gap-3">
-              <span className="text-slate-600 w-[88px]">Address:</span>
+            <div className="flex items-center gap-2">
+              <span className="text-slate-600 w-[70px]">Address:</span>
               <input 
                 type="text" 
                 value={download.url} 
                 readOnly 
-                className="flex-1 bg-white border border-slate-300 px-2 py-1 rounded text-slate-800 focus:outline-none selection:bg-brand-500 selection:text-white"
+                className="flex-1 bg-white border border-slate-300 px-2 py-1.5 rounded text-slate-800 focus:outline-none selection:bg-brand-500 selection:text-white truncate"
               />
+              <button
+                onClick={() => navigator.clipboard.writeText(download.url)}
+                className="px-3 py-1.5 bg-slate-100 border border-slate-300 rounded hover:bg-slate-200 text-slate-700 transition-colors"
+                title="Copy URL"
+              >
+                Copy
+              </button>
             </div>
     
 
           </div>
 
-          <div className="flex items-center justify-end gap-3 px-5 py-3 bg-slate-100 rounded-b-lg border-t border-slate-300">
+          <div className="flex items-center justify-end gap-3 px-5 py-3 bg-slate-50 rounded-b-lg border-t border-slate-200">
             <button
               onClick={() => {
                 onOpen();
                 onClose();
               }}
               disabled={download.status !== 'completed'}
-              className="px-6 py-1.5 bg-white border border-slate-300 rounded hover:bg-slate-50 text-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-1.5 bg-white border border-slate-300 rounded hover:bg-slate-50 text-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm font-medium"
             >
-              Open
+              Open file
             </button>
             <button
               onClick={onClose}
-              className="px-6 py-1.5 bg-white border border-slate-300 rounded hover:bg-slate-50 text-slate-800 transition-colors font-semibold shadow-sm"
+              className="px-5 py-1.5 bg-brand-500 border border-transparent rounded hover:bg-brand-600 text-white transition-colors font-semibold shadow-sm"
             >
-              OK
+              Close
             </button>
           </div>
         </Dialog.Content>

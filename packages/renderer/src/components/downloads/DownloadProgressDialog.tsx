@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { X, Minus, Activity } from 'lucide-react';
 import type { Download } from '@rdm/shared';
 import { formatFileSize } from '@rdm/shared';
 
@@ -19,7 +20,7 @@ export function DownloadProgressDialog({
 }: DownloadProgressDialogProps) {
   const isDownloading = download.status === 'downloading';
   const isPaused = download.status === 'paused';
-  const [activeTab, setActiveTab] = useState<'status' | 'speed' | 'options'>('status');
+  const [activeTab, setActiveTab] = useState<'status' | 'speed'>('status');
 
   const [speedLimitEnabled, setSpeedLimitEnabled] = useState(download.speedLimit ? download.speedLimit > 0 : false);
   const [speedLimitStr, setSpeedLimitStr] = useState(download.speedLimit ? (download.speedLimit / 1024).toString() : '100');
@@ -40,35 +41,30 @@ export function DownloadProgressDialog({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Title Bar */}
-        <div className="bg-gradient-to-b from-[#fff] to-[#e0e0e0] border-b border-[#ccc] px-3 py-1 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+        <div className="bg-white border-b border-slate-200 px-3 py-2 flex items-center justify-between">
+          <div className="flex items-center gap-2 text-slate-800">
+            <Activity size={14} className="text-brand-500" />
             <span className="text-xs font-semibold">{Math.round(download.progress)}% {download.filename}</span>
           </div>
           <div className="flex items-center gap-1">
-            <button className="hover:bg-[#d0d0d0] px-2 text-xs" onClick={onClose}>—</button>
-            <button className="hover:bg-[#e81123] hover:text-white px-2 text-xs" onClick={onClose}>✕</button>
+            <button className="hover:bg-slate-100 rounded px-1.5 py-0.5 text-slate-500 transition-colors" onClick={onClose}><Minus size={14} /></button>
+            <button className="hover:bg-red-500 rounded px-1.5 py-0.5 text-slate-500 hover:text-white transition-colors" onClick={onClose}><X size={14} /></button>
           </div>
         </div>
 
         {/* Tabs */}
         <div className="flex px-2 pt-2 gap-0 border-b border-[#ccc] text-xs">
           <button 
-            className={`px-3 py-1.5 border border-b-0 translate-y-px ${activeTab === 'status' ? 'bg-[#fff] border-[#ccc] text-black z-10' : 'bg-transparent border-transparent text-[#666] hover:text-black'}`}
+            className={`px-4 py-1.5 border border-b-0 translate-y-px rounded-t-sm transition-colors ${activeTab === 'status' ? 'bg-[#fff] border-[#ccc] text-slate-900 z-10 font-medium' : 'bg-transparent border-transparent text-[#666] hover:text-slate-900'}`}
             onClick={() => setActiveTab('status')}
           >
-            Download status
+            Status
           </button>
           <button 
-            className={`px-3 py-1.5 border border-b-0 translate-y-px ${activeTab === 'speed' ? 'bg-[#fff] border-[#ccc] text-black z-10' : 'bg-transparent border-transparent text-[#666] hover:text-black'}`}
+            className={`px-4 py-1.5 border border-b-0 translate-y-px rounded-t-sm transition-colors ${activeTab === 'speed' ? 'bg-[#fff] border-[#ccc] text-slate-900 z-10 font-medium' : 'bg-transparent border-transparent text-[#666] hover:text-slate-900'}`}
             onClick={() => setActiveTab('speed')}
           >
-            Speed Limiter
-          </button>
-          <button 
-            className={`px-3 py-1.5 border border-b-0 translate-y-px ${activeTab === 'options' ? 'bg-[#fff] border-[#ccc] text-black z-10' : 'bg-transparent border-transparent text-[#666] hover:text-black'}`}
-            onClick={() => setActiveTab('options')}
-          >
-            Options on completion
+            Speed Limit
           </button>
         </div>
 
@@ -80,8 +76,8 @@ export function DownloadProgressDialog({
               
               <div className="grid grid-cols-[130px_1fr] gap-y-0.5 text-[11px] mb-3">
                 <div className="text-[#333]">Status</div>
-                <div className="text-[#0000ff]">{
-                  isDownloading ? 'Receiving data...' : 
+                <div className="text-[#0000ff] font-medium">{
+                  isDownloading ? 'Downloading' : 
                   isPaused ? 'Paused' : download.status === 'completed' ? 'Finished' : download.status
                 }</div>
                 
@@ -92,7 +88,14 @@ export function DownloadProgressDialog({
                 <div>{formatFileSize(download.downloaded)} ({Number.isNaN(download.progress) ? 0 : download.progress.toFixed(2)}%)</div>
                 
                 <div className="text-[#333]">Transfer rate</div>
-                <div>{isDownloading ? `${formatFileSize(download.speed)}/sec` : '--'}</div>
+                <div className="flex items-center gap-2">
+                  {isDownloading ? `${formatFileSize(download.speed)}/sec` : '--'}
+                  {speedLimitEnabled && speedLimitStr && (
+                    <span className="text-[10px] text-brand-600 bg-brand-50 px-1 rounded border border-brand-200">
+                      Limit: {speedLimitStr} KB/s
+                    </span>
+                  )}
+                </div>
                 
                 <div className="text-[#333]">Time left</div>
                 <div>{isDownloading ? formatEta(download.eta) : '--'}</div>
@@ -113,37 +116,32 @@ export function DownloadProgressDialog({
 
           {activeTab === 'speed' && (
             <div className="text-xs text-[#333] flex-1 flex flex-col justify-center items-center">
-              <label className="flex items-center gap-2 mb-4">
+              <label className="flex items-center gap-2 mb-4 cursor-pointer select-none">
                 <input 
                   type="checkbox" 
                   checked={speedLimitEnabled} 
                   onChange={(e) => setSpeedLimitEnabled(e.target.checked)} 
-                /> Use Speed Limiter
+                  className="rounded border-slate-300 text-brand-500 focus:ring-brand-500"
+                /> 
+                <span className="font-medium">Use Speed Limiter</span>
               </label>
               <div className="flex items-center gap-2">
                 Maximum download speed: 
                 <input 
                   type="number" 
-                  className="border border-[#ccc] px-1 w-16 disabled:opacity-50" 
+                  className="border border-[#ccc] px-2 py-1 w-20 rounded disabled:opacity-50 focus:outline-none focus:border-brand-500" 
                   value={speedLimitStr}
-                  onChange={(e) => setSpeedLimitStr(e.target.value)}
+                  min="1"
+                  step="1"
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val === '' || parseInt(val, 10) > 0) {
+                      setSpeedLimitStr(val);
+                    }
+                  }}
                   disabled={!speedLimitEnabled}
                 /> KB/s
               </div>
-            </div>
-          )}
-
-          {activeTab === 'options' && (
-            <div className="text-xs text-[#333] flex-1 flex flex-col justify-center items-center">
-              <label className="flex items-center gap-2 mb-2">
-                <input type="checkbox" /> Show download complete dialog
-              </label>
-              <label className="flex items-center gap-2 mb-2">
-                <input type="checkbox" /> Disconnect from Internet when done
-              </label>
-              <label className="flex items-center gap-2">
-                <input type="checkbox" /> Turn off computer when done
-              </label>
             </div>
           )}
 
