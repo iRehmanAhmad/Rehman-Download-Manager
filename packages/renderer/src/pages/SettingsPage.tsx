@@ -56,7 +56,7 @@ export function SettingsPage() {
           {tab === 'connection' && <ConnectionSettings />}
           {tab === 'proxy' && <NetworkSettings />}
           {tab === 'sites-logins' && <SitesLoginsSettings />}
-          {tab === 'dial-up-vpn' && <div className="text-slate-400">Dial Up / VPN settings coming soon...</div>}
+          {tab === 'dial-up-vpn' && <DialUpVpnSettings />}
           {tab === 'sounds' && <NotificationSettings />}
           {tab === 'appearance' && <AppearanceSettings />}
         </div>
@@ -896,12 +896,125 @@ function SitesLoginsSettings() {
   );
 }
 
+function DialUpVpnSettings() {
+  const settings = useSettingsStore((s) => s.settings);
+  const setValue = useSettingsStore((s) => s.setValue);
+
+  const getBool = (key: string, def: boolean) => settings[key] !== undefined ? settings[key] === 'true' : def;
+
+  const useVpn = getBool('useVpn', false);
+  const vpnConnection = settings.vpnConnection || '';
+  const vpnUsername = settings.vpnUsername || '';
+  const vpnPassword = settings.vpnPassword || '';
+  const vpnSavePassword = getBool('vpnSavePassword', false);
+  const vpnRedialAttempts = settings.vpnRedialAttempts || '0';
+  const vpnRedialDelay = settings.vpnRedialDelay || '30';
+
+  return (
+    <div className="max-w-2xl text-sm text-slate-200 flex flex-col h-full">
+      <div className="flex items-center gap-4 pb-2 border-b border-gray-400">
+        <img src="/icons/icon.png" alt="" className="w-8 h-8 object-contain opacity-80" />
+        <span className="font-bold text-lg font-sans text-black">Dial up / VPN settings</span>
+      </div>
+
+      <div className="pt-4 space-y-4 px-2">
+        <label className="flex items-center gap-2 cursor-pointer text-black">
+          <input 
+            type="checkbox" 
+            checked={useVpn}
+            onChange={(e) => setValue('useVpn', String(e.target.checked))}
+            className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+          />
+          Use Windows Dial Up / VPN Networking
+        </label>
+
+        <fieldset className="border border-gray-300 p-4 pt-2 relative mt-4">
+          <legend className="px-1 text-black bg-[#f0f0f0] absolute -top-2.5 left-2">Connection options</legend>
+          <div className="grid grid-cols-[120px_1fr] items-center gap-y-3 gap-x-2 pt-2">
+            <span className="text-right text-black pr-2">Connection:</span>
+            <select 
+              value={vpnConnection}
+              onChange={(e) => setValue('vpnConnection', e.target.value)}
+              disabled={!useVpn}
+              className={`border p-1 outline-none w-full ${useVpn ? 'bg-white border-gray-400 text-black' : 'bg-[#f0f0f0] border-gray-200 text-gray-400'}`}
+            >
+              <option value=""></option>
+            </select>
+
+            <span className="text-right text-black pr-2">User name:</span>
+            <input 
+              type="text" 
+              value={vpnUsername}
+              onChange={(e) => setValue('vpnUsername', e.target.value)}
+              disabled={!useVpn}
+              className={`border p-1 outline-none w-64 ${useVpn ? 'bg-white border-gray-400 text-black' : 'bg-[#f0f0f0] border-gray-200 text-gray-400'}`}
+            />
+
+            <span className="text-right text-black pr-2">Password:</span>
+            <input 
+              type="password" 
+              value={vpnPassword}
+              onChange={(e) => setValue('vpnPassword', e.target.value)}
+              disabled={!useVpn}
+              className={`border p-1 outline-none w-64 ${useVpn ? 'bg-white border-gray-400 text-black' : 'bg-[#f0f0f0] border-gray-200 text-gray-400'}`}
+            />
+
+            <div></div>
+            <div className="flex justify-between items-center pr-4">
+              <label className={`flex items-center gap-1.5 ${useVpn ? 'cursor-pointer text-gray-600' : 'cursor-not-allowed text-gray-400'}`}>
+                <input 
+                  type="checkbox" 
+                  checked={vpnSavePassword}
+                  onChange={(e) => setValue('vpnSavePassword', String(e.target.checked))}
+                  disabled={!useVpn}
+                  className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+                />
+                Save password
+              </label>
+              
+              <button 
+                disabled={!useVpn}
+                className={`px-8 py-1 border rounded w-24 ml-auto ${useVpn ? 'bg-[#f0f0f0] border-gray-400 text-black hover:bg-[#e0e0e0]' : 'bg-[#f0f0f0] border-gray-200 text-gray-400 cursor-not-allowed'}`}
+              >
+                Apply
+              </button>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset className="border border-gray-300 p-4 pt-2 relative mt-4">
+          <legend className="px-1 text-black bg-[#f0f0f0] absolute -top-2.5 left-2">Redial options</legend>
+          <div className="grid grid-cols-[250px_60px_1fr] items-center gap-y-3 gap-x-2 pt-2">
+            <span className="text-right text-black pr-2">Redial attempts (zero if endlessly):</span>
+            <input 
+              type="text" 
+              value={vpnRedialAttempts}
+              onChange={(e) => setValue('vpnRedialAttempts', e.target.value)}
+              className="border p-1 outline-none bg-white border-gray-400 text-black w-full text-right"
+            />
+            <span className="text-black pl-2">times</span>
+
+            <span className="text-right text-black pr-2">Time between redial attempts:</span>
+            <input 
+              type="text" 
+              value={vpnRedialDelay}
+              onChange={(e) => setValue('vpnRedialDelay', e.target.value)}
+              className="border p-1 outline-none bg-white border-gray-400 text-black w-full text-right"
+            />
+            <span className="text-black pl-2">seconds</span>
+          </div>
+        </fieldset>
+
+      </div>
+    </div>
+  );
+}
+
 function NotificationSettings() {
   const settings = useSettingsStore((s) => s.settings);
   const setValue = useSettingsStore((s) => s.setValue);
 
   return (
-    <div className="max-w-lg space-y-6">
       <h2 className="text-base font-medium text-slate-200">Notifications</h2>
       <label className="flex items-center justify-between">
         <div>
