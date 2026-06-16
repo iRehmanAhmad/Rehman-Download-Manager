@@ -57,7 +57,7 @@ export function SettingsPage() {
           {tab === 'proxy' && <NetworkSettings />}
           {tab === 'sites-logins' && <SitesLoginsSettings />}
           {tab === 'dial-up-vpn' && <DialUpVpnSettings />}
-          {tab === 'sounds' && <NotificationSettings />}
+          {tab === 'sounds' && <SoundsSettings />}
           {tab === 'appearance' && <AppearanceSettings />}
         </div>
       </div>
@@ -1010,37 +1010,106 @@ function DialUpVpnSettings() {
   );
 }
 
-function NotificationSettings() {
+const SOUND_EVENTS = [
+  { id: 'sound_downloadComplete', label: 'Download complete' },
+  { id: 'sound_downloadFailed', label: 'Download failed' },
+  { id: 'sound_queueStarted', label: 'Queue processing started' },
+  { id: 'sound_queueStopped', label: 'Queue processing stopped/finished' },
+];
+
+function SoundsSettings() {
   const settings = useSettingsStore((s) => s.settings);
   const setValue = useSettingsStore((s) => s.setValue);
+  const [selectedEventId, setSelectedEventId] = useState<string>('');
+
+  const handleBrowse = async () => {
+    if (!selectedEventId) return;
+    const result = await window.electron.ipcRenderer.invoke('system:show-open-dialog', {
+      properties: ['openFile'],
+      filters: [{ name: 'Audio Files', extensions: ['wav', 'mp3'] }]
+    });
+
+    if (result && result.length > 0) {
+      setValue(`${selectedEventId}_file`, result[0]);
+    }
+  };
+
+  const handlePlay = () => {
+    if (!selectedEventId) return;
+    const filePath = settings[`${selectedEventId}_file`];
+    if (filePath) {
+      const audio = new Audio(`file://${filePath.replace(/\\/g, '/')}`);
+      audio.play().catch(console.error);
+    }
+  };
 
   return (
-    <div className="max-w-lg space-y-6">
-      <h2 className="text-base font-medium text-slate-200">Notifications</h2>
-      <label className="flex items-center justify-between">
-        <div>
-          <span className="text-sm text-slate-400">Show download notifications</span>
-          <p className="text-xs text-slate-600 mt-0.5">Desktop alerts on download complete or failure</p>
-        </div>
-        <input
-          type="checkbox"
-          className="rounded bg-slate-800 border-slate-700"
-          checked={settings.showNotifications !== 'false'}
-          onChange={(e) => setValue('showNotifications', String(e.target.checked))}
-        />
-      </label>
-      <label className="flex items-center justify-between">
-        <div>
-          <span className="text-sm text-slate-400">Monitor clipboard for URLs</span>
-          <p className="text-xs text-slate-600 mt-0.5">Auto-detect copied URLs and show download prompt</p>
-        </div>
-        <input
-          type="checkbox"
-          className="rounded bg-slate-800 border-slate-700"
-          checked={settings.clipboardMonitor !== 'false'}
-          onChange={(e) => setValue('clipboardMonitor', String(e.target.checked))}
-        />
-      </label>
+    <div className="max-w-2xl text-sm text-slate-200 flex flex-col h-full">
+      <div className="flex items-center gap-4 pb-2 border-b border-gray-400">
+        <img src="/icons/icon.png" alt="" className="w-8 h-8 object-contain opacity-80" />
+        <span className="font-bold text-lg font-sans text-black">Sound settings</span>
+      </div>
+
+      <div className="pt-4 flex-1 flex flex-col min-h-0">
+        <fieldset className="border border-gray-300 p-2 pt-4 relative flex-1 flex flex-col min-h-0 mt-2">
+          <legend className="px-1 text-black bg-[#f0f0f0] absolute -top-2.5 left-2">Select sounds for Internet Download Manager events</legend>
+          
+          <div className="border border-gray-400 bg-white flex-1 overflow-auto">
+            <table className="w-full text-black table-fixed">
+              <thead className="sticky top-0 bg-white border-b border-gray-300">
+                <tr className="text-left text-[13px]">
+                  <th className="font-normal px-2 py-0.5 w-[250px] border-r border-gray-300">Event</th>
+                  <th className="font-normal px-2 py-0.5">Sound file</th>
+                </tr>
+              </thead>
+              <tbody>
+                {SOUND_EVENTS.map((event) => {
+                  const enabled = settings[`${event.id}_enabled`] === 'true';
+                  const filePath = settings[`${event.id}_file`] || '';
+                  const isSelected = selectedEventId === event.id;
+
+                  return (
+                    <tr 
+                      key={event.id}
+                      onClick={() => setSelectedEventId(event.id)}
+                      className={`cursor-default ${isSelected ? 'bg-[#0078d7] text-white' : 'hover:bg-[#f0f0f0]'}`}
+                    >
+                      <td className="px-2 py-0.5 border-r border-gray-100 border-opacity-50 flex items-center gap-1.5 truncate">
+                        <input 
+                          type="checkbox"
+                          checked={enabled}
+                          onChange={(e) => setValue(`${event.id}_enabled`, String(e.target.checked))}
+                          className="w-3.5 h-3.5 accent-blue-600 rounded-sm"
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                        {event.label}
+                      </td>
+                      <td className="px-2 py-0.5 truncate text-[12px]">{filePath}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="flex justify-center gap-16 mt-4 mb-2">
+            <button 
+              onClick={handleBrowse}
+              disabled={!selectedEventId}
+              className={`px-8 py-1.5 border rounded w-32 ${selectedEventId ? 'bg-[#f0f0f0] border-gray-400 text-black hover:bg-[#e0e0e0]' : 'bg-[#f0f0f0] border-gray-200 text-gray-400 cursor-not-allowed'}`}
+            >
+              Browse...
+            </button>
+            <button 
+              onClick={handlePlay}
+              disabled={!selectedEventId || !settings[`${selectedEventId}_file`]}
+              className={`px-8 py-1.5 border rounded w-32 ${selectedEventId && settings[`${selectedEventId}_file`] ? 'bg-[#f0f0f0] border-gray-400 text-black hover:bg-[#e0e0e0]' : 'bg-[#f0f0f0] border-gray-200 text-gray-400 cursor-not-allowed'}`}
+            >
+              Play
+            </button>
+          </div>
+        </fieldset>
+      </div>
     </div>
   );
 }
