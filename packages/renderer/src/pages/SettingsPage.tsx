@@ -65,6 +65,7 @@ export function SettingsPage() {
 import { DownloadPanelsDialog } from '../components/settings/DownloadPanelsDialog';
 import { AddressExceptionsDialog } from '../components/settings/AddressExceptionsDialog';
 import { CategoryDialog } from '../components/settings/CategoryDialog';
+import { ConnectionExceptionsDialog, type ConnectionException } from '../components/settings/ConnectionExceptionsDialog';
 
 function GeneralSettings() {
   const settings = useSettingsStore((s) => s.settings);
@@ -272,52 +273,182 @@ function ConnectionSettings() {
   const handleGlobalSpeedLimit = useCallback(
     async (v: number) => {
       const clamped = Math.max(0, v);
-      setGlobalLimitInput(String(clamped));
-      await setValue('globalSpeedLimit', String(clamped));
-      await window.api.queue.setGlobalSpeedLimit(clamped);
-    },
-    [setValue],
-  );
+
+  const getBool = (key: string, def: boolean) => settings[key] !== undefined ? settings[key] === 'true' : def;
+
+  // Defaults based on IDM
+  const defaultMaxConnections = settings.defaultMaxConnections || '8';
+  const downloadLimitsEnabled = getBool('downloadLimitsEnabled', false);
+  const downloadLimitMB = settings.downloadLimitMB || '200';
+  const downloadLimitHours = settings.downloadLimitHours || '5';
+  const showWarningBeforeStopping = getBool('showWarningBeforeStopping', true);
+
+  // Exceptions list
+  const exceptions: ConnectionException[] = settings.connectionExceptions ? JSON.parse(settings.connectionExceptions) : [];
+  const [selectedExceptionId, setSelectedExceptionId] = useState<string>('');
+  const [exceptionDialogOpen, setExceptionDialogOpen] = useState(false);
+  const [exceptionDialogMode, setExceptionDialogMode] = useState<'new' | 'edit'>('new');
+
+  const selectedException = exceptions.find(e => e.id === selectedExceptionId);
+
+  const handleExceptionSave = (exception: ConnectionException) => {
+    let newExceptions;
+    if (exceptionDialogMode === 'new') {
+      newExceptions = [...exceptions, exception];
+    } else {
+      newExceptions = exceptions.map(e => e.id === exception.id ? exception : e);
+    }
+    setValue('connectionExceptions', JSON.stringify(newExceptions));
+    setSelectedExceptionId(exception.id);
+  };
+
+  const handleExceptionDelete = () => {
+    if (!selectedExceptionId) return;
+    const newExceptions = exceptions.filter(e => e.id !== selectedExceptionId);
+    setValue('connectionExceptions', JSON.stringify(newExceptions));
+    setSelectedExceptionId('');
+  };
 
   return (
-    <div className="max-w-lg space-y-6">
-      <h2 className="text-base font-medium text-slate-200">Connection</h2>
-      <div className="space-y-2">
-        <label className="text-sm text-slate-400 block">Max concurrent downloads</label>
-        <input
-          type="number"
-          value={concurrencyInput}
-          min={1}
-          max={32}
-          onChange={(e) => handleMaxConcurrent(parseInt(e.target.value) || 1)}
-          className="w-24 bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-200"
-        />
-      </div>
-      <div className="space-y-2">
-        <label className="text-sm text-slate-400 block">Default connections per download</label>
-        <input
-          type="number"
-          value={8}
-          min={1}
-          max={32}
-          readOnly
-          className="w-24 bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-200"
-        />
-      </div>
-      <div className="space-y-2">
-        <label className="text-sm text-slate-400 block">Global speed limit (0 = unlimited)</label>
+    <div className="max-w-2xl space-y-4 text-sm text-slate-200 h-full flex flex-col">
+      <div className="flex items-center justify-between border-b border-gray-600 pb-2">
         <div className="flex items-center gap-2">
-          <input
-            type="number"
-            value={globalLimitInput}
-            min={0}
-            step={102400}
-            onChange={(e) => handleGlobalSpeedLimit(parseInt(e.target.value) || 0)}
-            className="w-32 bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-200"
-          />
-          <span className="text-xs text-slate-500">bytes/s</span>
+          <img src="/icons/icon.png" alt="" className="w-5 h-5 object-contain opacity-80" />
+          <span className="font-bold text-[15px] font-sans">Connections and Limits</span>
         </div>
       </div>
+
+      <div className="border border-gray-300 p-4 bg-white text-black relative mt-6">
+        <div className="absolute -top-3 left-2 bg-[#f0f0f0] px-1 text-black font-sans">
+          Max. connections number
+        </div>
+
+        <div className="flex justify-center items-center gap-2 mt-2 mb-6">
+          <label>Default max. conn. number</label>
+          <select
+            value={defaultMaxConnections}
+            onChange={(e) => setValue('defaultMaxConnections', e.target.value)}
+            className="border border-gray-400 p-1 bg-white outline-none w-20 text-center"
+          >
+            {[1, 2, 4, 8, 16, 24, 32].map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+        </div>
+
+        <div className="flex items-start gap-4 pb-2">
+          <div className="flex-1 flex flex-col">
+            <label className="mb-1">Exceptions:</label>
+            <div className="border border-gray-400 h-32 bg-white overflow-y-auto">
+              <table className="w-full text-left border-collapse">
+                <thead className="bg-white sticky top-0 border-b border-gray-300">
+                  <tr>
+                    <th className="font-normal px-2 py-1 border-r border-gray-300 w-3/4">Server</th>
+                    <th className="font-normal px-2 py-1">Number</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {exceptions.map(exc => (
+                    <tr 
+                      key={exc.id} 
+                      onClick={() => setSelectedExceptionId(exc.id)}
+                      className={`cursor-pointer ${selectedExceptionId === exc.id ? 'bg-[#0078d7] text-white' : 'hover:bg-blue-50'}`}
+                    >
+                      <td className="px-2 py-0.5 border-r border-gray-300">{exc.protocol}{exc.server}</td>
+                      <td className="px-2 py-0.5">{exc.maxConnections}</td>
+                    </tr>
+                  ))}
+                  {exceptions.length === 0 && (
+                    <tr>
+                      <td colSpan={2} className="px-2 py-1 text-center text-gray-400 italic">No exceptions</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div className="flex flex-col gap-2 pt-6">
+            <button 
+              onClick={() => { setExceptionDialogMode('new'); setExceptionDialogOpen(true); }}
+              className="px-6 py-1 bg-white border border-gray-400 rounded hover:bg-[#e0e0e0] w-24"
+            >
+              New
+            </button>
+            <button 
+              onClick={handleExceptionDelete}
+              disabled={!selectedExceptionId}
+              className={`px-6 py-1 border rounded w-24 ${!selectedExceptionId ? 'bg-[#f0f0f0] border-gray-300 text-gray-400 cursor-not-allowed' : 'bg-[#f0f0f0] border-gray-400 hover:bg-[#e0e0e0]'}`}
+            >
+              Delete
+            </button>
+            <button 
+              onClick={() => { setExceptionDialogMode('edit'); setExceptionDialogOpen(true); }}
+              disabled={!selectedExceptionId}
+              className={`px-6 py-1 border rounded w-24 ${!selectedExceptionId ? 'bg-[#f0f0f0] border-gray-300 text-gray-400 cursor-not-allowed' : 'bg-[#f0f0f0] border-gray-400 hover:bg-[#e0e0e0]'}`}
+            >
+              Edit
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div className="border border-gray-300 p-4 bg-white text-black relative mt-8">
+        <div className="absolute -top-3 left-2 bg-[#f0f0f0] px-1 text-black font-sans flex items-center gap-2">
+          <input 
+            type="checkbox" 
+            checked={downloadLimitsEnabled}
+            onChange={(e) => setValue('downloadLimitsEnabled', String(e.target.checked))}
+            className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+          />
+          Download limits
+        </div>
+
+        <div className="pl-6 space-y-2 mt-4">
+          <div className="flex items-center gap-2">
+            <span className={downloadLimitsEnabled ? 'text-black' : 'text-gray-400'}>Download no more than</span>
+            <input 
+              type="number" 
+              disabled={!downloadLimitsEnabled}
+              value={downloadLimitMB}
+              onChange={(e) => setValue('downloadLimitMB', e.target.value)}
+              className={`border p-1 w-16 text-center outline-none ${downloadLimitsEnabled ? 'border-gray-400 bg-white' : 'border-gray-200 bg-[#f0f0f0] text-gray-400'}`}
+            />
+            <span className={downloadLimitsEnabled ? 'text-black' : 'text-gray-400'}>MBytes</span>
+          </div>
+
+          <div className="flex items-center gap-2 ml-16">
+            <span className={downloadLimitsEnabled ? 'text-black' : 'text-gray-400'}>every</span>
+            <input 
+              type="number" 
+              disabled={!downloadLimitsEnabled}
+              value={downloadLimitHours}
+              onChange={(e) => setValue('downloadLimitHours', e.target.value)}
+              className={`border p-1 w-16 text-center outline-none ${downloadLimitsEnabled ? 'border-gray-400 bg-white' : 'border-gray-200 bg-[#f0f0f0] text-gray-400'}`}
+            />
+            <span className={downloadLimitsEnabled ? 'text-black' : 'text-gray-400'}>hours</span>
+          </div>
+
+          <div className="pt-2">
+            <label className={`flex items-center gap-2 ${downloadLimitsEnabled ? 'cursor-pointer text-black' : 'cursor-not-allowed text-gray-400'}`}>
+              <input 
+                type="checkbox" 
+                disabled={!downloadLimitsEnabled}
+                checked={showWarningBeforeStopping}
+                onChange={(e) => setValue('showWarningBeforeStopping', String(e.target.checked))}
+                className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+              />
+              <span>Show warning before stopping downloads</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <ConnectionExceptionsDialog
+        open={exceptionDialogOpen}
+        onOpenChange={setExceptionDialogOpen}
+        exception={exceptionDialogMode === 'edit' ? selectedException : null}
+        onSave={handleExceptionSave}
+      />
+
     </div>
   );
 }
