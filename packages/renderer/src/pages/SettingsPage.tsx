@@ -1015,6 +1015,7 @@ function NotificationSettings() {
   const setValue = useSettingsStore((s) => s.setValue);
 
   return (
+    <div className="max-w-lg space-y-6">
       <h2 className="text-base font-medium text-slate-200">Notifications</h2>
       <label className="flex items-center justify-between">
         <div>
