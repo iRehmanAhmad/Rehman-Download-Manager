@@ -236,20 +236,270 @@ function NetworkSettings() {
   const settings = useSettingsStore((s) => s.settings);
   const setValue = useSettingsStore((s) => s.setValue);
 
+  const getBool = (key: string, def: boolean) => settings[key] !== undefined ? settings[key] === 'true' : def;
+
+  const useBrowserProxyOnError = getBool('useBrowserProxyOnError', true);
+  const proxyType = settings.proxyType || 'none';
+  const pacAddress = settings.pacAddress || '';
+  const proxyAddress = settings.proxyAddress || '';
+  const proxyPort = settings.proxyPort || '';
+  const proxyUsername = settings.proxyUsername || '';
+  const proxyPassword = settings.proxyPassword || '';
+  const proxyUseHttp = getBool('proxyUseHttp', false);
+  const proxyUseHttps = getBool('proxyUseHttps', false);
+  const proxyUseFtp = getBool('proxyUseFtp', false);
+  const useFtpPasv = getBool('useFtpPasv', false);
+
+  const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+
+  const handleGetSystem = () => {
+    setErrorDialogOpen(true);
+  };
+
+  const handleProxyTypeChange = (type: string) => {
+    if (type === 'system') {
+      setErrorDialogOpen(true);
+      // Optional: automatically revert to 'none' if system proxy fails, but let's just set it for now
+    }
+    setValue('proxyType', type);
+  };
+
   return (
-    <div className="max-w-lg space-y-6">
-      <h2 className="text-base font-medium text-slate-200">Network & Proxy</h2>
-      <div className="space-y-2">
-        <label className="text-sm text-slate-400 block">Proxy Server (HTTP/HTTPS)</label>
-        <input
-          type="text"
-          placeholder="http://127.0.0.1:8080"
-          value={settings.proxyUrl || ''}
-          onChange={(e) => setValue('proxyUrl', e.target.value)}
-          className="w-full bg-slate-800 border border-slate-700 rounded px-3 py-1.5 text-sm text-slate-200"
-        />
-        <p className="text-xs text-slate-500">Leave blank to use direct connection. Basic auth can be embedded in URL (e.g., http://user:pass@127.0.0.1).</p>
+    <div className="max-w-2xl text-sm text-slate-200 flex flex-col h-full">
+      <div className="flex items-center justify-between pb-4">
+        <div className="flex items-center gap-4">
+          <img src="/icons/icon.png" alt="" className="w-8 h-8 object-contain opacity-80" />
+          <span className="font-bold text-lg font-sans">Proxy / socks configuration</span>
+        </div>
+        <button 
+          onClick={handleGetSystem}
+          className="px-6 py-1 bg-white border border-blue-500 rounded hover:bg-blue-50 w-28 border-2 text-black"
+        >
+          Get System
+        </button>
       </div>
+
+      <div className="space-y-4 px-2">
+        <label className="flex items-start gap-2 cursor-pointer pt-2">
+          <input 
+            type="checkbox" 
+            checked={useBrowserProxyOnError}
+            onChange={(e) => setValue('useBrowserProxyOnError', String(e.target.checked))}
+            className="w-4 h-4 mt-0.5 accent-blue-600 border border-gray-400 rounded-sm"
+          />
+          <span className="text-black">
+            Use proxy/socks from a browser's request if there are download errors<br/>
+            for the downloads intercepted from the browser
+          </span>
+        </label>
+
+        <div className="border-b border-gray-400 mt-2 mb-2"></div>
+
+        <label className="flex items-center gap-2 cursor-pointer text-black font-medium">
+          <input 
+            type="radio" 
+            name="proxyType"
+            value="none"
+            checked={proxyType === 'none'}
+            onChange={() => handleProxyTypeChange('none')}
+            className="w-4 h-4 accent-blue-600"
+          />
+          No proxy/socks
+        </label>
+
+        <div className="border-b border-gray-400 my-2"></div>
+
+        <label className="flex items-center gap-2 cursor-pointer text-black">
+          <input 
+            type="radio" 
+            name="proxyType"
+            value="system"
+            checked={proxyType === 'system'}
+            onChange={() => handleProxyTypeChange('system')}
+            className="w-4 h-4 accent-blue-600"
+          />
+          Use system settings
+        </label>
+
+        <div className="border-b border-gray-400 my-2"></div>
+
+        <label className="flex items-center gap-2 cursor-pointer text-black">
+          <input 
+            type="radio" 
+            name="proxyType"
+            value="pac"
+            checked={proxyType === 'pac'}
+            onChange={() => handleProxyTypeChange('pac')}
+            className="w-4 h-4 accent-blue-600"
+          />
+          Use automatic configuration script
+        </label>
+
+        <div className="flex items-center gap-4 pl-6 pt-2 pb-2">
+          <span className={proxyType === 'pac' ? 'text-gray-600' : 'text-gray-400'}>Address</span>
+          <input 
+            type="text" 
+            disabled={proxyType !== 'pac'}
+            value={pacAddress}
+            onChange={(e) => setValue('pacAddress', e.target.value)}
+            className={`border flex-1 p-1 outline-none ${proxyType === 'pac' ? 'bg-white border-gray-400 text-black' : 'bg-[#f0f0f0] border-gray-200 text-gray-400'}`}
+          />
+        </div>
+
+        <div className="border-b border-gray-400 my-2"></div>
+
+        <label className="flex items-center gap-2 cursor-pointer text-black">
+          <input 
+            type="radio" 
+            name="proxyType"
+            value="manual"
+            checked={proxyType === 'manual'}
+            onChange={() => handleProxyTypeChange('manual')}
+            className="w-4 h-4 accent-blue-600"
+          />
+          Manual proxy/socks configuration
+        </label>
+
+        <div className="pl-6 pt-2 grid grid-cols-[1fr_80px_1fr_1fr] gap-4 text-black">
+          <div className="flex flex-col gap-1">
+            <span className={proxyType === 'manual' ? 'text-gray-500' : 'text-gray-300'}>Proxy server address</span>
+            <input 
+              type="text" 
+              disabled={proxyType !== 'manual'}
+              value={proxyAddress}
+              onChange={(e) => setValue('proxyAddress', e.target.value)}
+              className={`border p-1 outline-none ${proxyType === 'manual' ? 'bg-white border-gray-400 text-black' : 'bg-[#f0f0f0] border-gray-200 text-gray-400'}`}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className={proxyType === 'manual' ? 'text-gray-500' : 'text-gray-300'}>Port</span>
+            <input 
+              type="text" 
+              disabled={proxyType !== 'manual'}
+              value={proxyPort}
+              onChange={(e) => setValue('proxyPort', e.target.value)}
+              className={`border p-1 outline-none ${proxyType === 'manual' ? 'bg-white border-gray-400 text-black' : 'bg-[#f0f0f0] border-gray-200 text-gray-400'}`}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className={proxyType === 'manual' ? 'text-gray-500' : 'text-gray-300'}>UserName</span>
+            <input 
+              type="text" 
+              disabled={proxyType !== 'manual'}
+              value={proxyUsername}
+              onChange={(e) => setValue('proxyUsername', e.target.value)}
+              className={`border p-1 outline-none ${proxyType === 'manual' ? 'bg-white border-gray-400 text-black' : 'bg-[#f0f0f0] border-gray-200 text-gray-400'}`}
+            />
+          </div>
+          <div className="flex flex-col gap-1">
+            <span className={proxyType === 'manual' ? 'text-gray-500' : 'text-gray-300'}>Password</span>
+            <input 
+              type="password" 
+              disabled={proxyType !== 'manual'}
+              value={proxyPassword}
+              onChange={(e) => setValue('proxyPassword', e.target.value)}
+              className={`border p-1 outline-none ${proxyType === 'manual' ? 'bg-white border-gray-400 text-black' : 'bg-[#f0f0f0] border-gray-200 text-gray-400'}`}
+            />
+          </div>
+        </div>
+
+        <div className="pl-6 pt-2 pb-6">
+          <div className={proxyType === 'manual' ? 'text-gray-500 mb-2' : 'text-gray-300 mb-2'}>
+            Use this proxy for the following protocols:
+          </div>
+          <div className="flex justify-between items-center">
+            <div className="flex gap-6">
+              <label className={`flex items-center gap-1.5 ${proxyType === 'manual' ? 'cursor-pointer text-gray-700' : 'cursor-not-allowed text-gray-400'}`}>
+                <input 
+                  type="checkbox" 
+                  disabled={proxyType !== 'manual'}
+                  checked={proxyUseHttp}
+                  onChange={(e) => setValue('proxyUseHttp', String(e.target.checked))}
+                  className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+                />
+                http
+              </label>
+              <label className={`flex items-center gap-1.5 ${proxyType === 'manual' ? 'cursor-pointer text-gray-700' : 'cursor-not-allowed text-gray-400'}`}>
+                <input 
+                  type="checkbox" 
+                  disabled={proxyType !== 'manual'}
+                  checked={proxyUseHttps}
+                  onChange={(e) => setValue('proxyUseHttps', String(e.target.checked))}
+                  className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+                />
+                https
+              </label>
+              <label className={`flex items-center gap-1.5 ${proxyType === 'manual' ? 'cursor-pointer text-gray-700' : 'cursor-not-allowed text-gray-400'}`}>
+                <input 
+                  type="checkbox" 
+                  disabled={proxyType !== 'manual'}
+                  checked={proxyUseFtp}
+                  onChange={(e) => setValue('proxyUseFtp', String(e.target.checked))}
+                  className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+                />
+                ftp
+              </label>
+            </div>
+            
+            <button 
+              disabled={proxyType !== 'manual'}
+              className={`px-4 py-1 border rounded w-40 ${proxyType === 'manual' ? 'bg-white border-gray-400 text-black hover:bg-[#e0e0e0]' : 'bg-[#f0f0f0] border-gray-200 text-gray-400 cursor-not-allowed'}`}
+            >
+              Advanced / Socks...
+            </button>
+          </div>
+        </div>
+
+        <div className="border-b-2 border-gray-400 mt-auto mb-2"></div>
+
+        <label className="flex items-center gap-2 cursor-pointer text-black">
+          <input 
+            type="checkbox" 
+            checked={useFtpPasv}
+            onChange={(e) => setValue('useFtpPasv', String(e.target.checked))}
+            className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+          />
+          Use FTP in PASV mode
+        </label>
+      </div>
+
+      {/* Warning Dialog */}
+      <Dialog.Root open={errorDialogOpen} onOpenChange={setErrorDialogOpen}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="fixed inset-0 bg-transparent z-50" />
+          <Dialog.Content className="fixed left-[50%] top-[50%] z-50 flex flex-col w-[380px] translate-x-[-50%] translate-y-[-50%] bg-[#f0f0f0] shadow-lg border border-gray-400 p-0 text-black font-sans text-sm outline-none">
+            
+            <div className="flex items-center justify-between px-3 py-2 bg-white border-b border-gray-300 gap-2">
+              <Dialog.Title className="text-xs font-normal">Internet Download Manager</Dialog.Title>
+              <Dialog.Close className="text-gray-500 hover:text-black">
+                <span className="text-lg leading-none">&times;</span>
+              </Dialog.Close>
+            </div>
+
+            <div className="flex items-center gap-4 px-6 py-8 pb-10">
+              {/* Alert Triangle Icon */}
+              <div className="flex-shrink-0 text-yellow-500">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L1 21H23L12 2ZM13 18H11V16H13V18ZM13 14H11V10H13V14Z" />
+                </svg>
+              </div>
+              <div className="text-sm">
+                Could not find proxy configuration in System Settings
+              </div>
+            </div>
+
+            <div className="bg-[#f0f0f0] flex justify-end px-4 py-3 pb-4">
+              <Dialog.Close asChild>
+                <button className="px-8 py-1 bg-white border border-blue-500 rounded hover:bg-blue-50 w-24 border-2">
+                  OK
+                </button>
+              </Dialog.Close>
+            </div>
+            
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
+
     </div>
   );
 }
