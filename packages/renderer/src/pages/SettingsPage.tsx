@@ -5,6 +5,8 @@ import { useTranslation } from 'react-i18next';
 import type { Category } from '@rdm/shared';
 import * as Dialog from '@radix-ui/react-dialog';
 
+import { SiteLoginDialog, type SiteLogin } from '../components/settings/SiteLoginDialog';
+
 const TABS = [
   { id: 'general', label: 'General', icon: Settings },
   { id: 'file-types', label: 'File types', icon: Folder },
@@ -795,6 +797,101 @@ function DownloadSettings() {
         </select>
       </div>
 
+    </div>
+  );
+}
+
+function SitesLoginsSettings() {
+  const settings = useSettingsStore((s) => s.settings);
+  const setValue = useSettingsStore((s) => s.setValue);
+  
+  const sitesLogins: SiteLogin[] = settings.sitesLogins ? JSON.parse(settings.sitesLogins) : [];
+  const [selectedLoginId, setSelectedLoginId] = useState<string>('');
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMode, setDialogMode] = useState<'new' | 'edit'>('new');
+
+  const selectedLogin = sitesLogins.find(l => l.id === selectedLoginId);
+
+  const handleSave = (login: SiteLogin) => {
+    let newLogins;
+    if (dialogMode === 'new') {
+      newLogins = [...sitesLogins, login];
+    } else {
+      newLogins = sitesLogins.map(l => l.id === login.id ? login : l);
+    }
+    setValue('sitesLogins', JSON.stringify(newLogins));
+  };
+
+  const handleRemove = () => {
+    if (!selectedLoginId) return;
+    const newLogins = sitesLogins.filter(l => l.id !== selectedLoginId);
+    setValue('sitesLogins', JSON.stringify(newLogins));
+    setSelectedLoginId('');
+  };
+
+  return (
+    <div className="max-w-2xl text-sm text-slate-200 flex flex-col h-full">
+      <div className="flex items-center gap-4 pb-2 border-b border-gray-400">
+        <img src="/icons/icon.png" alt="" className="w-8 h-8 object-contain opacity-80" />
+        <span className="font-bold text-lg font-sans text-black">User names and passwords for servers/sites</span>
+      </div>
+
+      <div className="pt-4 flex-1 flex flex-col min-h-0">
+        <div className="border border-gray-400 bg-white flex-1 overflow-auto">
+          <table className="w-full text-black">
+            <thead className="sticky top-0 bg-white border-b border-gray-300 shadow-sm">
+              <tr className="text-left text-[13px]">
+                <th className="font-normal px-2 py-1 w-1/2 border-r border-gray-300">Site/path</th>
+                <th className="font-normal px-2 py-1 border-r border-gray-300">User</th>
+                <th className="font-normal px-2 py-1">Password</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sitesLogins.map((login) => (
+                <tr 
+                  key={login.id} 
+                  onClick={() => setSelectedLoginId(login.id)}
+                  className={`cursor-default ${selectedLoginId === login.id ? 'bg-[#0078d7] text-white' : 'hover:bg-[#f0f0f0]'}`}
+                >
+                  <td className="px-2 py-0.5 truncate max-w-[200px] border-r border-gray-100 border-opacity-50">{login.protocol === '*' ? '*' : `${login.protocol}${login.server}`}</td>
+                  <td className="px-2 py-0.5 truncate max-w-[100px] border-r border-gray-100 border-opacity-50">{login.username}</td>
+                  <td className="px-2 py-0.5">{login.password ? '***' : ''}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        
+        <div className="flex gap-4 mt-4">
+          <button 
+            onClick={() => { setDialogMode('new'); setDialogOpen(true); }}
+            className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 rounded hover:bg-[#e0e0e0] w-24 text-black"
+          >
+            New
+          </button>
+          <button 
+            onClick={() => { if (selectedLoginId) { setDialogMode('edit'); setDialogOpen(true); } }}
+            disabled={!selectedLoginId}
+            className={`px-6 py-1 border rounded w-24 ${selectedLoginId ? 'bg-[#f0f0f0] border-gray-400 text-black hover:bg-[#e0e0e0]' : 'bg-[#f0f0f0] border-gray-200 text-gray-400 cursor-not-allowed'}`}
+          >
+            Edit
+          </button>
+          <button 
+            onClick={handleRemove}
+            disabled={!selectedLoginId}
+            className={`px-6 py-1 border rounded w-24 ${selectedLoginId ? 'bg-[#f0f0f0] border-gray-400 text-black hover:bg-[#e0e0e0]' : 'bg-[#f0f0f0] border-gray-200 text-gray-400 cursor-not-allowed'}`}
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+
+      <SiteLoginDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        siteLogin={dialogMode === 'edit' ? selectedLogin : null}
+        onSave={handleSave}
+      />
     </div>
   );
 }
