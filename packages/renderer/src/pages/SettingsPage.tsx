@@ -50,7 +50,7 @@ export function SettingsPage() {
           {tab === 'file-types' && <FileTypesSettings />}
           {tab === 'save-to' && <FolderSettings />}
           {tab === 'downloads' && <DownloadSettings />}
-          {tab === 'connection' && <div className="text-slate-400">Connection settings coming soon...</div>}
+          {tab === 'connection' && <ConnectionSettings />}
           {tab === 'proxy' && <NetworkSettings />}
           {tab === 'sites-logins' && <SecuritySettings />}
           {tab === 'dial-up-vpn' && <div className="text-slate-400">Dial Up / VPN settings coming soon...</div>}
@@ -253,7 +253,7 @@ function NetworkSettings() {
   );
 }
 
-function DownloadSettings() {
+function ConnectionSettings() {
   const settings = useSettingsStore((s) => s.settings);
   const setValue = useSettingsStore((s) => s.setValue);
   const [globalLimitInput, setGlobalLimitInput] = useState(settings.globalSpeedLimit || '0');
@@ -281,7 +281,7 @@ function DownloadSettings() {
 
   return (
     <div className="max-w-lg space-y-6">
-      <h2 className="text-base font-medium text-slate-200">Download</h2>
+      <h2 className="text-base font-medium text-slate-200">Connection</h2>
       <div className="space-y-2">
         <label className="text-sm text-slate-400 block">Max concurrent downloads</label>
         <input
@@ -318,6 +318,139 @@ function DownloadSettings() {
           <span className="text-xs text-slate-500">bytes/s</span>
         </div>
       </div>
+    </div>
+  );
+}
+
+function DownloadSettings() {
+  const settings = useSettingsStore((s) => s.settings);
+  const setValue = useSettingsStore((s) => s.setValue);
+
+  const getBool = (key: string, def: boolean) => settings[key] !== undefined ? settings[key] === 'true' : def;
+
+  const showStartDialog = getBool('showStartDialog', true);
+  const addFilesToQueueOnly = getBool('addFilesToQueueOnly', false);
+  const showCompleteDialog = getBool('showCompleteDialog', true);
+  const startImmediatelyWhenInfoDialog = getBool('startImmediatelyWhenInfoDialog', true);
+  const showQueueSelectionOnLater = getBool('showQueueSelectionOnLater', true);
+  const showQueueSelectionOnBatchClose = getBool('showQueueSelectionOnBatchClose', true);
+  const ignoreFileModTime = getBool('ignoreFileModTime', false);
+  const duplicateLinkAction = settings.duplicateLinkAction || 'ask';
+
+  return (
+    <div className="max-w-2xl space-y-4 text-sm text-slate-200">
+      
+      <div className="flex items-center justify-between border-b border-gray-600 pb-2">
+        <div className="flex items-center gap-2">
+          <img src="/icons/icon.png" alt="" className="w-5 h-5 object-contain opacity-80" />
+          <span className="font-medium text-[15px] font-sans">Default download settings</span>
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center px-4 py-2 mt-4">
+        <span>Customize "Download progress" dialog</span>
+        <button className="px-6 py-1 bg-[#f0f0f0] border border-gray-400 text-black rounded hover:bg-[#e0e0e0] transition-colors w-24">
+          Edit...
+        </button>
+      </div>
+
+      <div className="space-y-3 px-4">
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input 
+            type="checkbox" 
+            checked={showStartDialog}
+            onChange={(e) => setValue('showStartDialog', String(e.target.checked))}
+            className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+          />
+          <span>Show start download dialog</span>
+        </label>
+        
+        <label className={`flex items-center gap-2 ml-6 ${!showStartDialog ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
+          <input 
+            type="checkbox" 
+            checked={addFilesToQueueOnly}
+            disabled={!showStartDialog}
+            onChange={(e) => setValue('addFilesToQueueOnly', String(e.target.checked))}
+            className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+          />
+          <span>Do not start downloading, only add files to the queue</span>
+        </label>
+
+        <label className="flex items-center gap-2 cursor-pointer pt-1">
+          <input 
+            type="checkbox" 
+            checked={showCompleteDialog}
+            onChange={(e) => setValue('showCompleteDialog', String(e.target.checked))}
+            className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+          />
+          <span>Show download complete dialog</span>
+        </label>
+        
+        <div className="ml-6 text-gray-400 pb-2">
+          Note: These settings don't relate to queue processing
+        </div>
+      </div>
+
+      <div className="border-b border-gray-600 mx-2"></div>
+
+      <div className="space-y-3 px-4 pt-2">
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input 
+            type="checkbox" 
+            checked={startImmediatelyWhenInfoDialog}
+            onChange={(e) => setValue('startImmediatelyWhenInfoDialog', String(e.target.checked))}
+            className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+          />
+          <span>Start downloading immediately while displaying "Download File Info" dialog</span>
+        </label>
+
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input 
+            type="checkbox" 
+            checked={showQueueSelectionOnLater}
+            onChange={(e) => setValue('showQueueSelectionOnLater', String(e.target.checked))}
+            className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+          />
+          <span>Show queue selection panel on pressing "Download Later" button</span>
+        </label>
+
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input 
+            type="checkbox" 
+            checked={showQueueSelectionOnBatchClose}
+            onChange={(e) => setValue('showQueueSelectionOnBatchClose', String(e.target.checked))}
+            className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+          />
+          <span>Show queue selection panel on closing batch download dialogs</span>
+        </label>
+
+        <label className="flex items-center gap-2 cursor-pointer pb-2">
+          <input 
+            type="checkbox" 
+            checked={ignoreFileModTime}
+            onChange={(e) => setValue('ignoreFileModTime', String(e.target.checked))}
+            className="w-4 h-4 accent-blue-600 border border-gray-400 rounded-sm"
+          />
+          <span>Ignore file modification time changes when resuming a download</span>
+        </label>
+      </div>
+
+      <div className="border-b border-gray-600 mx-2"></div>
+
+      <div className="px-4 pt-2 pb-6 space-y-2">
+        <label className="block mb-1">If a duplicate download link is added:</label>
+        <select
+          value={duplicateLinkAction}
+          onChange={(e) => setValue('duplicateLinkAction', e.target.value)}
+          className="border border-gray-400 p-1 w-full bg-white text-black outline-none"
+        >
+          <option value="ask">Show a dialog and ask what to do.</option>
+          <option value="numbered">Add the duplicate with a numbered file name</option>
+          <option value="overwrite">Add the duplicate and overwrite the existing file</option>
+          <option value="resume">If existing file is complete, show download complete dialog; otherwise resume it.</option>
+        </select>
+      </div>
+
     </div>
   );
 }
