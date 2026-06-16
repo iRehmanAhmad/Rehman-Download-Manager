@@ -64,6 +64,7 @@ export function SettingsPage() {
 
 import { DownloadPanelsDialog } from '../components/settings/DownloadPanelsDialog';
 import { AddressExceptionsDialog } from '../components/settings/AddressExceptionsDialog';
+import { CategoryDialog } from '../components/settings/CategoryDialog';
 
 function GeneralSettings() {
   const settings = useSettingsStore((s) => s.settings);
@@ -363,6 +364,8 @@ function FolderSettings() {
   const setCategories = useSettingsStore((s) => s.setCategories);
   
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('');
+  const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
+  const [categoryDialogMode, setCategoryDialogMode] = useState<'new' | 'edit'>('new');
 
   useEffect(() => {
     if (categories.length > 0 && !selectedCategoryId) {
@@ -382,6 +385,16 @@ function FolderSettings() {
     
     // Persist
     await window.api.categories.update(updatedCategory);
+  };
+
+  const handleCategorySave = async (updates: Partial<Category>) => {
+    if (categoryDialogMode === 'new') {
+      const newCategory = await window.api.categories.create(updates as any);
+      setCategories([...categories, newCategory]);
+      setSelectedCategoryId(newCategory.id);
+    } else {
+      await handleCategoryUpdate(updates);
+    }
   };
 
   const handleBrowseDefaultDir = async () => {
@@ -435,8 +448,19 @@ function FolderSettings() {
             </select>
           </div>
           <div className="flex flex-col gap-2">
-            <button className="px-6 py-1 bg-white border border-gray-400 rounded hover:bg-[#e0e0e0] w-24">New</button>
-            <button className="px-6 py-1 bg-[#f0f0f0] border border-gray-300 text-gray-400 rounded cursor-not-allowed w-24">Edit...</button>
+            <button 
+              onClick={() => { setCategoryDialogMode('new'); setCategoryDialogOpen(true); }}
+              className="px-6 py-1 bg-white border border-gray-400 rounded hover:bg-[#e0e0e0] w-24"
+            >
+              New
+            </button>
+            <button 
+              onClick={() => { setCategoryDialogMode('edit'); setCategoryDialogOpen(true); }}
+              disabled={isGeneral}
+              className={`px-6 py-1 border rounded w-24 ${isGeneral ? 'bg-[#f0f0f0] border-gray-300 text-gray-400 cursor-not-allowed' : 'bg-[#f0f0f0] border-gray-400 hover:bg-[#e0e0e0]'}`}
+            >
+              Edit...
+            </button>
           </div>
         </div>
 
@@ -523,6 +547,14 @@ function FolderSettings() {
           faster assembling of downloaded files.
         </p>
       </div>
+
+      <CategoryDialog
+        open={categoryDialogOpen}
+        onOpenChange={setCategoryDialogOpen}
+        category={categoryDialogMode === 'edit' ? selectedCategory : null}
+        onSave={handleCategorySave}
+        title={categoryDialogMode === 'new' ? 'Adding a category to IDM categories list' : 'Editing a category from IDM categories list'}
+      />
 
     </div>
   );

@@ -59,7 +59,9 @@ CREATE TABLE IF NOT EXISTS categories (
     color           TEXT,
     sort_order      INTEGER DEFAULT 0,
     extensions      TEXT,
-    save_last_folder INTEGER DEFAULT 0
+    save_last_folder INTEGER DEFAULT 0,
+    sites           TEXT,
+    sites_enabled   INTEGER DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS schedules (
@@ -181,6 +183,13 @@ export async function initDatabase(): Promise<void> {
   try {
     db.exec("ALTER TABLE categories ADD COLUMN extensions TEXT");
     db.exec("ALTER TABLE categories ADD COLUMN save_last_folder INTEGER DEFAULT 0");
+  } catch (e) {
+    // Columns might already exist
+  }
+
+  try {
+    db.exec("ALTER TABLE categories ADD COLUMN sites TEXT");
+    db.exec("ALTER TABLE categories ADD COLUMN sites_enabled INTEGER DEFAULT 0");
   } catch (e) {
     // Columns might already exist
   }

@@ -7,4 +7,6 @@ export interface Category {
   sortOrder: number;
   extensions?: string;
   saveLastFolder?: boolean;
+  sites?: string;
+  sitesEnabled?: boolean;
 }

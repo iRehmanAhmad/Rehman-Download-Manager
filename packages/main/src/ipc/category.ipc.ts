@@ -7,7 +7,7 @@ export function registerCategoryIpc(): void {
   ipcMain.handle('category:get-all', (): Category[] => {
     const db = getDatabase();
     const rows = db
-      .prepare('SELECT id, name, default_dir, color, sort_order, extensions, save_last_folder FROM categories ORDER BY sort_order')
+      .prepare('SELECT id, name, default_dir, color, sort_order, extensions, save_last_folder, sites, sites_enabled FROM categories ORDER BY sort_order')
       .all() as {
       id: string;
       name: string;
@@ -16,6 +16,8 @@ export function registerCategoryIpc(): void {
       sort_order: number;
       extensions: string | null;
       save_last_folder: number;
+      sites: string | null;
+      sites_enabled: number;
     }[];
     return rows.map((r) => ({
       id: r.id,
@@ -26,6 +28,8 @@ export function registerCategoryIpc(): void {
       sortOrder: r.sort_order,
       extensions: r.extensions || undefined,
       saveLastFolder: r.save_last_folder === 1,
+      sites: r.sites || undefined,
+      sitesEnabled: r.sites_enabled === 1,
     }));
   });
 
@@ -33,8 +37,8 @@ export function registerCategoryIpc(): void {
     const db = getDatabase();
     const id = `cat-${uuid().slice(0, 8)}`;
     db.prepare(
-      'INSERT INTO categories (id, name, default_dir, color, sort_order, extensions, save_last_folder) VALUES (?, ?, ?, ?, ?, ?, ?)',
-    ).run(id, category.name, category.defaultDir, category.color || null, category.sortOrder || 0, category.extensions || null, category.saveLastFolder ? 1 : 0);
+      'INSERT INTO categories (id, name, default_dir, color, sort_order, extensions, save_last_folder, sites, sites_enabled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    ).run(id, category.name, category.defaultDir, category.color || null, category.sortOrder || 0, category.extensions || null, category.saveLastFolder ? 1 : 0, category.sites || null, category.sitesEnabled ? 1 : 0);
     return { id, ...category };
   });
 
@@ -42,9 +46,9 @@ export function registerCategoryIpc(): void {
     const db = getDatabase();
     const result = db
       .prepare(
-        'UPDATE categories SET name = ?, default_dir = ?, color = ?, sort_order = ?, extensions = ?, save_last_folder = ? WHERE id = ?',
+        'UPDATE categories SET name = ?, default_dir = ?, color = ?, sort_order = ?, extensions = ?, save_last_folder = ?, sites = ?, sites_enabled = ? WHERE id = ?',
       )
-      .run(category.name, category.defaultDir, category.color || null, category.sortOrder || 0, category.extensions || null, category.saveLastFolder ? 1 : 0, category.id);
+      .run(category.name, category.defaultDir, category.color || null, category.sortOrder || 0, category.extensions || null, category.saveLastFolder ? 1 : 0, category.sites || null, category.sitesEnabled ? 1 : 0, category.id);
     return result.changes > 0;
   });
 
