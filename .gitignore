@@ -14,6 +14,22 @@ test-results/
 
 # Tooling output
 graphify-out/
+node_modules/
+dist/
+out/
+.electron-vite/
+*.log
+*.tsbuildinfo
+.env
+.env.local
+.DS_Store
+Thumbs.db
+coverage/
+playwright-report/
+test-results/
+
+# Tooling output
+graphify-out/
 
 # Downloaded files
 Music/
@@ -21,3 +37,5 @@ Music
 Videos/
 Documents/
 Downloads/
+release/
+scratch/

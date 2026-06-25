@@ -6,6 +6,7 @@ import { MenuBar } from './components/layout/MenuBar';
 import { TopToolbar } from './components/layout/TopToolbar';
 import { Sidebar } from './components/layout/Sidebar';
 import { StatusBar } from './components/layout/StatusBar';
+import { UpdateNotifier } from './components/updater/UpdateNotifier';
 import { DownloadsPage } from './pages/DownloadsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { SchedulerPage } from './pages/SchedulerPage';
@@ -102,6 +103,7 @@ export function App() {
         onDrop={handleDrop}
       >
         <TitleBar />
+        <UpdateNotifier />
         <MenuBar />
         <TopToolbar />
         <div className="flex flex-1 overflow-hidden">

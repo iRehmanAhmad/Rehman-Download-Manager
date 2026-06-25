@@ -17,6 +17,7 @@ export const IPC_CHANNELS = {
   DOWNLOAD_ERROR: 'download:error',
   DOWNLOAD_STATUS_CHANGED: 'download:status-changed',
   DOWNLOAD_ADDED: 'download:added',
+  SHOW_ADD_DOWNLOAD_DIALOG: 'app:show-add-download-dialog',
   DOWNLOAD_GET_FILE_INFO: 'download:get-file-info',
   DOWNLOAD_GET_FILE_INFO_BASIC: 'download:get-file-info-basic',
   DOWNLOAD_DISCARD_PRE: 'download:discard-pre',

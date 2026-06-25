@@ -225,9 +225,9 @@ export function SchedulerPage() {
     if (!formData) return null;
 
     return (
-      <div className="p-4 space-y-3 text-sm text-slate-700 dark:text-slate-300">
+      <div className="p-3 space-y-2 text-sm text-slate-700 dark:text-slate-300">
         {/* Top Type Toggles */}
-        <div className="flex gap-6">
+        <div className="flex gap-4">
           <label className="flex items-center gap-2 cursor-pointer">
             <input 
               type="radio" 
@@ -248,7 +248,7 @@ export function SchedulerPage() {
           </label>
         </div>
 
-        <div className="flex flex-wrap items-center gap-8 pt-2 border-t border-slate-200 dark:border-slate-300 dark:border-slate-700/50">
+        <div className="flex flex-wrap items-center gap-4 pt-1 border-t border-slate-200 dark:border-slate-300 dark:border-slate-700/50">
           <label className="flex items-center gap-2 cursor-pointer">
             <input 
               type="checkbox" 
@@ -260,8 +260,8 @@ export function SchedulerPage() {
           </label>
         </div>
 
-        <div className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-300 dark:border-slate-700/50">
-          <div className="flex items-center gap-4">
+        <div className="space-y-2 pt-1 border-t border-slate-200 dark:border-slate-300 dark:border-slate-700/50">
+          <div className="flex items-center gap-2">
             <label className="flex items-center gap-2 cursor-pointer">
               <input 
                 type="checkbox" 
@@ -281,7 +281,7 @@ export function SchedulerPage() {
           </div>
 
           {formData.scheduleType === 'periodic' ? (
-            <div className="flex items-center gap-4 pl-6">
+            <div className="flex items-center gap-2 pl-4">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input 
                   type="checkbox" 
@@ -309,8 +309,8 @@ export function SchedulerPage() {
               <span>minutes</span>
             </div>
           ) : (
-            <div className="pl-6 space-y-2">
-              <div className="flex items-center gap-4">
+            <div className="pl-4 space-y-1">
+              <div className="flex items-center gap-2">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input 
                     type="radio" 
@@ -328,7 +328,7 @@ export function SchedulerPage() {
                   className="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 disabled:opacity-50"
                 />
               </div>
-              <div className="flex items-start gap-4">
+              <div className="flex items-start gap-2">
                 <label className="flex items-center gap-2 cursor-pointer mt-1">
                   <input 
                     type="radio" 
@@ -361,8 +361,8 @@ export function SchedulerPage() {
           )}
         </div>
 
-        <div className="flex flex-wrap items-center gap-x-8 gap-y-3 pt-2 border-t border-slate-200 dark:border-slate-300 dark:border-slate-700/50">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 pt-1 border-t border-slate-200 dark:border-slate-300 dark:border-slate-700/50">
+          <div className="flex items-center gap-2">
             <label className="flex items-center gap-2 cursor-pointer">
               <input 
                 type="checkbox" 
@@ -380,8 +380,7 @@ export function SchedulerPage() {
               className="bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded px-2 py-1 disabled:opacity-50"
             />
           </div>
-          
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <label className="flex items-center gap-2 cursor-pointer">
               <input 
                 type="checkbox" 
@@ -401,7 +400,7 @@ export function SchedulerPage() {
           </div>
         </div>
 
-        <div className="space-y-2 pt-2 border-t border-slate-200 dark:border-slate-300 dark:border-slate-700/50">
+        <div className="space-y-1 pt-1 border-t border-slate-200 dark:border-slate-300 dark:border-slate-700/50">
           <label className="flex items-center gap-2 cursor-pointer">
             <input 
               type="checkbox" 
@@ -422,8 +421,8 @@ export function SchedulerPage() {
             <button disabled={!formData.openFileWhenDone} className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded disabled:opacity-50">...</button>
           </div>
           
-          <div className="grid grid-cols-[1fr_1.5fr] gap-4 pt-1">
-            <div className="space-y-2">
+          <div className="grid grid-cols-[1fr_1.5fr] gap-2 pt-0.5">
+            <div className="space-y-1">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" checked={formData.hangUpModem} onChange={(e) => updateForm({ hangUpModem: e.target.checked })} className="rounded accent-brand-500" />
                 Disconnect from internet
@@ -433,8 +432,8 @@ export function SchedulerPage() {
                 Exit app when done
               </label>
             </div>
-            <div className="space-y-2">
-              <div className="flex items-center gap-4">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input type="checkbox" checked={formData.turnOffComputer} onChange={(e) => updateForm({ turnOffComputer: e.target.checked })} className="rounded accent-brand-500" />
                   Turn off computer:

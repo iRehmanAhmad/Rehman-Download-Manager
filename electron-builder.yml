@@ -6,6 +6,9 @@ directories:
 files:
   - dist/**/*
   - package.json
+asarUnpack:
+  - "**/node_modules/youtube-dl-exec/**/*"
+  - "**/node_modules/ffmpeg-static/**/*"
 win:
   target:
     - target: nsis

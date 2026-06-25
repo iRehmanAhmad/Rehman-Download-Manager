@@ -1,10 +1,12 @@
 import { app, BrowserWindow, Tray, Menu, nativeImage, screen } from 'electron';
 import { join } from 'path';
 import * as fs from 'fs';
+import contextMenu from 'electron-context-menu';
 import { registerAllIpc, getDownloadEngine } from './ipc';
 import { initDatabase, getDatabase } from './storage/database';
 import { DownloadEngine } from './download/engine';
 import { startBrowserBridge, stopBrowserBridge } from './browser-bridge';
+import { installNativeHost } from './browser-bridge/install-host';
 import { startClipboardMonitor, stopClipboardMonitor } from './clipboard';
 import { initNotifications } from './notifications';
 import { getQueueManager } from './queue/queue.manager';
@@ -162,6 +164,7 @@ app.whenReady().then(async () => {
   loadEngineSettings();
   initNotifications();
   if (getClipboardEnabled()) startClipboardMonitor();
+  installNativeHost();
   startBrowserBridge(engine);
   getQueueManager().start();
   loadEnabledPlugins();

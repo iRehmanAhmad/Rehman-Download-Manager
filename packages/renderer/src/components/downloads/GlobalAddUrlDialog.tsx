@@ -23,6 +23,9 @@ export function GlobalAddUrlDialog() {
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [autoDetectedCategory, setAutoDetectedCategory] = useState(false);
   
+  const [availableFormats, setAvailableFormats] = useState<{ id: string, label: string, isAudioOnly: boolean }[]>([]);
+  const [selectedFormatId, setSelectedFormatId] = useState<string>('');
+
   const submittedRef = useRef(false);
 
   useEffect(() => {
@@ -87,6 +90,22 @@ export function GlobalAddUrlDialog() {
         if (!cancelled && info) {
           if (info.fileSize > 0) setFileSize(info.fileSize);
           if (info.preId) setPreId(info.preId);
+          
+          if (info.formats && info.formats.length > 0) {
+            setAvailableFormats(info.formats);
+            setSelectedFormatId(info.formats[0].id); // default to best available
+          } else {
+            setAvailableFormats([]);
+            setSelectedFormatId('');
+          }
+
+          if (info.filename) {
+            setFilepath((prev) => {
+              const baseDir = prev.substring(0, Math.max(prev.lastIndexOf('\\'), prev.lastIndexOf('/')) + 1) || '';
+              if (!baseDir) return info.filename as string;
+              return `${baseDir}${info.filename}`;
+            });
+          }
         }
       } catch (err) {
         // ignore
@@ -172,14 +191,32 @@ export function GlobalAddUrlDialog() {
       if (initialUrl) {
         setUrl(initialUrl);
       }
+      setAvailableFormats([]);
+      setSelectedFormatId('');
       setShowDialog(true);
       setShowAdvanced(false);
     };
-    
     window.addEventListener('open-add-url-dialog', handleOpenAddUrl);
+
+    // Listen to IPC event from main process (intercepted by extension)
+    const removeIpcListener = window.api.app?.onShowAddDownloadDialog?.((data) => {
+      submittedRef.current = false;
+      setUrl(data.url);
+      
+      // If we got a specific filename, we can try to set it, but usually the first useEffect 
+      // will run and set the filepath based on extractFilename(url). 
+      // If data.filename exists, we can let the UI logic handle it or override.
+      // For now, setting the URL is enough to trigger the metadata fetch and category detection.
+      
+      setAvailableFormats([]);
+      setSelectedFormatId('');
+      setShowDialog(true);
+      setShowAdvanced(false);
+    });
 
     return () => {
       window.removeEventListener('open-add-url-dialog', handleOpenAddUrl);
+      removeIpcListener?.();
     };
   }, [showDialog]);
 
@@ -206,7 +243,10 @@ export function GlobalAddUrlDialog() {
           numConnections: connections,
           checksum: checksum.trim() || undefined,
           paused,
-          metadata: { description: description.trim() },
+          metadata: { 
+            description: description.trim(),
+            ...(selectedFormatId ? { ytdlpFormat: selectedFormatId } : {})
+          },
           ...(preId ? { preId } : {})
         };
         const dl = await window.api.download.add(options);
@@ -224,7 +264,7 @@ export function GlobalAddUrlDialog() {
         setAdding(false);
       }
     },
-    [url, filepath, categoryId, connections, checksum, description, rememberPath, adding, addDownload, categories, preId],
+    [url, filepath, categoryId, connections, checksum, description, rememberPath, adding, addDownload, categories, preId, selectedFormatId],
   );
 
   const handleClose = () => setShowDialog(false);
@@ -311,6 +351,25 @@ export function GlobalAddUrlDialog() {
                 ))}
               </select>
             </div>
+
+            {availableFormats.length > 0 && (
+              <div className="w-48 space-y-1">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Video Quality
+                </label>
+                <select
+                  value={selectedFormatId}
+                  onChange={(e) => setSelectedFormatId(e.target.value)}
+                  className="w-full px-3 py-2 bg-slate-50 dark:bg-slate-800/50 border border-slate-300 dark:border-slate-600 rounded-lg text-sm text-slate-800 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 transition-all"
+                >
+                  {availableFormats.map((f) => (
+                    <option key={f.id} value={f.id}>
+                      {f.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
           
           <div className="flex items-center">

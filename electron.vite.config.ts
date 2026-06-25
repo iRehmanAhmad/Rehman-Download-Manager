@@ -9,10 +9,11 @@ export default defineConfig({
     build: {
       outDir: 'dist/main',
       rollupOptions: {
-        external: ['better-sqlite3'],
+        external: ['better-sqlite3', 'youtube-dl-exec', 'ffmpeg-static'],
         input: {
           index: resolve(__dirname, 'packages/main/src/index.ts'),
           'plugin-host': resolve(__dirname, 'packages/main/src/plugins/plugin-host.ts'),
+          'native-host': resolve(__dirname, 'packages/main/src/browser-bridge/native-host.js'),
         },
       },
     },

@@ -32,6 +32,7 @@
     "@typescript-eslint/parser": "^8.61.0",
     "@vitejs/plugin-react": "^4.7.0",
     "electron": "^42.4.0",
+    "electron-builder": "^24.13.3",
     "electron-vite": "^5.0.0",
     "eslint": "^10.5.0",
     "eslint-config-prettier": "^10.1.8",
@@ -41,6 +42,58 @@
     "vitest": "^4.1.8"
   },
   "dependencies": {
-    "https-proxy-agent": "^9.1.0"
+    "electron-context-menu": "^4.1.2",
+    "electron-log": "^5.4.4",
+    "electron-updater": "^6.8.9",
+    "ffmpeg-static": "^5.3.0",
+    "https-proxy-agent": "^9.1.0",
+    "youtube-dl-exec": "^3.1.8"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "ffmpeg-static"
+    ]
+  },
+  "build": {
+    "appId": "com.rdm.app",
+    "productName": "RDM",
+    "directories": {
+      "output": "release"
+    },
+    "asarUnpack": [
+      "dist/main/browser-bridge/native-host.js"
+    ],
+    "files": [
+      "dist/**/*"
+    ],
+    "extraFiles": [
+      {
+        "from": "node_modules/ffmpeg-static/ffmpeg.exe",
+        "to": "resources/app.asar.unpacked/node_modules/ffmpeg-static/ffmpeg.exe"
+      },
+      {
+        "from": "node_modules/youtube-dl-exec/bin/yt-dlp.exe",
+        "to": "resources/app.asar.unpacked/node_modules/youtube-dl-exec/bin/yt-dlp.exe"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "RDM"
+    }
   }
 }

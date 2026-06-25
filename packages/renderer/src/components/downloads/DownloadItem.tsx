@@ -28,10 +28,12 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
   const isActiveMatch = activeMatchId === download.id;
 
   const handleOpen = () => {
+    console.log('[DownloadItem] handleOpen called for id:', download.id);
     window.api.download.openFile(download.id);
   };
 
   const handleOpenFolder = () => {
+    console.log('[DownloadItem] handleOpenFolder called for id:', download.id);
     window.api.download.openFolder(download.id);
   };
 
@@ -41,26 +43,26 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
 
   const handlePause = (e?: any) => {
     e?.stopPropagation();
-    window.api.download.pause(download.id);
+    window.api.download.pause(download.id).catch(console.error);
     updateDownload(download.id, { status: 'paused' });
   };
 
   const handleResume = (e?: any) => {
     e?.stopPropagation();
-    window.api.download.resume(download.id);
+    window.api.download.resume(download.id).catch(console.error);
     updateDownload(download.id, { status: 'downloading' });
   };
 
   const handleCancel = (e?: any) => {
     e?.stopPropagation();
-    window.api.download.cancel(download.id);
+    window.api.download.cancel(download.id).catch(console.error);
     updateDownload(download.id, { status: 'cancelled' });
     setShowDialog(false);
   };
 
   const handleRemove = (e?: any) => {
     e?.stopPropagation();
-    window.api.download.remove(download.id);
+    window.api.download.remove(download.id).catch(console.error);
     removeDownload(download.id);
   };
 
@@ -124,9 +126,10 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
             id={`download-row-${download.id}`}
             onClick={handleClick}
             onDoubleClick={() => setShowDialog(true)}
-            className={`grid grid-cols-[24px_auto_80px_70px] md:grid-cols-[24px_auto_80px_80px_70px] lg:grid-cols-[24px_auto_80px_80px_100px_80px_70px] gap-2 px-4 py-2.5 items-center hover:bg-slate-200/60 dark:hover:bg-white/10 transition-colors group relative cursor-pointer ${
+            className={`grid grid-cols-[24px_auto_80px_60px] md:grid-cols-[24px_auto_80px_110px_60px] lg:grid-cols-[24px_auto_70px_130px_120px_90px_60px] xl:grid-cols-[24px_auto_80px_130px_140px_100px_90px_60px] gap-2 px-3 py-0.5 items-center hover:bg-slate-200/60 dark:hover:bg-white/10 transition-colors group relative cursor-pointer divide-x divide-slate-200/50 dark:divide-white/5 ${
               isSelected ? 'bg-brand-50 dark:bg-brand-500/20 hover:bg-brand-100 dark:hover:bg-brand-500/30 border-l-4 border-brand-500' 
               : isActiveMatch ? 'bg-yellow-50/50 dark:bg-yellow-900/20 border-l-4 border-yellow-400' 
+              : index % 2 === 0 ? 'bg-slate-500/5 dark:bg-white/[0.02] border-l-4 border-transparent'
               : 'border-l-4 border-transparent'
             }`}
           >
@@ -139,36 +142,41 @@ export function DownloadItem({ download, index, total, onMoveUp, onMoveDown }: D
         )}
 
         {/* # */}
-        <div className="text-center text-[11px] text-slate-500">{index + 1}</div>
+        <div className="text-center text-[11px] text-slate-500 pl-1">{index + 1}</div>
 
         {/* File Name */}
-        <div className="min-w-0 flex items-center gap-2">
+        <div className="min-w-0 flex items-center gap-2 pl-2">
           <div className={`w-2 h-2 rounded-full flex-shrink-0 ${statusColor} ${isSelected ? 'shadow-[0_0_8px_currentColor]' : ''}`} />
-          <span className={`text-[13px] truncate transition-colors ${isSelected ? 'text-brand-900 dark:text-brand-100 font-semibold' : 'text-slate-800 dark:text-slate-200 font-medium group-hover:text-slate-900 dark:group-hover:text-white'}`}>
+          <span className={`text-[13px] truncate transition-colors ${isSelected ? 'text-brand-900 dark:text-brand-100 font-normal' : 'text-slate-800 dark:text-slate-200 font-normal group-hover:text-slate-900 dark:group-hover:text-white'}`}>
             {renderHighlightedText(download.filename)}
           </span>
         </div>
 
         {/* Size */}
-        <div className="hidden md:block text-[11px] text-slate-500 dark:text-slate-400">
+        <div className="text-[11px] text-slate-500 dark:text-slate-400 pl-2">
           {formatFileSize(download.fileSize)}
         </div>
 
         {/* Status */}
-        <div className="text-[11px] text-slate-500 dark:text-slate-400 flex items-center gap-1">
+        <div className="hidden md:flex text-[11px] text-slate-500 dark:text-slate-400 items-center gap-1 pl-2">
           <span>{statusLabel}</span>
           {download.status === 'downloading' && (
             <span className="text-[10px] text-brand-600 dark:text-brand-400 font-medium">{Math.round(download.progress)}%</span>
           )}
         </div>
 
+        {/* Added On */}
+        <div className="hidden lg:block text-[11px] text-slate-500 dark:text-slate-400 pl-2">
+          {download.addedAt ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }).format(new Date(download.addedAt)) : '--'}
+        </div>
+
         {/* Time Left */}
-        <div className="hidden lg:block text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+        <div className="hidden lg:block text-[11px] text-slate-500 dark:text-slate-400 font-mono pl-2">
           {download.status === 'downloading' ? formatEta(download.eta) : '--'}
         </div>
 
         {/* Transfer Rate */}
-        <div className="hidden lg:block text-[11px] text-slate-500 dark:text-slate-400 font-mono">
+        <div className="hidden xl:block text-[11px] text-slate-500 dark:text-slate-400 font-mono pl-2">
           {download.status === 'downloading' ? `${formatFileSize(download.speed)}/s` : '--'}
         </div>
 

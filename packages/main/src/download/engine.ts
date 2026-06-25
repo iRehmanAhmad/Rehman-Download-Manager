@@ -18,6 +18,7 @@ import { DownloadRepository } from '../storage/download.repository';
 import { getDatabase } from '../storage/database';
 import { HttpsProxyAgent } from 'https-proxy-agent';
 import { spawn } from 'node:child_process';
+import { YtdlpDownloadTask } from './ytdlp.task';
 
 const MIN_CHUNK_SIZE = 1024 * 256;
 const SPEED_AVERAGE_WINDOW = 3000;
@@ -43,288 +44,23 @@ export interface DownloadEngineEvents {
   statusChanged: (download: Download) => void;
 }
 
-export class DownloadEngine extends EventEmitter {
-  private tasks = new Map<string, DownloadTask>();
-  private queue: string[] = [];
-  private maxConcurrent: number;
-  private globalSpeedLimit: number;
-  private tempDir: string;
-  private saveTimer: ReturnType<typeof setInterval> | null = null;
-
-  constructor(maxConcurrent = 5, globalSpeedLimit = 0) {
-    super();
-    this.maxConcurrent = maxConcurrent;
-    this.globalSpeedLimit = globalSpeedLimit;
-    // Store partial chunks under userData (persistent) rather than the OS temp
-    // dir, which can be purged on reboot/cleanup and silently truncate resumes.
-    this.tempDir = path.join(app.getPath('userData'), 'partials');
-    fs.mkdirSync(this.tempDir, { recursive: true });
-    
-    this.loadFromDB();
-    this.startSaveLoop();
-  }
-
-  private loadFromDB(): void {
-    const dls = DownloadRepository.loadAllDownloads();
-    for (const dl of dls) {
-      // Defensive: loadAllDownloads already demotes crashed in-flight
-      // downloads to 'paused', but normalize any stray 'downloading' too.
-      if (dl.status === 'downloading') {
-        dl.status = 'queued';
-        DownloadRepository.saveDownload(dl);
-      }
-      const task = new DownloadTask(dl, this.tempDir, () => this.getGlobalBytesPerSecond());
-      this.tasks.set(dl.id, task);
-
-      // Re-enqueue items that were genuinely waiting in the queue so they
-      // resume after a restart. Crash-paused downloads stay paused for the
-      // user to resume manually (safer than silently restarting them).
-      if (dl.status === 'queued') {
-        this.bindTaskListeners(task);
-        this.queue.push(dl.id);
-      }
-    }
-    this.processQueue();
-  }
-
-  /** Bind engine-level event forwarding onto a task. */
-  private bindTaskListeners(task: DownloadTask): void {
-    task.removeAllListeners();
-    task.on('progress', (dl: Download) => this.emit('progress', dl));
-    task.on('completed', (dl: Download) => {
-      this.emit('completed', dl);
-      this.processQueue();
-    });
-    task.on('error', (dl: Download) => {
-      this.emit('error', dl);
-      this.processQueue();
-    });
-  }
-
-  private startSaveLoop(): void {
-    this.saveTimer = setInterval(() => {
-      for (const [, task] of this.tasks) {
-        if (task.status === 'downloading' || task.status === 'paused') {
-          DownloadRepository.saveDownload(task.snapshot());
-        }
-      }
-    }, 5000);
-  }
-
-  addPreDownload(download: Download): void {
-    const task = new DownloadTask(download, this.tempDir, () => this.getGlobalBytesPerSecond());
-    this.tasks.set(download.id, task);
-    // Do not queue, do not save. Start immediately.
-    task.start().catch((err) => console.error('Pre-download error:', err));
-  }
-
-  discardPreDownload(preId: string): boolean {
-    const task = this.tasks.get(preId);
-    if (!task) return false;
-    task.cancel();
-    this.tasks.delete(preId);
-    return true;
-  }
-
-  add(download: Download): void {
-    let task = this.tasks.get(download.id);
-    if (task) {
-      // Promote pre-download
-      task.updateOptions(download);
-      if (download.status === 'paused' && task.status === 'downloading') {
-        task.pause();
-      }
-      
-      // Bind listeners now that it's promoted
-      this.bindTaskListeners(task);
-
-      if (!this.queue.includes(task.snapshot().id)) {
-        if (task.status !== 'paused') {
-          this.queue.push(task.snapshot().id);
-        }
-        // activeCount is a derived getter (counts tasks in 'downloading'
-        // state), so a running task is already reflected — no manual bump.
-      }
-    } else {
-      task = new DownloadTask(download, this.tempDir, () => this.getGlobalBytesPerSecond());
-      this.tasks.set(download.id, task);
-      if (task.status === 'downloading' && !this.queue.includes(task.snapshot().id)) {
-        this.queue.push(task.snapshot().id);
-        // We need to call processQueue to start it if there is room
-        this.processQueue();
-      }
-    }
-    
-    // Explicitly emit progress to immediately update the UI with current state
-    this.emit('progress', task.snapshot());
-    DownloadRepository.saveDownload(task.snapshot());
-    this.processQueue();
-  }
-
-  pause(id: string): boolean {
-    const task = this.tasks.get(id);
-    if (!task) return false;
-    task.pause();
-    DownloadRepository.saveDownload(task.snapshot());
-    this.queue = this.queue.filter((qid) => qid !== id);
-    this.processQueue();
-    return true;
-  }
-
-  resume(id: string): boolean {
-    const task = this.tasks.get(id);
-    if (!task) return false;
-    task.resume();
-    DownloadRepository.saveDownload(task.snapshot());
-    if (!this.queue.includes(id)) {
-      this.queue.push(id);
-    }
-    this.processQueue();
-    return true;
-  }
-
-  cancel(id: string): boolean {
-    const task = this.tasks.get(id);
-    if (!task) return false;
-    task.cancel();
-    DownloadRepository.saveDownload(task.snapshot());
-    this.queue = this.queue.filter((qid) => qid !== id);
-    this.processQueue();
-    return true;
-  }
-
-  remove(id: string): boolean {
-    const task = this.tasks.get(id);
-    if (task) {
-      task.cancel();
-    }
-    this.queue = this.queue.filter((qid) => qid !== id);
-    this.tasks.delete(id);
-    DownloadRepository.removeDownload(id);
-    this.processQueue();
-    return true;
-  }
-
-  updateFilePath(id: string, filepath: string): boolean {
-    const task = this.tasks.get(id);
-    if (!task) return false;
-    task.updateFilePath(filepath);
-    DownloadRepository.saveDownload(task.snapshot());
-    this.emit('progress', task.snapshot());
-    return true;
-  }
-
-  reorder(orderedIds: string[]): void {
-    const currentSet = new Set(this.queue);
-    this.queue = orderedIds.filter((id) => currentSet.has(id));
-    for (const id of this.queue) {
-      if (!orderedIds.includes(id)) {
-        this.queue.push(id);
-      }
-    }
-  }
-
-  setSpeedLimit(id: string, limit: number): boolean {
-    const task = this.tasks.get(id);
-    if (!task) return false;
-    task.speedLimit = limit;
-    return true;
-  }
-
-  setConnections(id: string, count: number): boolean {
-    const task = this.tasks.get(id);
-    if (!task) return false;
-    task.numConnections = Math.max(1, Math.min(count, MAX_CONNECTIONS));
-    return true;
-  }
-
-  setMaxConcurrent(n: number): void {
-    this.maxConcurrent = n;
-    this.processQueue();
-  }
-
-  setGlobalSpeedLimit(limit: number): void {
-    this.globalSpeedLimit = limit;
-  }
-
-  getDownload(id: string): Download | undefined {
-    return this.tasks.get(id)?.snapshot();
-  }
-
-  getAll(): Download[] {
-    return Array.from(this.tasks.values()).map((t) => t.snapshot());
-  }
-
-  getQueueOrder(): string[] {
-    return [...this.queue];
-  }
-
-  getQueueStatus(): { queue: string[]; activeCount: number; maxConcurrent: number; globalSpeedLimit: number; totalSpeed: number } {
-    let totalSpeed = 0;
-    for (const [, task] of this.tasks) {
-      totalSpeed += task.currentSpeed;
-    }
-    return {
-      queue: [...this.queue],
-      activeCount: this.activeCount,
-      maxConcurrent: this.maxConcurrent,
-      globalSpeedLimit: this.globalSpeedLimit,
-      totalSpeed,
-    };
-  }
-
-  pauseAll(): void {
-    for (const [, task] of this.tasks) {
-      task.pause();
-    }
-    this.queue = [];
-  }
-
-  clearCompleted(): void {
-    for (const [id, task] of this.tasks) {
-      if (task.status === 'completed') {
-        this.tasks.delete(id);
-      }
-    }
-    this.queue = this.queue.filter(id => this.tasks.has(id));
-  }
-
-  resumeAll(): void {
-    this.queue = Array.from(this.tasks.keys());
-    this.processQueue();
-  }
-
-  get activeCount(): number {
-    let count = 0;
-    for (const [, task] of this.tasks) {
-      if (task.status === 'downloading') count++;
-    }
-    return count;
-  }
-
-  private getGlobalBytesPerSecond(): number {
-    if (this.globalSpeedLimit <= 0) return 0;
-    const active = this.activeCount;
-    if (active === 0) return 0;
-    return this.globalSpeedLimit / active;
-  }
-
-  private processQueue(): void {
-    while (this.activeCount < this.maxConcurrent && this.queue.length > 0) {
-      const id = this.queue.shift()!;
-      const task = this.tasks.get(id);
-      if (!task) continue;
-      if (task.status === 'cancelled' || task.status === 'completed') continue;
-
-      this.bindTaskListeners(task);
-      task.start().catch((err) => {
-        console.error('Unhandled task start error:', err);
-      });
-    }
-  }
+export interface IDownloadTask extends EventEmitter {
+  speedLimit: number;
+  numConnections: number;
+  readonly status: string;
+  readonly currentSpeed: number;
+  snapshot(): Download;
+  updateFilePath(filepath: string): void;
+  updateOptions(opts: Partial<Download>): void;
+  start(): Promise<void>;
+  pause(): void;
+  resume(): void;
+  cancel(): void;
 }
 
-class DownloadTask extends EventEmitter {
+
+
+export class HttpDownloadTask extends EventEmitter implements IDownloadTask {
   private dl: Download;
   private tempDir: string;
   private activeChunks: Set<ChunkStream> = new Set();
@@ -1243,3 +979,296 @@ class DownloadTask extends EventEmitter {
     return total / span;
   }
 }
+export class DownloadEngine extends EventEmitter {
+  private tasks = new Map<string, IDownloadTask>();
+  private queue: string[] = [];
+  private maxConcurrent: number;
+  private globalSpeedLimit: number;
+  private tempDir: string;
+  private saveTimer: ReturnType<typeof setInterval> | null = null;
+
+  constructor(maxConcurrent = 5, globalSpeedLimit = 0) {
+    super();
+    this.maxConcurrent = maxConcurrent;
+    this.globalSpeedLimit = globalSpeedLimit;
+    // Store partial chunks under userData (persistent) rather than the OS temp
+    // dir, which can be purged on reboot/cleanup and silently truncate resumes.
+    this.tempDir = path.join(app.getPath('userData'), 'partials');
+    fs.mkdirSync(this.tempDir, { recursive: true });
+    
+    this.loadFromDB();
+    this.startSaveLoop();
+  }
+
+  
+  private createTask(download: Download): IDownloadTask {
+    if (download.type === 'ytdlp') {
+      return new YtdlpDownloadTask(download, this.tempDir, () => this.getGlobalBytesPerSecond());
+    }
+    return new HttpDownloadTask(download, this.tempDir, () => this.getGlobalBytesPerSecond());
+  }
+
+  private loadFromDB(): void {
+    const dls = DownloadRepository.loadAllDownloads();
+    for (const dl of dls) {
+      // Defensive: loadAllDownloads already demotes crashed in-flight
+      // downloads to 'paused', but normalize any stray 'downloading' too.
+      if (dl.status === 'downloading') {
+        dl.status = 'queued';
+        DownloadRepository.saveDownload(dl);
+      }
+      const task = this.createTask(dl);
+      this.tasks.set(dl.id, task);
+
+      // Re-enqueue items that were genuinely waiting in the queue so they
+      // resume after a restart. Crash-paused downloads stay paused for the
+      // user to resume manually (safer than silently restarting them).
+      if (dl.status === 'queued') {
+        this.bindTaskListeners(task);
+        this.queue.push(dl.id);
+      }
+    }
+    this.processQueue();
+  }
+
+  /** Bind engine-level event forwarding onto a task. */
+  private bindTaskListeners(task: IDownloadTask): void {
+    task.removeAllListeners();
+    task.on('progress', (dl: Download) => this.emit('progress', dl));
+    task.on('completed', (dl: Download) => {
+      this.emit('completed', dl);
+      this.processQueue();
+    });
+    task.on('error', (dl: Download) => {
+      this.emit('error', dl);
+      this.processQueue();
+    });
+  }
+
+  private startSaveLoop(): void {
+    this.saveTimer = setInterval(() => {
+      for (const [, task] of this.tasks) {
+        if (task.status === 'downloading' || task.status === 'paused') {
+          DownloadRepository.saveDownload(task.snapshot());
+        }
+      }
+    }, 5000);
+  }
+
+  addPreDownload(download: Download): void {
+    const task = this.createTask(download);
+    this.tasks.set(download.id, task);
+    // Do not queue, do not save. Start immediately.
+    task.start().catch((err) => console.error('Pre-download error:', err));
+  }
+
+  discardPreDownload(preId: string): boolean {
+    const task = this.tasks.get(preId);
+    if (!task) return false;
+    task.cancel();
+    this.tasks.delete(preId);
+    return true;
+  }
+
+  add(download: Download): void {
+    let task = this.tasks.get(download.id);
+    if (task) {
+      // Promote pre-download
+      task.updateOptions(download);
+      if (download.status === 'paused' && task.status === 'downloading') {
+        task.pause();
+      }
+      
+      const snap = task.snapshot();
+      if (snap.status === 'error') {
+        // If it failed during pre-download (e.g. missing filepath for yt-dlp), reset it.
+        (task as any).dl.status = 'queued';
+      }
+
+      this.bindTaskListeners(task);
+
+      if (!this.queue.includes(task.snapshot().id)) {
+        if (task.status !== 'paused') {
+          this.queue.push(task.snapshot().id);
+          this.processQueue();
+        }
+      }
+    } else {
+      task = this.createTask(download);
+      this.tasks.set(download.id, task);
+      if (task.status !== 'paused' && !this.queue.includes(task.snapshot().id)) {
+        this.queue.push(task.snapshot().id);
+        // We need to call processQueue to start it if there is room
+        this.processQueue();
+      }
+    }
+    
+    // Explicitly emit progress to immediately update the UI with current state
+    this.emit('progress', task.snapshot());
+    DownloadRepository.saveDownload(task.snapshot());
+    this.processQueue();
+  }
+
+  pause(id: string): boolean {
+    const task = this.tasks.get(id);
+    if (!task) return false;
+    task.pause();
+    DownloadRepository.saveDownload(task.snapshot());
+    this.queue = this.queue.filter((qid) => qid !== id);
+    this.processQueue();
+    return true;
+  }
+
+  resume(id: string): boolean {
+    const task = this.tasks.get(id);
+    if (!task) return false;
+    task.resume();
+    DownloadRepository.saveDownload(task.snapshot());
+    if (!this.queue.includes(id)) {
+      this.queue.push(id);
+    }
+    this.processQueue();
+    return true;
+  }
+
+  cancel(id: string): boolean {
+    const task = this.tasks.get(id);
+    if (!task) return false;
+    task.cancel();
+    DownloadRepository.saveDownload(task.snapshot());
+    this.queue = this.queue.filter((qid) => qid !== id);
+    this.processQueue();
+    return true;
+  }
+
+  remove(id: string): boolean {
+    const task = this.tasks.get(id);
+    if (task) {
+      task.cancel();
+    }
+    this.queue = this.queue.filter((qid) => qid !== id);
+    this.tasks.delete(id);
+    DownloadRepository.removeDownload(id);
+    this.processQueue();
+    return true;
+  }
+
+  updateFilePath(id: string, filepath: string): boolean {
+    const task = this.tasks.get(id);
+    if (!task) return false;
+    task.updateFilePath(filepath);
+    DownloadRepository.saveDownload(task.snapshot());
+    this.emit('progress', task.snapshot());
+    return true;
+  }
+
+  reorder(orderedIds: string[]): void {
+    const currentSet = new Set(this.queue);
+    this.queue = orderedIds.filter((id) => currentSet.has(id));
+    for (const id of this.queue) {
+      if (!orderedIds.includes(id)) {
+        this.queue.push(id);
+      }
+    }
+  }
+
+  setSpeedLimit(id: string, limit: number): boolean {
+    const task = this.tasks.get(id);
+    if (!task) return false;
+    task.speedLimit = limit;
+    return true;
+  }
+
+  setConnections(id: string, count: number): boolean {
+    const task = this.tasks.get(id);
+    if (!task) return false;
+    task.numConnections = Math.max(1, Math.min(count, MAX_CONNECTIONS));
+    return true;
+  }
+
+  setMaxConcurrent(n: number): void {
+    this.maxConcurrent = n;
+    this.processQueue();
+  }
+
+  setGlobalSpeedLimit(limit: number): void {
+    this.globalSpeedLimit = limit;
+  }
+
+  getDownload(id: string): Download | undefined {
+    return this.tasks.get(id)?.snapshot();
+  }
+
+  getAll(): Download[] {
+    return Array.from(this.tasks.values()).map((t) => t.snapshot());
+  }
+
+  getQueueOrder(): string[] {
+    return [...this.queue];
+  }
+
+  getQueueStatus(): { queue: string[]; activeCount: number; maxConcurrent: number; globalSpeedLimit: number; totalSpeed: number } {
+    let totalSpeed = 0;
+    for (const [, task] of this.tasks) {
+      totalSpeed += task.currentSpeed;
+    }
+    return {
+      queue: [...this.queue],
+      activeCount: this.activeCount,
+      maxConcurrent: this.maxConcurrent,
+      globalSpeedLimit: this.globalSpeedLimit,
+      totalSpeed,
+    };
+  }
+
+  pauseAll(): void {
+    for (const [, task] of this.tasks) {
+      task.pause();
+    }
+    this.queue = [];
+  }
+
+  clearCompleted(): void {
+    for (const [id, task] of this.tasks) {
+      if (task.status === 'completed') {
+        this.tasks.delete(id);
+      }
+    }
+    this.queue = this.queue.filter(id => this.tasks.has(id));
+  }
+
+  resumeAll(): void {
+    this.queue = Array.from(this.tasks.keys());
+    this.processQueue();
+  }
+
+  get activeCount(): number {
+    let count = 0;
+    for (const [, task] of this.tasks) {
+      if (task.status === 'downloading') count++;
+    }
+    return count;
+  }
+
+  private getGlobalBytesPerSecond(): number {
+    if (this.globalSpeedLimit <= 0) return 0;
+    const active = this.activeCount;
+    if (active === 0) return 0;
+    return this.globalSpeedLimit / active;
+  }
+
+  private processQueue(): void {
+    while (this.activeCount < this.maxConcurrent && this.queue.length > 0) {
+      const id = this.queue.shift()!;
+      const task = this.tasks.get(id);
+      if (!task) continue;
+      if (task.status === 'cancelled' || task.status === 'completed') continue;
+
+      this.bindTaskListeners(task);
+      task.start().catch((err) => {
+        console.error('Unhandled task start error:', err);
+      });
+    }
+  }
+}
+

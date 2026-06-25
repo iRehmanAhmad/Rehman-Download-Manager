@@ -10,6 +10,7 @@ describe('IPC Channels', () => {
 
   it('contains all phase 1-9 channels', () => {
     expect(IPC_CHANNELS.DOWNLOAD_ADD).toBeDefined();
+    expect(IPC_CHANNELS.SHOW_ADD_DOWNLOAD_DIALOG).toBeDefined();
     expect(IPC_CHANNELS.QUEUE_REORDER).toBeDefined();
     expect(IPC_CHANNELS.SCHEDULE_GET_ALL).toBeDefined();
     expect(IPC_CHANNELS.AUTOMATION_GET_RULES).toBeDefined();

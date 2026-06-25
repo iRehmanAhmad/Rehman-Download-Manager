@@ -3,7 +3,7 @@ import { IPC_CHANNELS, type Download, type DownloadOptions, type Category, type 
 
 const api = {
   download: {
-    getFileInfo: (url: string): Promise<{ fileSize: number; supportsRange: boolean; preId?: string }> =>
+    getFileInfo: (url: string): Promise<{ fileSize: number; supportsRange: boolean; preId?: string; filename?: string }> =>
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_GET_FILE_INFO, url),
     getFileInfoBasic: (url: string): Promise<{ fileSize: number; supportsRange: boolean; contentType: string }> =>
       ipcRenderer.invoke(IPC_CHANNELS.DOWNLOAD_GET_FILE_INFO_BASIC, url),
@@ -146,6 +146,11 @@ const api = {
     minimize: () => ipcRenderer.send(IPC_CHANNELS.APP_MINIMIZE),
     maximize: () => ipcRenderer.send(IPC_CHANNELS.APP_MAXIMIZE),
     close: () => ipcRenderer.send(IPC_CHANNELS.APP_CLOSE),
+    onShowAddDownloadDialog: (callback: (data: { url: string, filename?: string, referer?: string, metadata?: any }) => void) => {
+      const handler = (_event: Electron.IpcRendererEvent, data: any) => callback(data);
+      ipcRenderer.on(IPC_CHANNELS.SHOW_ADD_DOWNLOAD_DIALOG, handler);
+      return () => ipcRenderer.removeListener(IPC_CHANNELS.SHOW_ADD_DOWNLOAD_DIALOG, handler);
+    },
   },
 
   clipboard: {
@@ -185,6 +190,26 @@ const api = {
     showOpenDialog: (options: any): Promise<string[]> =>
       ipcRenderer.invoke(IPC_CHANNELS.SYSTEM_SHOW_OPEN_DIALOG, options),
   },
+
+  updater: {
+    checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
+    quitAndInstall: () => ipcRenderer.invoke('quit-and-install'),
+    onUpdateAvailable: (callback: (info: any) => void) => {
+      const handler = (_event: Electron.IpcRendererEvent, info: any) => callback(info);
+      ipcRenderer.on('update-available', handler);
+      return () => ipcRenderer.removeListener('update-available', handler);
+    },
+    onUpdateDownloaded: (callback: (info: any) => void) => {
+      const handler = (_event: Electron.IpcRendererEvent, info: any) => callback(info);
+      ipcRenderer.on('update-downloaded', handler);
+      return () => ipcRenderer.removeListener('update-downloaded', handler);
+    },
+    onDownloadProgress: (callback: (progress: any) => void) => {
+      const handler = (_event: Electron.IpcRendererEvent, progress: any) => callback(progress);
+      ipcRenderer.on('download-progress', handler);
+      return () => ipcRenderer.removeListener('download-progress', handler);
+    }
+  }
 };
 
 contextBridge.exposeInMainWorld('api', api);

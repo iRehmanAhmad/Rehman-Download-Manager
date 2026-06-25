@@ -25,6 +25,7 @@ export interface ChunkInfo {
 
 export interface Download {
   id: string;
+  type?: 'standard' | 'ytdlp';
   url: string;
   filename: string;
   filepath?: string;
@@ -56,6 +57,7 @@ export interface Download {
 
 export interface DownloadOptions {
   url: string;
+  type?: 'standard' | 'ytdlp';
   filename?: string;
   filepath?: string;
   categoryId?: string;

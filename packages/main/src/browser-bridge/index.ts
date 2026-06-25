@@ -2,12 +2,14 @@ import { createServer, Socket } from 'node:net';
 import { randomBytes } from 'node:crypto';
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { app } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import { DownloadEngine } from '../download/engine';
-import { extractFilename, SETTINGS_KEY } from '@rdm/shared';
+import { extractFilename, SETTINGS_KEY, IPC_CHANNELS } from '@rdm/shared';
 import { v4 as uuid } from 'uuid';
 import { getDatabase } from '../storage/database';
 import { isPublicHttpUrl } from '../net/ssrf-guard';
+import { isYtdlpUrl } from '../ipc/download.ipc';
+import youtubedl from 'youtube-dl-exec';
 
 let bridgeServer: ReturnType<typeof createServer> | null = null;
 
@@ -127,40 +129,108 @@ async function handleBridgeMessage(socket: Socket, message: Record<string, unkno
       return;
     }
 
-    const filename = String(message.filename || extractFilename(url) || 'download');
     const pageUrl = String(message.pageUrl || '');
     const source = String(message.source || 'extension');
 
-    const download = {
-      id: uuid(),
-      url,
-      filename,
-      tempDir: '',
-      fileSize: -1,
-      downloaded: 0,
-      status: 'queued' as const,
-      priority: 'normal' as const,
-      addedAt: Date.now(),
-      retryCount: 0,
-      maxRetries: 3,
-      numConnections: 8,
-      headers: pageUrl ? { Referer: pageUrl } : undefined,
-      referer: pageUrl || undefined,
-      chunks: [],
-      speed: 0,
-      progress: 0,
-      eta: 0,
-    };
+    const metadata = (message.metadata || {}) as Record<string, unknown>;
+    const isYtdlp = !!metadata.ytdlpFormat || isYtdlpUrl(url);
 
-    engine.add(download);
-    console.log(`[browser-bridge] Added download from ${source}: ${url}`);
+    const finalFilename = isYtdlp
+      ? 'Fetching video...'
+      : String(message.filename || extractFilename(url) || 'download');
+
+    // Resolve output filepath — same logic as download.ipc.ts
+    let filepath: string;
+    try {
+      const db = getDatabase();
+      const defaultSavePathRow = db.prepare("SELECT value FROM settings WHERE key = 'defaultSavePath'").get() as { value: string } | undefined;
+      const baseDir = defaultSavePathRow?.value || app.getPath('downloads');
+      filepath = join(baseDir, finalFilename);
+    } catch {
+      filepath = join(app.getPath('downloads'), finalFilename);
+    }
+
+
+
+    console.log(`[browser-bridge] Intercepted download from ${source}: ${url}, triggering Add Dialog`);
+
+    // Bring app to foreground and show the Add Download dialog
+    BrowserWindow.getAllWindows().forEach((win) => {
+      if (win.isMinimized()) win.restore();
+      win.focus();
+      
+      // We pass the URL and a pre-filled filename/referer so the AddUrlDialog can use it
+      win.webContents.send(IPC_CHANNELS.SHOW_ADD_DOWNLOAD_DIALOG, {
+        url,
+        filename: finalFilename,
+        referer: pageUrl || undefined,
+        metadata
+      });
+    });
 
     sendBridgeResponse(socket, {
       status: 'ok',
-      downloadId: download.id,
-      filename: download.filename,
-      action: 'added',
+      action: 'show-dialog',
     });
+    return;
+  }
+
+  if (action === 'get-formats') {
+    const url = String(message.url || '');
+    const tabId = message.tabId;
+    if (!url || !(await isPublicHttpUrl(url))) {
+      sendBridgeResponse(socket, { status: 'error', error: 'Invalid URL', action: 'formats-result', tabId });
+      return;
+    }
+
+    try {
+      const ytInfo = await youtubedl(url, { dumpJson: true }) as any;
+      if (ytInfo.formats && Array.isArray(ytInfo.formats)) {
+        const availableFormats: { id: string, label: string }[] = [];
+        const formatSize = (bytes?: number) => bytes ? ` - ${(bytes / (1024 * 1024)).toFixed(1)}MB` : '';
+        const videoFormats = ytInfo.formats.filter((f: any) => f.vcodec !== 'none').reverse();
+        const heights = [4320, 2880, 2160, 1440, 1080, 720, 480, 360, 240, 144];
+        
+        heights.forEach(height => {
+          const formatsAtHeight = videoFormats.filter((f: any) => f.height === height);
+          if (formatsAtHeight.length > 0) {
+            const format = formatsAtHeight.find((f: any) => f.ext === 'mp4') || formatsAtHeight[0];
+            const hasAudio = format.acodec !== 'none';
+            const formatId = hasAudio ? format.format_id : `${format.format_id}+bestaudio/best`;
+            availableFormats.push({
+              id: formatId,
+              label: `${height}p${format.fps && format.fps > 30 ? format.fps : ''} (${format.ext.toUpperCase()})${formatSize(format.filesize || format.filesize_approx)}`
+            });
+          }
+        });
+
+        const bestAudio = ytInfo.formats.find((f: any) => f.vcodec === 'none' && f.ext === 'm4a') || ytInfo.formats.find((f: any) => f.vcodec === 'none');
+        if (bestAudio) {
+          availableFormats.push({
+            id: bestAudio.format_id,
+            label: `Audio Only (${bestAudio.ext})${formatSize(bestAudio.filesize || bestAudio.filesize_approx)}`
+          });
+        }
+        sendBridgeResponse(socket, { status: 'ok', formats: availableFormats, action: 'formats-result', tabId });
+      } else {
+        sendBridgeResponse(socket, { status: 'error', error: 'No formats found', action: 'formats-result', tabId });
+      }
+    } catch (err: any) {
+      let errorMessage = err.message || 'Unknown error occurred';
+      if (errorMessage.includes('HTTP Error 429') || errorMessage.includes('Too Many Requests')) {
+        errorMessage = 'YouTube Rate Limit (HTTP 429). Please try again later.';
+      } else if (errorMessage.includes('No supported JavaScript runtime') || errorMessage.includes('Sign in to confirm')) {
+        errorMessage = 'YouTube blocked the request. Cookies or a JS runtime may be required.';
+      } else {
+        const match = errorMessage.match(/ERROR: (.*)/);
+        if (match) {
+          errorMessage = match[1];
+        } else {
+          errorMessage = errorMessage.split('\n')[0].substring(0, 100);
+        }
+      }
+      sendBridgeResponse(socket, { status: 'error', error: errorMessage, action: 'formats-result', tabId });
+    }
     return;
   }
 

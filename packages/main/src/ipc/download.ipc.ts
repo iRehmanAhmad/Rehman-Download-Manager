@@ -11,6 +11,17 @@ import https from 'node:https';
 import path from 'node:path';
 import fs from 'node:fs';
 import { URL } from 'node:url';
+import youtubedl from 'youtube-dl-exec';
+
+export const isYtdlpUrl = (url: string) => {
+  const lowerUrl = url.toLowerCase();
+  return lowerUrl.includes('youtube.com/') || 
+         lowerUrl.includes('youtu.be/') || 
+         lowerUrl.includes('facebook.com/') || 
+         lowerUrl.includes('fb.watch/') || 
+         lowerUrl.includes('x.com/') || 
+         lowerUrl.includes('twitter.com/');
+};
 
 let engine: DownloadEngine | null = null;
 
@@ -58,14 +69,22 @@ export function registerDownloadIpc(): void {
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_ADD, (_event, rawOptions: DownloadOptions): Download => {
+    try {
     const eng = getDownloadEngine();
     const id = rawOptions.preId || uuid();
     const now = Date.now();
 
     const options = evaluateRules(rawOptions);
 
+    if (options.filepath && !options.filename) {
+      options.filename = path.basename(options.filepath);
+    }
     let finalFilepath = options.filepath;
-    const finalFilename = options.filename || extractFilename(options.url) || 'download';
+    let finalFilename = options.filename || extractFilename(options.url) || 'download';
+    
+    if (isYtdlpUrl(options.url) && !options.filename) {
+      finalFilename = 'Fetching video...';
+    }
     
     if (!finalFilepath) {
       try {
@@ -88,6 +107,7 @@ export function registerDownloadIpc(): void {
 
     const download: Download = {
       id,
+      type: options.type || (isYtdlpUrl(options.url) ? 'ytdlp' : 'standard'),
       url: options.url,
       filename: finalFilename,
       filepath: finalFilepath,
@@ -120,6 +140,10 @@ export function registerDownloadIpc(): void {
     sendToRenderer(IPC_CHANNELS.DOWNLOAD_ADDED, eng.getDownload(id) || download);
     emitQueueStatus();
     return eng.getDownload(id) || download;
+    } catch (e) {
+      console.error("DOWNLOAD_ADD ERROR:", e);
+      throw e;
+    }
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_GET_ALL, (): Download[] => {
@@ -182,17 +206,81 @@ const fetchInfo = (currentUrl: string, redirectCount = 0): Promise<{ supportsRan
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_GET_FILE_INFO, async (_event, urlStr: string) => {
-    const info = await fetchInfo(urlStr);
+    let info: { fileSize: number; supportsRange: boolean; contentType?: string; filename?: string; formats?: { id: string, label: string, isAudioOnly: boolean }[] } = {
+      fileSize: -1,
+      supportsRange: false
+    };
+
+    if (isYtdlpUrl(urlStr)) {
+      try {
+        const ytInfo = await youtubedl(urlStr, { dumpJson: true }) as any;
+        info.filename = (ytInfo.title || 'video').replace(/[\\/:*?"<>|]/g, '') + '.' + (ytInfo.ext || 'mp4');
+        info.fileSize = ytInfo.filesize_approx || ytInfo.filesize || -1;
+        info.supportsRange = true;
+        
+        // Extract available formats for selection
+        if (ytInfo.formats && Array.isArray(ytInfo.formats)) {
+          const availableFormats: { id: string, label: string, isAudioOnly: boolean }[] = [];
+          
+          // Helper to format size
+          const formatSize = (bytes?: number) => {
+            if (!bytes) return '';
+            const mb = (bytes / (1024 * 1024)).toFixed(1);
+            return ` - ${mb}MB`;
+          };
+
+          // Group by resolution/type
+          const videoFormats = ytInfo.formats.filter((f: any) => f.vcodec !== 'none').reverse(); // reverse to get best quality first
+          const heights = [4320, 2880, 2160, 1440, 1080, 720, 480, 360, 240, 144];
+          
+          heights.forEach(height => {
+            // Find the best video for this height
+            const formatsAtHeight = videoFormats.filter((f: any) => f.height === height);
+            if (formatsAtHeight.length > 0) {
+              // Prefer mp4 if available, otherwise take the best (first since reversed)
+              const format = formatsAtHeight.find((f: any) => f.ext === 'mp4') || formatsAtHeight[0];
+              const hasAudio = format.acodec !== 'none';
+              // If it doesn't have audio, we need to combine it with the best audio
+              const formatId = hasAudio ? format.format_id : `${format.format_id}+bestaudio/best`;
+              availableFormats.push({
+                id: formatId,
+                label: `${height}p${format.fps && format.fps > 30 ? format.fps : ''} (${format.ext.toUpperCase()})${formatSize(format.filesize || format.filesize_approx)}`,
+                isAudioOnly: false
+              });
+            }
+          });
+
+          // Add Audio Only option
+          const bestAudio = ytInfo.formats.find((f: any) => f.vcodec === 'none' && f.ext === 'm4a') || 
+                           ytInfo.formats.find((f: any) => f.vcodec === 'none');
+          if (bestAudio) {
+            availableFormats.push({
+              id: bestAudio.format_id,
+              label: `Audio Only (${bestAudio.ext})${formatSize(bestAudio.filesize || bestAudio.filesize_approx)}`,
+              isAudioOnly: true
+            });
+          }
+
+          info.formats = availableFormats;
+        }
+      } catch (err) {
+        info = await fetchInfo(urlStr);
+      }
+    } else {
+      info = await fetchInfo(urlStr);
+    }
+
     let preId: string | undefined = undefined;
-    if (info.fileSize > 0) {
+    if (info.fileSize > 0 || info.filename) {
       preId = `pre-${uuid()}`;
       const dl: Download = {
         id: preId,
+        type: isYtdlpUrl(urlStr) ? 'ytdlp' : 'standard',
         url: urlStr,
-        filename: extractFilename(urlStr) || 'download',
+        filename: info.filename || extractFilename(urlStr) || 'download',
         filepath: '',
         tempDir: '',
-        fileSize: info.fileSize,
+        fileSize: info.fileSize > 0 ? info.fileSize : -1,
         downloaded: 0,
         status: 'queued',
         priority: 'normal',
@@ -288,18 +376,56 @@ const fetchInfo = (currentUrl: string, redirectCount = 0): Promise<{ supportsRan
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_OPEN_FILE, async (_event, id: string): Promise<boolean> => {
+    console.log('[IPC] DOWNLOAD_OPEN_FILE called for id:', id);
     const dl = getDownloadEngine().getDownload(id);
-    if (!dl || !dl.filepath) return false;
+    if (!dl || !dl.filepath) {
+      console.log('[IPC] DOWNLOAD_OPEN_FILE failed: No download or filepath', dl);
+      return false;
+    }
     const { shell } = require('electron');
-    const result = await shell.openPath(dl.filepath);
-    return result === '';
+    const path = require('path');
+    const fs = require('fs');
+    
+    // Ensure absolute path
+    const normalizedPath = path.isAbsolute(dl.filepath) 
+      ? path.normalize(dl.filepath) 
+      : path.resolve(dl.filepath);
+      
+    if (fs.existsSync(normalizedPath)) {
+      console.log('[IPC] Opening path:', normalizedPath);
+      const result = await shell.openPath(normalizedPath);
+      console.log('[IPC] shell.openPath result:', result);
+      return result === '';
+    } else {
+      console.log('[IPC] File does not exist yet. Cannot open file:', normalizedPath);
+      return false;
+    }
   });
 
   ipcMain.handle(IPC_CHANNELS.DOWNLOAD_OPEN_FOLDER, (_event, id: string): boolean => {
+    console.log('[IPC] DOWNLOAD_OPEN_FOLDER called for id:', id);
     const dl = getDownloadEngine().getDownload(id);
-    if (!dl || !dl.filepath) return false;
+    if (!dl || !dl.filepath) {
+      console.log('[IPC] DOWNLOAD_OPEN_FOLDER failed: No download or filepath', dl);
+      return false;
+    }
     const { shell } = require('electron');
-    shell.showItemInFolder(dl.filepath);
+    const path = require('path');
+    const fs = require('fs');
+    
+    // Ensure absolute path
+    const normalizedPath = path.isAbsolute(dl.filepath) 
+      ? path.normalize(dl.filepath) 
+      : path.resolve(dl.filepath);
+      
+    if (fs.existsSync(normalizedPath)) {
+      console.log('[IPC] Showing item in folder:', normalizedPath);
+      shell.showItemInFolder(normalizedPath);
+    } else {
+      const parentDir = path.dirname(normalizedPath);
+      console.log('[IPC] File not found, opening parent directory:', parentDir);
+      shell.openPath(parentDir);
+    }
     return true;
   });
 
